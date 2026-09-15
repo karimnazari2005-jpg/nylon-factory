@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گُهر نایلون</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,Tahoma,sans-serif;
+}
+
+body{
+  background:#f4f6f8;
+  color:#17202a;
+}
+
+.header{
+  background:#111827;
+  color:white;
+  padding:20px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.header h1{
+  font-size:24px;
+}
+
+.header p{
+  margin-top:6px;
+  color:#cbd5e1;
+  font-size:14px;
+}
+
+.container{
+  padding:16px;
+  max-width:1100px;
+  margin:auto;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:white;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+.card .title{
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.card .value{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.afn{color:#2563eb;}
+.usd{color:#16a34a;}
+.red{color:#dc2626;}
+.orange{color:#ea580c;}
+
+.section-title{
+  font-size:20px;
+  margin:20px 0 12px;
+}
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.menu button{
+  border:0;
+  background:white;
+  padding:18px 10px;
+  border-radius:16px;
+  font-size:15px;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
+  cursor:pointer;
+}
+
+.menu button:active{
+  transform:scale(.97);
+}
+
+.icon{
+  font-size:28px;
+  display:block;
+  margin-bottom:8px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.back{
+  background:#111827;
+  color:white;
+  border:0;
+  padding:10px 18px;
+  border-radius:10px;
+  margin-bottom:16px;
+  font-size:15px;
+}
+
+.list{
+  background:white;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.item{
+  padding:16px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+}
+
+@media(min-width:700px){
+  .cards{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .menu{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>🏭 گُهر نایلون</h1>
+  <p>سیستم مدیریت کارخانه نایلون</p>
+</div>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page active">
+
+  <h2 class="section-title">📊 داشبورد کارخانه</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="title">صندوق افغانی</div>
+      <div class="value afn">0 AFN</div>
+    </div>
+
+    <div class="card">
+      <div class="title">صندوق دالر</div>
+      <div class="value usd">$0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">طلب از مشتریان</div>
+      <div class="value red">0 AFN</div>
+    </div>
+
+    <div class="card">
+      <div class="title">بدهی به فروشندگان</div>
+      <div class="value orange">0 AFN</div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">⚡ بخش‌های کارخانه</h2>
+
+  <div class="menu">
+
+    <button onclick="openPage('customers')">
+      <span class="icon">👥</span>
+      مشتریان
+    </button>
+
+    <button onclick="openPage('sales')">
+      <span class="icon">🧾</span>
+      فروشات
+    </button>
+
+    <button onclick="openPage('purchases')">
+      <span class="icon">🛒</span>
+      خریداری
+    </button>
+
+    <button onclick="openPage('production')">
+      <span class="icon">🏭</span>
+      تولید
+    </button>
+
+    <button onclick="openPage('inventory')">
+      <span class="icon">📦</span>
+      انبار
+    </button>
+
+    <button onclick="openPage('expenses')">
+      <span class="icon">💸</span>
+      مصارف
+    </button>
+
+    <button onclick="openPage('accounting')">
+      <span class="icon">💰</span>
+      حسابداری
+    </button>
+
+    <button onclick="openPage('reports')">
+      <span class="icon">📈</span>
+      گزارش‌ها
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- CUSTOMERS -->
+<div id="customers" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">👥 مشتریان</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>هنوز مشتری ثبت نشده</span>
+      <span>➕</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- SALES -->
+<div id="sales" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">🧾 فروشات</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>فروش جدید</span>
+      <span>➕</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- PURCHASES -->
+<div id="purchases" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">🛒 خریداری</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>خرید جدید</span>
+      <span>➕</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- PRODUCTION -->
+<div id="production" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">🏭 تولید کارخانه</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>تولید امروز</span>
+      <strong>0 kg</strong>
+    </div>
+
+    <div class="item">
+      <span>ضایعات امروز</span>
+      <strong>0 kg</strong>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- INVENTORY -->
+<div id="inventory" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">📦 انبار</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>مواد اولیه</span>
+      <strong>0 kg</strong>
+    </div>
+
+    <div class="item">
+      <span>محصول آماده</span>
+      <strong>0 kg</strong>
+    </div>
+
+    <div class="item">
+      <span>ضایعات</span>
+      <strong>0 kg</strong>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- EXPENSES -->
+<div id="expenses" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">💸 مصارف</h2>
+
+  <div class="list">
+    <div class="item">
+      <span>مصارف امروز</span>
+      <strong>0 AFN</strong>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ACCOUNTING -->
+<div id="accounting" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">💰 حسابداری</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="title">افغانی</div>
+      <div class="value afn">0 AFN</div>
+    </div>
+
+    <div class="card">
+      <div class="title">دالر</div>
+      <div class="value usd">$0</div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- REPORTS -->
+<div id="reports" class="page">
+
+  <button class="back" onclick="openPage('dashboard')">
+    ← برگشت
+  </button>
+
+  <h2 class="section-title">📈 گزارش‌ها</h2>
+
+  <div class="list">
+
+    <div class="item">
+      <span>گزارش فروش</span>
+      <span>→</span>
+    </div>
+
+    <div class="item">
+      <span>گزارش خرید</span>
+      <span>→</span>
+    </div>
+
+    <div class="item">
+      <span>گزارش تولید</span>
+      <span>→</span>
+    </div>
+
+    <div class="item">
+      <span>گزارش انبار</span>
+      <span>→</span>
+    </div>
+
+    <div class="item">
+      <span>گزارش سود و زیان</span>
+      <span>→</span>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+function openPage(page){
+
+  document.querySelectorAll('.page').forEach(function(p){
+    p.classList.remove('active');
+  });
+
+  document.getElementById(page).classList.add('active');
+
+  window.scrollTo(0,0);
+}
+
+</script>
+
+</body>
+</html>
