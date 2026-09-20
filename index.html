@@ -1,376 +1,3 @@
-!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14303D">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="کارخانه">
-<title>مدیریت کارخانه نایلون</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#EBF1F4; --surface:#FFFFFF; --ink:#14303D; --text:#14303D; --muted:#5A7480; --line:#D6E1E6;
-  --primary:#1B7A9E; --on-primary:#FFFFFF;
-  --red:#B93C31; --green:#1F7D57; --gold:#8A6210;
-  --t-blue:#DCEEF5; --t-green:#DBEFE4; --t-gold:#FAEDC8; --t-red:#F7DFDB;
-  --on-ink:#F1F7F9; --on-ink-muted:#A5BDC7;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0E1A20; --surface:#15252D; --ink:#0A2029; --text:#E5EEF1; --muted:#8DA5AF; --line:#26404B;
-    --primary:#5BB8DC; --on-primary:#072028;
-    --red:#F0857A; --green:#58C18F; --gold:#F2B632;
-    --t-blue:#17323E; --t-green:#16332A; --t-gold:#3A3117; --t-red:#3B211F;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0E1A20; --surface:#15252D; --ink:#0A2029; --text:#E5EEF1; --muted:#8DA5AF; --line:#26404B;
-  --primary:#5BB8DC; --on-primary:#072028;
-  --red:#F0857A; --green:#58C18F; --gold:#F2B632;
-  --t-blue:#17323E; --t-green:#16332A; --t-gold:#3A3117; --t-red:#3B211F;
-}
-html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--ink)}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  min-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
-  min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
-  font-family:"Vazirmatn",Tahoma,"Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.7;
-  -webkit-text-size-adjust:100%;
-}
-[hidden]{display:none!important}
-button{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
-.icon{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.n{display:inline-block;direction:ltr;unicode-bidi:isolate}
-.muted{color:var(--muted)}
-.pos{color:var(--green)}
-.neg{color:var(--red)}
-
-.app{max-width:560px;margin:0 auto;padding-bottom:104px}
-
-/* header */
-.top{position:relative;overflow:hidden;background:var(--ink);color:var(--on-ink);padding:22px 20px 66px}
-.top.compact{padding:18px 20px 22px}
-.roll{position:absolute;left:-96px;top:-84px;width:290px;height:290px;color:#6FC3E3;opacity:.2;pointer-events:none}
-.compact .roll{left:-70px;top:-100px;width:210px;height:210px}
-.roll svg{width:100%;height:100%}
-.top-row{position:relative;display:flex;align-items:center;gap:12px}
-.grow{flex:1;min-width:0}
-.top h1{margin:0;font-size:22px;font-weight:700;line-height:1.5}
-.top .date{margin:0;color:var(--on-ink-muted);font-size:13px}
-.chip{flex:none;font-size:12px;padding:1px 10px;border-radius:999px;background:rgba(255,255,255,.14);color:var(--on-ink)}
-.back{flex:none;width:38px;height:38px;border-radius:12px;border:0;background:rgba(255,255,255,.14);color:var(--on-ink);display:grid;place-items:center;cursor:pointer}
-
-/* account strip */
-.accounts{position:relative;display:grid;grid-template-columns:1fr 1fr;margin:-42px 16px 0;background:var(--surface);border-radius:18px;box-shadow:0 8px 24px rgba(10,32,41,.16)}
-.acc{padding:14px 16px}
-.acc + .acc{border-inline-start:1px solid var(--line)}
-button.acc{display:block;border:0;background:none;text-align:start;cursor:pointer}
-.acc .lbl{display:block;color:var(--muted);font-size:13px}
-.acc b{display:block;font-size:22px;font-weight:700;line-height:1.5}
-.cur{font-weight:400;color:var(--muted);font-size:12px;margin-inline-start:4px}
-
-/* quick actions */
-.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 16px 0}
-.qa{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-weight:500;cursor:pointer}
-
-/* blocks and rows */
-.block{margin:20px 16px 0}
-.block h2{margin:0 0 8px;font-size:15px;font-weight:700}
-.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.list > :last-child{border-bottom:0}
-.row{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 14px;border:0;border-bottom:1px solid var(--line);background:none;text-align:start}
-button.row{cursor:pointer}
-.ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
-.ic .icon{width:20px;height:20px}
-.tone-green{background:var(--t-green);color:var(--green)}
-.tone-blue{background:var(--t-blue);color:var(--primary)}
-.tone-gold{background:var(--t-gold);color:var(--gold)}
-.tone-red{background:var(--t-red);color:var(--red)}
-.main{flex:1;min-width:0}
-.main b{display:block;font-weight:500}
-.subs{display:flex;flex-wrap:wrap;gap:0 12px}
-.sub{color:var(--muted);font-size:13px}
-.amt{flex:none;text-align:end;max-width:52%}
-.amt b{display:block;font-weight:700}
-.tag{display:inline-block;font-size:12px;line-height:1.7;padding:0 8px;border-radius:999px}
-.tag.debt{background:var(--t-red);color:var(--red)}
-.tag.paid{background:var(--t-green);color:var(--green)}
-.tag.info{background:var(--t-blue);color:var(--primary)}
-.tag.warn{background:var(--t-gold);color:var(--gold)}
-.chev{width:18px;height:18px;color:var(--muted)}
-.chev .icon{width:18px;height:18px}
-.avatar{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--t-blue);color:var(--primary)}
-.empty{padding:22px 16px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);text-align:center}
-
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border:0;border-radius:14px;background:var(--primary);color:var(--on-primary);font-weight:700;cursor:pointer}
-.btn.ghost{background:var(--t-blue);color:var(--primary);margin-top:10px}
-.btn.del{background:var(--t-red);color:var(--red)}
-.sum{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 16px;border-radius:14px;background:var(--t-red);color:var(--red)}
-.sum.blue{background:var(--t-blue);color:var(--text)}
-.sum b{font-size:20px;text-align:end}
-.sum b span.blk{display:block}
-.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;padding:3px;border-radius:12px;background:var(--t-blue)}
-.seg button{padding:8px;border:0;border-radius:9px;background:none;color:var(--muted);cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);font-weight:700}
-.rep{display:grid;grid-template-columns:1.1fr 1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.c{padding:12px 8px;border-bottom:1px solid var(--line);text-align:center}
-.c.h{background:var(--t-blue);color:var(--muted);font-size:13px}
-.c.l{text-align:start;padding-inline-start:14px;font-weight:500}
-.c.res{font-weight:700;border-bottom:0}
-.note{margin:10px 2px 0;color:var(--muted);font-size:13px}
-
-/* form */
-.form .fld{margin-bottom:16px}
-.fld > label,.fld > .lbl{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
-.inp{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;line-height:1.5}
-.inp[type="date"]{min-height:48px;text-align:start}
-.inp::placeholder{color:var(--muted);opacity:.8}
-.rollrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
-.rollrow .hd{grid-column:1/-1;display:flex;align-items:center;gap:8px}
-.rollrow .hd b{font-weight:500}
-.rollrow .rp{flex:1;text-align:end;font-size:14px}
-.mini{display:block;font-size:12.5px;color:var(--muted)}
-.mini .inp{margin-top:4px}
-.x{width:34px;height:34px;border:0;border-radius:10px;background:var(--t-red);color:var(--red);font-size:20px;line-height:1;cursor:pointer}
-.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:18px 0 16px;padding:14px 16px;border-radius:14px;background:var(--t-blue)}
-.total b{font-size:24px}
-.chips{display:flex;gap:8px;margin-top:8px}
-.chips.wrap{flex-wrap:wrap}
-.pillbtn[aria-pressed="true"]{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
-.pillbtn{padding:5px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:14px;cursor:pointer}
-.due{margin:-4px 2px 14px;font-weight:500;min-height:1.7em}
-.err{margin:0 0 12px;color:var(--red)}
-.err:empty{display:none}
-
-/* tab bar */
-.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tabs{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:0;background:none;color:var(--muted);font-size:12px;cursor:pointer}
-.pill{width:52px;height:30px;border-radius:15px;display:grid;place-items:center}
-.tab[aria-current="page"]{color:var(--primary);font-weight:700}
-.tab[aria-current="page"] .pill{background:var(--t-blue)}
-
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);width:max-content;max-width:calc(100% - 32px);box-sizing:border-box;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--ink);color:var(--on-ink);font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion: reduce){.toast{transition:none}}
-</style>
-</head>
-<body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-5h4v5"/></symbol>
-  <symbol id="i-sale" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
-  <symbol id="i-buy" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
-  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7h15a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z"/><path d="M4 7l12-3v3"/><circle cx="16.5" cy="13.5" r="1"/></symbol>
-  <symbol id="i-more" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
-  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6"/><path d="M18 14.3c1.8.8 3 2.5 3 4.7"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M3 20h18"/></symbol>
-  <symbol id="i-cheque" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13h7M9 17h7"/></symbol>
-  <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 10l9-6 9 6"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8"/><path d="M3 20h18"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></symbol>
-  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h8M18 7h2M4 17h2M12 17h8"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
-  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></symbol>
-  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
-  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
-  <symbol id="i-back" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></symbol>
-</svg>
-
-<div class="app"><main id="view"></main></div>
-
-<nav class="tabbar" aria-label="منوی اصلی">
-  <div class="tabs" id="tabs"></div>
-</nav>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script>
-(function(){
-  var DIG='۰۱۲۳۴۵۶۷۸۹';
-  var CUR={AFN:'افغانی',USD:'دالر'};
-  var DEFAULT_NAME='کارخانه نایلون';
-
-  /* ---------- helpers ---------- */
-  function fa(s){return String(s).replace(/\d/g,function(d){return DIG[d]})}
-  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function fmt(v){return Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:2})}
-  function N(v){return '<span class="n">'+(v<0?'−':'')+fa(fmt(v))+'</span>'}
-  function S(dir,v){return '<span class="n">'+(dir==='in'?'+':'−')+fa(fmt(v))+'</span>'}
-  function T(s){return '<span class="n">'+fa(s)+'</span>'}
-  function icon(n){return '<svg class="icon" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
-  function cur(c){return '<span class="cur">'+c+'</span>'}
-  function sum(a,k){return a.reduce(function(t,x){return t+(x[k]||0)},0)}
-  function r2(v){return Math.round(v*100)/100}
-  function by(arr,f){
-    var r={AFN:0,USD:0};
-    arr.forEach(function(x){r[x.cur||'AFN']+=f(x)});
-    r.AFN=r2(r.AFN);r.USD=r2(r.USD);return r;
-  }
-  function parse(s){
-    s=String(s||'')
-      .replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)})
-      .replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)})
-      .replace(/[,٬،\s]/g,'').replace(/٫/g,'.');
-    var v=parseFloat(s);return isFinite(v)?v:0;
-  }
-  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-  function pad(n){return (n<10?'0':'')+n}
-  function timeText(ts){var d=new Date(ts);return pad(d.getHours())+':'+pad(d.getMinutes())}
-  function dayKey(ts){var d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()}
-  function isToday(ts){return dayKey(ts)===dayKey(Date.now())}
-  function dayStart(ts){var d=new Date(ts);d.setHours(0,0,0,0);return d.getTime()}
-  function daysLeft(ts){return Math.round((dayStart(ts)-dayStart(Date.now()))/864e5)}
-  function dateVal(ts){var d=new Date(ts);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-  function dateTs(v){
-    var p=String(v||'').split('-');if(p.length!==3)return 0;
-    var t=new Date(+p[0],+p[1]-1,+p[2],12,0,0).getTime();
-    return isFinite(t)?t:0;
-  }
-  function pdate(ts,o){
-    var locs=['fa-AF-u-ca-persian','fa-IR-u-ca-persian'];
-    for(var i=0;i<locs.length;i++){
-      try{return fa(new Intl.DateTimeFormat(locs[i],o).format(new Date(ts)))}catch(e){}
-    }
-    return '';
-  }
-  function dayLabel(ts){
-    if(isToday(ts))return 'امروز';
-    if(dayKey(ts)===dayKey(Date.now()-864e5))return 'دیروز';
-    return pdate(ts,{day:'numeric',month:'long'});
-  }
-  function monthKey(ts){
-    try{return new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric'}).format(new Date(ts))}
-    catch(e){var d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()}
-  }
-
-  /* ---------- data (saved on this device) ---------- */
-  var KEY='nylon-factory-app-v1';
-  function at(daysAgo,h,m){var d=new Date();d.setDate(d.getDate()-daysAgo);d.setHours(h,m,0,0);return d.getTime()}
-  function emptyData(){
-    return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[]};
-  }
-  function sampleData(){
-    return {
-      sample:true,open:{AFN:1000000,USD:10000},seq:100,
-      customers:[{name:'احمد کریمی'},{name:'حاجی نصیر'},{name:'رحمت‌الله'},{name:'شرکت آریانا'},{name:'مرادی'}],
-      sales:[
-        {id:1,ts:at(0,8,30),name:'احمد کریمی',cur:'AFN',rolls:25,kg:900,total:126000,paid:76000},
-        {id:2,ts:at(0,10,5),name:'حاجی نصیر',cur:'AFN',rolls:12,kg:430,total:60200,paid:60200},
-        {id:3,ts:at(0,11,20),name:'رحمت‌الله',cur:'AFN',rolls:40,kg:1500,total:210000,paid:100000},
-        {id:4,ts:at(1,15,0),name:'شرکت آریانا',cur:'AFN',rolls:60,kg:2100,total:294000,paid:294000},
-        {id:5,ts:at(1,11,30),name:'مرادی',cur:'AFN',rolls:18,kg:650,total:91000,paid:16000}
-      ],
-      buys:[
-        {id:1,ts:at(1,9,0),name:'پلاستیک خام، تاجر خالد',ton:3,amt:2400,cur:'USD'},
-        {id:2,ts:at(7,10,0),name:'پلاستیک خام، شرکت نوین',ton:5,amt:4000,cur:'USD'},
-        {id:3,ts:at(8,10,0),name:'رنگ و مواد افزودنی',ton:1,amt:900,cur:'USD'}
-      ],
-      exps:[
-        {id:1,ts:at(0,9,40),name:'برق',cat:'خدمات',amt:12000,cur:'AFN'},
-        {id:2,ts:at(0,9,10),name:'کرایه موتر',cat:'حمل',amt:3500,cur:'AFN'},
-        {id:3,ts:at(0,8,50),name:'چای و خوراک کارگران',cat:'خوراک',amt:1800,cur:'AFN'},
-        {id:4,ts:at(1,17,0),name:'معاش کارگران',cat:'معاش',amt:85000,cur:'AFN'}
-      ],
-      pays:[],checks:[],moves:[]
-    };
-  }
-  function load(){
-    try{var s=localStorage.getItem(KEY);if(s){var d=JSON.parse(s);if(d&&d.sales&&d.customers)return d}}catch(e){}
-    return null;
-  }
-  function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
-  var db=load()||sampleData();
-  function ensure(){
-    if(!db.pays)db.pays=[];
-    if(!db.checks)db.checks=[];
-    if(!db.moves)db.moves=[];
-    if(!db.open)db.open={AFN:0,USD:0};
-    var s=db.settings||{};
-    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||'auto'};
-  }
-  function applyTheme(){
-    var t=db.settings.theme,r=document.documentElement;
-    if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
-    document.title=db.settings.name;
-  }
-  ensure();applyTheme();
-
-  function balance(c){
-    var v=(db.open&&db.open[c])||0;
-    db.sales.forEach(function(s){if((s.cur||'AFN')===c)v+=s.paid});
-    db.buys.forEach(function(b){if((b.cur||'AFN')===c)v-=b.amt});
-    db.exps.forEach(function(x){if((x.cur||'AFN')===c)v-=x.amt});
-    db.pays.forEach(function(p){if((p.cur||'AFN')===c)v+=p.amt});
-    db.moves.forEach(function(m){if((m.cur||'AFN')===c)v+=(m.dir==='out'?-m.amt:m.amt)});
-    return r2(v);
-  }
-  function custInfo(c){
-    var ss=db.sales.filter(function(s){return s.name===c.name});
-    var d=by(ss,function(s){return s.total-s.paid});
-    db.pays.forEach(function(p){if(p.name===c.name){var k=p.cur||'AFN';d[k]=r2(d[k]-p.amt)}});
-    var last=ss.reduce(function(m,s){return Math.max(m,s.ts)},0);
-    return {name:c.name,d:d,last:last};
-  }
-  function totalDebt(){
-    var d=by(db.sales,function(s){return s.total-s.paid});
-    db.pays.forEach(function(p){var k=p.cur||'AFN';d[k]=r2(d[k]-p.amt)});
-    return d;
-  }
-  function hasDebt(ci){return ci.d.AFN>0||ci.d.USD>0}
-  function amts(a,u){
-    var out='';
-    if(a)out+='<b>'+N(a)+cur(CUR.AFN)+'</b>';
-    if(u)out+='<b>'+N(u)+cur(CUR.USD)+'</b>';
-    return out||'<b>'+N(0)+cur(CUR.AFN)+'</b>';
-  }
-  function dueText(d){
-    var p=[];
-    if(d.AFN>0)p.push(N(d.AFN)+' '+CUR.AFN);
-    if(d.USD>0)p.push(N(d.USD)+' '+CUR.USD);
-    return p.join(' و ');
-  }
-
-  var LIST={sale:'sales',buy:'buys',exp:'exps',pay:'pays',check:'checks',move:'moves'};
-  function curEdit(t){
-    if(!state.edit||state.edit.type!==t)return null;
-    var a=db[LIST[t]];
-    for(var i=0;i<a.length;i++)if(String(a[i].id)===String(state.edit.id))return a[i];
-    return null;
-  }
-  function pruneCustomers(){
-    var used={};
-    db.sales.forEach(function(x){used[x.name]=1});
-    db.pays.forEach(function(x){used[x.name]=1});
-    db.checks.forEach(function(x){used[x.name]=1});
-    db.customers=db.customers.filter(function(c){return used[c.name]});
-  }
-  function addCustomer(name){
-    if(!db.customers.some(function(c){return c.name===name}))db.customers.push({name:name});
-  }
-  /* a cashed check becomes a payment received from the customer */
-  function syncCheckPay(c){
-    db.pays=db.pays.filter(function(p){return p.checkId!==c.id});
-    if(c.status==='cashed')db.pays.push({id:uid(),ts:c.cashTs||Date.now(),name:c.name,cur:c.cur,amt:c.amt,checkId:c.id});
-  }
-  var delArmed=null,delTimer;
-  function armDel(btn,fn){
-    if(delArmed===btn){clearTimeout(delTimer);delArmed=null;fn();return}
-    if(delArmed){delArmed.textContent=delArmed.dataset.t;delArmed=null}
-    delArmed=btn;btn.dataset.t=btn.textContent;btn.textContent='مطمئنی؟ برای حذف دوباره بزن';
-    clearTimeout(delTimer);
-    delTimer=setTimeout(function(){if(delArmed){delArmed.textContent=delArmed.dataset.t;delArmed=null}},4000);
-  }
-  function delBtn(id,label){return '<button type="button" class="btn ghost del" id="'+id+'">'+label+'</button>'}
-  function setSeg(f,g,v){
-    var box=f.querySelector('[data-seg="'+g+'"]');if(!box)return;
-    Array.prototype.forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v?'true':'false')});
-  }
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -744,181 +371,269 @@ button.row{cursor:pointer}
     var box=f.querySelector('[data-seg="'+g+'"]');if(!box)return;
     Array.prototype.forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v?'true':'false')});
   }
-    cust:function(){
-      var name=state.cust,known=db.customers.some(function(c){return c.name===name});
-      if(!name||!known)return top('مشتری',{back:true})+'<div class="block"><div class="empty">مشتری پیدا نشد.</div></div>';
-      var info=custInfo({name:name}),d=info.d;
-      var t='';
-      if(d.AFN>0)t+='<span class="blk">'+N(d.AFN)+cur(CUR.AFN)+'</span>';
-      if(d.USD>0)t+='<span class="blk">'+N(d.USD)+cur(CUR.USD)+'</span>';
-      var items=db.sales.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'s',x:x}})
-        .concat(db.pays.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'p',x:x}}))
-        .sort(function(a,b){return b.ts-a.ts});
-      var rows=items.map(function(it){
-        var x=it.x,when='<span class="sub">'+dayLabel(x.ts)+' '+T(timeText(x.ts))+'</span>';
-        if(it.k==='p'){
-          var eid=x.checkId?'check:'+x.checkId:'pay:'+x.id;
-          return '<button class="row" data-edit="'+eid+'"><span class="ic tone-blue">'+icon(x.checkId?'cheque':'bank')+'</span><div class="main"><b>'+(x.checkId?'چک نقد شده':'دریافت پول')+'</b>'+when+'</div>'+
-            '<div class="amt"><b>'+N(x.amt)+cur(CUR[x.cur||'AFN'])+'</b><span class="tag paid">دریافت</span></div><span class="chev">'+icon('chev')+'</span></button>';
-        }
-        var due=r2(x.total-x.paid);
-        return '<button class="row" data-edit="sale:'+x.id+'"><span class="ic tone-green">'+icon('sale')+'</span><div class="main"><b>فروش</b><span class="subs">'+
-          (x.rolls?'<span class="sub">'+N(x.rolls)+' رول</span>':'')+'<span class="sub">'+N(x.kg)+' کیلو</span></span>'+when+'</div>'+
-          '<div class="amt"><b>'+N(x.total)+cur(CUR[x.cur||'AFN'])+'</b>'+
-          (due>0?'<span class="tag debt">باقی '+N(due)+'</span>':'<span class="tag paid">نقد</span>')+'</div><span class="chev">'+icon('chev')+'</span></button>';
-      }).join('');
-      var pendCh=db.checks.filter(function(c){return c.name===name&&c.status==='pending'}).sort(function(a,b){return a.due-b.due});
-      var dc=d.AFN>0?'AFN':'USD';
-      var form=hasDebt(info)?
-        '<div class="block form" id="pf"><h2>دریافت پول از مشتری</h2>'+
-          '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
-            '<button type="button" data-v="AFN" aria-pressed="'+(dc==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+(dc==='USD')+'">دالر</button></div></div>'+
-          '<div class="fld"><label for="p-amt">مبلغ دریافتی</label><input class="inp" id="p-amt" inputmode="decimal" autocomplete="off">'+
-            '<div class="chips"><button type="button" class="pillbtn" id="p-all">همه باقی</button></div></div>'+
-          '<div class="due" id="p-due"></div>'+
-          '<p class="err" id="p-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="p-save">ثبت دریافت</button></div>':'';
-      return top(esc(name),{back:true,sub:'صورت‌حساب مشتری'})+
-        '<div class="block">'+(t?'<div class="sum"><span>باقی‌دار است</span><b>'+t+'</b></div>':'<div class="sum" style="background:var(--t-green);color:var(--green)"><span>حساب تسویه است</span><b>'+N(0)+'</b></div>')+'</div>'+
-        form+
-        (pendCh.length?'<div class="block"><h2>چک‌های در انتظار</h2><div class="list">'+pendCh.map(checkRow).join('')+'</div></div>':'')+
-        '<div class="block"><h2>تاریخچه <span class="muted" style="font-weight:400;font-size:13px">(برای ویرایش یا حذف روی هر مورد بزن)</span></h2>'+(rows?'<div class="list">'+rows+'</div>':'<div class="empty">هنوز حرکتی ثبت نشده.</div>')+'</div>'+
-        '<div class="block"><button class="btn ghost" data-go="editcust">ویرایش نام مشتری</button></div>';
-    },
-    editpay:function(){
-      var ed=curEdit('pay');
-      if(!ed)return top('ویرایش دریافت',{back:true})+'<div class="block"><div class="empty">پیدا نشد.</div></div>';
-      return top('ویرایش دریافت',{back:true,sub:esc(ed.name)})+
-        '<div class="block form" id="yf">'+
-          '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
-            '<button type="button" data-v="AFN" aria-pressed="'+((ed.cur||'AFN')==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+(ed.cur==='USD')+'">دالر</button></div></div>'+
-          '<div class="fld"><label for="y-amt">مبلغ دریافتی</label><input class="inp" id="y-amt" inputmode="decimal" autocomplete="off" value="'+ed.amt+'"></div>'+
-          '<p class="err" id="y-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="y-save">ذخیره تغییرات</button>'+
-          delBtn('y-del','حذف این دریافت')+
-        '</div>';
-    },
-    editcust:function(){
-      var name=state.cust;
-      return top('ویرایش مشتری',{back:true})+
-        '<div class="block form" id="cf">'+
-          '<div class="fld"><label for="c-name">نام مشتری</label><input class="inp" id="c-name" autocomplete="off" value="'+esc(name)+'"></div>'+
-          '<p class="note" style="margin:-6px 2px 14px">با عوض کردن اسم، همه فروش‌ها، چک‌ها و دریافتی‌های این مشتری هم به اسم جدید می‌شوند.</p>'+
-          '<p class="err" id="c-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="c-save">ذخیره نام</button>'+
-        '</div>';
-    },
+  /* ---------- state and shell ---------- */
+  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in'};
+  var view=document.getElementById('view');
+  var tabsEl=document.getElementById('tabs');
+  var toastEl=document.getElementById('toast');
+  var toastTimer,clearArmed=false,clearTimer;
 
-    /* ----- checks ----- */
-    checks:function(){
-      var pend=db.checks.filter(function(c){return c.status==='pending'}).sort(function(a,b){return a.due-b.due});
-      var done=db.checks.filter(function(c){return c.status!=='pending'}).sort(function(a,b){return b.ts-a.ts});
-      var tot=by(pend,function(c){return c.amt}),t='';
-      if(tot.AFN>0)t+='<span class="blk">'+N(tot.AFN)+cur(CUR.AFN)+'</span>';
-      if(tot.USD>0)t+='<span class="blk">'+N(tot.USD)+cur(CUR.USD)+'</span>';
-      if(!t)t='<span class="blk">'+N(0)+cur(CUR.AFN)+'</span>';
-      return top('چک‌ها',{back:true})+
-        '<div class="block"><div class="sum blue"><span>چک‌های در انتظار</span><b>'+t+'</b></div></div>'+
-        addBtn('ثبت چک جدید','newcheck')+
-        '<div class="block"><h2>در انتظار</h2>'+
-          (pend.length?'<div class="list">'+pend.map(checkRow).join('')+'</div>':'<div class="empty">چک در انتظاری نیست.</div>')+'</div>'+
-        (done.length?'<div class="block"><h2>نقد شده و برگشتی</h2><div class="list">'+done.map(checkRow).join('')+'</div></div>':'');
-    },
-    newcheck:function(){
-      var ed=curEdit('check');
-      var opts=db.customers.map(function(c){return '<option value="'+esc(c.name)+'">'}).join('');
-      return top(ed?'ویرایش چک':'ثبت چک جدید',{back:true})+
-        '<div class="block form" id="kf">'+
-          '<div class="fld"><label for="k-cust">مشتری</label>'+
-            '<input class="inp" id="k-cust" list="k-list" autocomplete="off" placeholder="نام مشتری را بنویس یا انتخاب کن">'+
-            '<datalist id="k-list">'+opts+'</datalist></div>'+
-          '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
-            '<button type="button" data-v="AFN" aria-pressed="true">افغانی</button><button type="button" data-v="USD" aria-pressed="false">دالر</button></div></div>'+
-          '<div class="fld"><label for="k-amt">مبلغ چک</label><input class="inp" id="k-amt" inputmode="decimal" autocomplete="off"></div>'+
-          '<div class="fld"><label for="k-date">تاریخ سررسید</label><input class="inp" type="date" id="k-date"></div>'+
-          '<div class="due" id="k-when"></div>'+
-          '<div class="fld"><label for="k-no">شماره چک (اختیاری)</label><input class="inp" id="k-no" inputmode="numeric" autocomplete="off"></div>'+
-          (ed?'<div class="fld"><span class="lbl">وضعیت چک</span><div class="seg" data-seg="st" role="group" aria-label="وضعیت چک">'+
-            '<button type="button" data-v="pending" aria-pressed="true">در انتظار</button>'+
-            '<button type="button" data-v="cashed" aria-pressed="false">نقد شد</button>'+
-            '<button type="button" data-v="bounced" aria-pressed="false">برگشت خورد</button></div>'+
-            '<p class="note">وقتی «نقد شد» را بزنی، مبلغ چک از طلب مشتری کم می‌شود و به حساب کارخانه اضافه می‌شود.</p></div>':'')+
-          '<p class="err" id="k-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="k-save">'+(ed?'ذخیره تغییرات':'ذخیره چک')+'</button>'+
-          (ed?delBtn('k-del','حذف این چک'):'')+
-        '</div>';
-    },
+  var ROLL='<svg viewBox="0 0 280 280" fill="none" stroke="currentColor" stroke-width="2"><circle cx="140" cy="140" r="132"/><circle cx="140" cy="140" r="113"/><circle cx="140" cy="140" r="94"/><circle cx="140" cy="140" r="76"/><circle cx="140" cy="140" r="60"/><circle cx="140" cy="140" r="46"/><circle cx="140" cy="140" r="32" fill="currentColor" fill-opacity=".35"/><circle cx="140" cy="140" r="12"/></svg>';
+  var TABS=[['home','خانه','home'],['sales','فروش','sale'],['buy','خرید','buy'],['exp','مصارف','wallet'],['more','بیشتر','more']];
+  var ROOT={home:1,sales:1,buy:1,exp:1,more:1};
+  var TAB_OF={home:'home',sales:'sales',newsale:'sales',buy:'buy',exp:'exp',more:'more',customers:'more',reports:'more',newbuy:'buy',newexp:'exp',cust:'more',editpay:'more',editcust:'more',checks:'more',newcheck:'more',accounts:'more',newmove:'more',openbal:'more',settings:'more'};
 
-    /* ----- accounts ----- */
-    accounts:function(){
-      var c=state.acc,label=CUR[c],bal=balance(c),items=[];
-      db.sales.forEach(function(s){if((s.cur||'AFN')===c&&s.paid>0)items.push({ts:s.ts,dir:'in',ic:'sale',tone:'green',text:'فروش به '+esc(s.name),amt:s.paid,edit:'sale:'+s.id})});
-      db.pays.forEach(function(p){if((p.cur||'AFN')===c)items.push({ts:p.ts,dir:'in',ic:p.checkId?'cheque':'bank',tone:'blue',text:(p.checkId?'چک از ':'دریافت از ')+esc(p.name),amt:p.amt,edit:p.checkId?'check:'+p.checkId:'pay:'+p.id})});
-      db.buys.forEach(function(b){if((b.cur||'USD')===c)items.push({ts:b.ts,dir:'out',ic:'buy',tone:'blue',text:esc(b.name),amt:b.amt,edit:'buy:'+b.id})});
-      db.exps.forEach(function(x){if((x.cur||'AFN')===c)items.push({ts:x.ts,dir:'out',ic:x.cat==='معاش'?'users':'wallet',tone:'gold',text:esc(x.name),amt:x.amt,edit:'exp:'+x.id})});
-      db.moves.forEach(function(m){if((m.cur||'AFN')===c)items.push({ts:m.ts,dir:m.dir,ic:m.dir==='out'?'minus':'plus',tone:m.dir==='out'?'red':'green',text:m.note?esc(m.note):(m.dir==='out'?'برداشت از حساب':'واریز به حساب'),amt:m.amt,edit:'move:'+m.id})});
-      function accRow(x){
-        return '<button class="row" data-edit="'+x.edit+'"><span class="ic tone-'+x.tone+'">'+icon(x.ic)+'</span>'+
-          '<div class="main"><b>'+x.text+'</b><span class="sub">'+T(timeText(x.ts))+'</span></div>'+
-          '<div class="amt"><b class="'+(x.dir==='in'?'pos':'neg')+'">'+S(x.dir,x.amt)+cur(label)+'</b></div><span class="chev">'+icon('chev')+'</span></button>';
-      }
-      return top('حساب‌ها',{back:true})+
-        '<div class="block"><div class="seg" role="group" aria-label="انتخاب حساب">'+
-          '<button data-acc="AFN" aria-pressed="'+(c==='AFN')+'">حساب افغانی</button>'+
-          '<button data-acc="USD" aria-pressed="'+(c==='USD')+'">حساب دالر</button></div></div>'+
-        '<div class="block"><div class="sum blue"><span>موجودی حساب '+label+'</span><b class="'+(bal<0?'neg':'')+'">'+N(bal)+cur(label)+'</b></div></div>'+
-        '<div class="quick" style="grid-template-columns:1fr 1fr">'+
-          '<button class="qa" data-go="newmove" data-dir="in"><span class="ic tone-green">'+icon('plus')+'</span>واریز به حساب</button>'+
-          '<button class="qa" data-go="newmove" data-dir="out"><span class="ic tone-red">'+icon('minus')+'</span>برداشت از حساب</button>'+
+  tabsEl.innerHTML=TABS.map(function(t){
+    return '<button class="tab" data-go="'+t[0]+'"><span class="pill">'+icon(t[2])+'</span>'+t[1]+'</button>';
+  }).join('');
+
+  function top(title,o){
+    o=o||{};
+    return '<header class="top'+(o.home?'':' compact')+'"><div class="roll" aria-hidden="true">'+ROLL+'</div>'+
+      '<div class="top-row">'+
+      (o.back?'<button class="back" data-go="back" aria-label="بازگشت">'+icon('back')+'</button>':'')+
+      '<div class="grow"><h1>'+title+'</h1>'+(o.sub?'<p class="date">'+o.sub+'</p>':'')+'</div>'+
+      (db.sample?'<span class="chip">اطلاعات نمونه</span>':'')+'</div></header>';
+  }
+  function addBtn(label,go,msg){
+    return '<div class="block"><button class="btn" '+(go?'data-go="'+go+'"':'data-toast="'+msg+'"')+'>'+icon('plus')+label+'</button></div>';
+  }
+  function grouped(items,rowFn,emptyMsg){
+    if(!items.length)return '<div class="block"><div class="empty">'+emptyMsg+'</div></div>';
+    var sorted=items.slice().sort(function(a,b){return b.ts-a.ts}),labels=[];
+    sorted.forEach(function(x){var l=dayLabel(x.ts);if(labels.indexOf(l)<0)labels.push(l)});
+    return labels.map(function(l){
+      return '<div class="block"><h2>'+l+'</h2><div class="list">'+
+        sorted.filter(function(x){return dayLabel(x.ts)===l}).map(rowFn).join('')+'</div></div>';
+    }).join('');
+  }
+  function saleRow(s){
+    var due=r2(s.total-s.paid),c=CUR[s.cur||'AFN'];
+    return '<button class="row" data-edit="sale:'+s.id+'"><span class="ic tone-green">'+icon('sale')+'</span>'+
+      '<div class="main"><b>'+esc(s.name)+'</b><span class="subs">'+
+        (s.rolls?'<span class="sub">'+N(s.rolls)+' رول</span>':'')+
+        '<span class="sub">'+N(s.kg)+' کیلو</span></span></div>'+
+      '<div class="amt"><b>'+N(s.total)+cur(c)+'</b>'+
+        (due>0?'<span class="tag debt">باقی '+N(due)+'</span>':'<span class="tag paid">نقد</span>')+'</div><span class="chev">'+icon('chev')+'</span></button>';
+  }
+  function buyRow(b){
+    return '<button class="row" data-edit="buy:'+b.id+'"><span class="ic tone-blue">'+icon('buy')+'</span>'+
+      '<div class="main"><b>'+esc(b.name)+'</b><span class="sub">'+N(b.ton)+' تُن</span></div>'+
+      '<div class="amt"><b>'+N(b.amt)+cur(CUR[b.cur||'USD'])+'</b><span class="tag info">حساب '+CUR[b.cur||'USD']+'</span></div><span class="chev">'+icon('chev')+'</span></button>';
+  }
+  function expRow(x){
+    return '<button class="row" data-edit="exp:'+x.id+'"><span class="ic tone-gold">'+icon(x.cat==='معاش'?'users':'wallet')+'</span>'+
+      '<div class="main"><b>'+esc(x.name)+'</b><span class="sub">'+esc(x.cat||'')+'</span></div>'+
+      '<div class="amt"><b>'+N(x.amt)+cur(CUR[x.cur||'AFN'])+'</b></div><span class="chev">'+icon('chev')+'</span></button>';
+  }
+  function chTag(c){
+    if(c.status==='cashed')return '<span class="tag paid">نقد شد</span>';
+    if(c.status==='bounced')return '<span class="tag debt">برگشت خورد</span>';
+    var d=daysLeft(c.due);
+    if(d<0)return '<span class="tag debt">'+N(-d)+' روز گذشته</span>';
+    if(d===0)return '<span class="tag warn">سررسید امروز</span>';
+    return '<span class="tag info">'+N(d)+' روز مانده</span>';
+  }
+  function checkRow(c){
+    return '<button class="row" data-edit="check:'+c.id+'"><span class="ic tone-gold">'+icon('cheque')+'</span>'+
+      '<div class="main"><b>'+esc(c.name)+'</b><span class="subs"><span class="sub">سررسید: '+pdate(c.due,{day:'numeric',month:'long'})+'</span>'+
+        (c.no?'<span class="sub">شماره '+T(esc(c.no))+'</span>':'')+'</span></div>'+
+      '<div class="amt"><b>'+N(c.amt)+cur(CUR[c.cur||'AFN'])+'</b>'+chTag(c)+'</div><span class="chev">'+icon('chev')+'</span></button>';
+  }
+  function link(go,ic,tone,title,sub,extra){
+    return '<button class="row" data-go="'+go+'"><span class="ic tone-'+tone+'">'+icon(ic)+'</span>'+
+      '<div class="main"><b>'+title+'</b>'+sub+'</div>'+(extra||'')+'<span class="chev">'+icon('chev')+'</span></button>';
+  }
+  function soon(ic,tone,title,desc){
+    return '<button class="row" data-toast="این بخش در مرحله بعد ساخته می‌شود"><span class="ic tone-'+tone+'">'+icon(ic)+'</span>'+
+      '<div class="main"><b>'+title+'</b><span class="sub">'+desc+'</span></div><span class="chev">'+icon('chev')+'</span></button>';
+  }
+
+  /* ---------- pages ---------- */
+  var pages={
+    home:function(){
+      var ts=db.sales.filter(function(s){return isToday(s.ts)});
+      var te=db.exps.filter(function(x){return isToday(x.ts)});
+      var tot=by(ts,function(s){return s.total});
+      var dueT=by(ts,function(s){return s.total-s.paid});
+      var ex=by(te,function(x){return x.amt});
+      var ci=db.customers.map(custInfo);
+      var debt=totalDebt();
+      var debtors=ci.filter(hasDebt).length;
+      var nRolls=sum(ts,'rolls'),nKg=sum(ts,'kg');
+      var dt=dueText(dueT);
+
+      var rec=db.sales.map(function(s){return {ts:s.ts,ic:'sale',tone:'green',text:'فروش به '+esc(s.name),amt:s.total,c:s.cur||'AFN'}})
+        .concat(db.buys.map(function(b){return {ts:b.ts,ic:'buy',tone:'blue',text:'خرید '+esc(b.name),amt:b.amt,c:b.cur||'USD'}}))
+        .concat(db.exps.map(function(x){return {ts:x.ts,ic:x.cat==='معاش'?'users':'wallet',tone:'gold',text:esc(x.name),amt:x.amt,c:x.cur||'AFN'}}))
+        .concat(db.pays.map(function(p){return {ts:p.ts,ic:p.checkId?'cheque':'bank',tone:'blue',text:(p.checkId?'چک از ':'دریافت از ')+esc(p.name),amt:p.amt,c:p.cur||'AFN'}}))
+        .sort(function(a,b){return b.ts-a.ts}).slice(0,4);
+
+      return top(esc(db.settings.name),{home:true,sub:pdate(Date.now(),{weekday:'long',day:'numeric',month:'long',year:'numeric'})})+
+        '<div class="accounts">'+
+          '<button class="acc" data-go="accounts" data-acc="AFN"><span class="lbl">حساب افغانی</span><b>'+N(balance('AFN'))+cur(CUR.AFN)+'</b></button>'+
+          '<button class="acc" data-go="accounts" data-acc="USD"><span class="lbl">حساب دالر</span><b>'+N(balance('USD'))+cur(CUR.USD)+'</b></button>'+
         '</div>'+
-        '<div class="block"><div class="list"><button class="row" data-go="openbal"><span class="ic tone-blue">'+icon('sliders')+'</span>'+
-          '<div class="main"><b>موجودی اول حساب‌ها</b><span class="sub">'+N((db.open&&db.open.AFN)||0)+' افغانی، '+N((db.open&&db.open.USD)||0)+' دالر</span></div><span class="chev">'+icon('chev')+'</span></button></div></div>'+
-        grouped(items,accRow,'هنوز حرکتی در این حساب ثبت نشده.');
+        '<div class="quick">'+
+          '<button class="qa" data-go="newsale"><span class="ic tone-green">'+icon('sale')+'</span>ثبت فروش</button>'+
+          '<button class="qa" data-go="newbuy"><span class="ic tone-blue">'+icon('buy')+'</span>ثبت خرید</button>'+
+          '<button class="qa" data-go="newexp"><span class="ic tone-gold">'+icon('wallet')+'</span>ثبت مصرف</button>'+
+        '</div>'+
+        '<div class="block"><h2>امروز</h2><div class="list">'+
+          link('sales','sale','green','فروش امروز',
+            ts.length?'<span class="subs">'+(nRolls?'<span class="sub">'+N(nRolls)+' رول</span>':'')+'<span class="sub">'+N(nKg)+' کیلو</span></span>':'<span class="sub">هنوز فروشی ثبت نشده</span>',
+            '<div class="amt">'+amts(tot.AFN,tot.USD)+(dt?'<span class="tag debt">باقی '+dt+'</span>':'')+'</div>')+
+          link('exp','wallet','gold','مصارف امروز',
+            '<span class="sub">'+(te.length?N(te.length)+' ثبت':'مصرفی ثبت نشده')+'</span>',
+            '<div class="amt">'+amts(ex.AFN,ex.USD)+'</div>')+
+          link('customers','users','red','طلب از مشتری‌ها',
+            '<span class="sub">'+(debtors?N(debtors)+' مشتری':'کسی باقی‌دار نیست')+'</span>',
+            '<div class="amt">'+amts(debt.AFN,debt.USD)+'</div>')+
+        '</div></div>'+
+        '<div class="block"><h2>آخرین ثبت‌ها</h2>'+
+          (rec.length?'<div class="list">'+rec.map(function(r){
+            return '<div class="row"><span class="ic tone-'+r.tone+'">'+icon(r.ic)+'</span>'+
+              '<div class="main"><b>'+r.text+'</b><span class="sub">'+(isToday(r.ts)?'':dayLabel(r.ts)+' ')+T(timeText(r.ts))+'</span></div>'+
+              '<div class="amt"><b>'+N(r.amt)+cur(CUR[r.c])+'</b></div></div>';
+          }).join('')+'</div>':'<div class="empty">هنوز چیزی ثبت نشده. با «ثبت فروش» شروع کن.</div>')+
+        '</div>';
     },
-    newmove:function(){
-      var ed=curEdit('move');
-      return top(ed?'ویرایش حرکت حساب':'واریز یا برداشت',{back:true})+
-        '<div class="block form" id="mf">'+
-          '<div class="fld"><span class="lbl">نوع حرکت</span><div class="seg" data-seg="dir" role="group" aria-label="نوع حرکت">'+
-            '<button type="button" data-v="in" aria-pressed="true">واریز به حساب</button><button type="button" data-v="out" aria-pressed="false">برداشت از حساب</button></div></div>'+
-          '<div class="fld"><span class="lbl">حساب</span><div class="seg" data-seg="cur" role="group" aria-label="حساب">'+
+    sales:function(){
+      return top('فروش')+addBtn('ثبت فروش جدید','newsale')+
+        grouped(db.sales,saleRow,'هنوز فروشی ثبت نشده. اولین فروش را ثبت کن.');
+    },
+    buy:function(){
+      return top('خرید مواد خام')+addBtn('ثبت خرید جدید','newbuy')+
+        grouped(db.buys,buyRow,'هنوز خریدی ثبت نشده.');
+    },
+    exp:function(){
+      return top('مصارف')+addBtn('ثبت مصرف جدید','newexp')+
+        grouped(db.exps,expRow,'هنوز مصرفی ثبت نشده.');
+    },
+    customers:function(){
+      var ci=db.customers.map(custInfo).sort(function(a,b){return (b.d.AFN-a.d.AFN)||(b.d.USD-a.d.USD)});
+      var debt=totalDebt();
+      var t='';
+      if(debt.AFN>0)t+='<span class="blk">'+N(debt.AFN)+cur(CUR.AFN)+'</span>';
+      if(debt.USD>0)t+='<span class="blk">'+N(debt.USD)+cur(CUR.USD)+'</span>';
+      if(!t)t='<span class="blk">'+N(0)+cur(CUR.AFN)+'</span>';
+      return top('مشتری‌ها',{back:true})+
+        '<div class="block"><div class="sum"><span>مجموع طلب از مشتری‌ها</span><b>'+t+'</b></div></div>'+
+        '<div class="block">'+(ci.length?'<div class="list">'+ci.map(function(c){
+          return '<button class="row" data-go="cust" data-cust="'+esc(c.name)+'"><span class="avatar" aria-hidden="true">'+esc(c.name.charAt(0))+'</span>'+
+            '<div class="main"><b>'+esc(c.name)+'</b><span class="sub">'+(c.last?'آخرین خرید: '+dayLabel(c.last):'هنوز خریدی ندارد')+'</span></div>'+
+            '<div class="amt">'+(hasDebt(c)?amts(c.d.AFN>0?c.d.AFN:0,c.d.USD>0?c.d.USD:0)+'<span class="tag debt">باقی</span>':'<span class="tag paid">تسویه</span>')+'</div>'+
+            '<span class="chev">'+icon('chev')+'</span></button>';
+        }).join('')+'</div>':'<div class="empty">هنوز مشتری‌ای نیست. با ثبت اولین فروش، مشتری هم اضافه می‌شود.</div>')+'</div>';
+    },
+    reports:function(){
+      var day=state.rep==='day';
+      var inP=day?isToday:function(ts){return monthKey(ts)===monthKey(Date.now())};
+      function tot(arr,c,k){return r2(arr.reduce(function(t,x){return ((x.cur||'AFN')===c&&inP(x.ts))?t+(x[k]||0):t},0))}
+      function fig(c){return {s:tot(db.sales,c,'total'),b:tot(db.buys,c,'amt'),e:tot(db.exps,c,'amt')}}
+      var afn=fig('AFN'),usd=fig('USD');
+      function cell(v){return v===0?'<span class="muted">—</span>':N(v)}
+      function res(a){var v=r2(a.s-a.b-a.e);return '<div class="c res '+(v<0?'neg':'pos')+'">'+(v===0?'<span class="muted">—</span>':N(v))+'</div>'}
+      var rows=[['فروش','s'],['خرید مواد','b'],['مصارف','e']].map(function(x){
+        return '<div class="c l">'+x[0]+'</div><div class="c">'+cell(afn[x[1]])+'</div><div class="c">'+cell(usd[x[1]])+'</div>';
+      }).join('');
+      return top('گزارش‌ها',{back:true,sub:day?'امروز':'این ماه'})+
+        '<div class="block"><div class="seg" role="group" aria-label="دوره گزارش">'+
+          '<button data-rep="day" aria-pressed="'+day+'">روزانه</button>'+
+          '<button data-rep="month" aria-pressed="'+(!day)+'">ماهانه</button></div></div>'+
+        '<div class="block"><div class="rep">'+
+          '<div class="c h"></div><div class="c h">افغانی</div><div class="c h">دالر</div>'+
+          rows+
+          '<div class="c l res">نتیجه</div>'+res(afn)+res(usd)+
+        '</div><p class="note">حساب افغانی و دالر جدا هستند و با هم جمع نمی‌شوند.</p></div>';
+    },
+    more:function(){
+      var pend=db.checks.filter(function(c){return c.status==='pending'});
+      var late=pend.filter(function(c){return daysLeft(c.due)<0}).length;
+      var chExtra=pend.length?'<div class="amt"><span class="tag '+(late?'debt':'info')+'">'+N(pend.length)+' در انتظار</span></div>':'';
+      return top('بیشتر')+
+        '<div class="block"><h2>حساب‌داری</h2><div class="list">'+
+          link('customers','users','blue','مشتری‌ها','<span class="sub">حساب و طلب هر مشتری</span>')+
+          link('checks','cheque','gold','چک‌ها','<span class="sub">چک‌های دریافتی از مشتری‌ها</span>',chExtra)+
+          link('accounts','bank','green','حساب‌ها','<span class="sub">حساب افغانی و حساب دالر</span>')+
+        '</div></div>'+
+        '<div class="block"><h2>گزارش</h2><div class="list">'+
+          link('reports','chart','blue','گزارش روزانه و ماهانه','<span class="sub">فروش، خرید، مصارف و نتیجه</span>')+
+        '</div></div>'+
+        '<div class="block"><h2>مدیریت</h2><div class="list">'+
+          soon('shield','red','کاربران','مدیر و کارگرها، هرکس با دسترسی خودش')+
+          link('settings','sliders','blue','تنظیمات','<span class="sub">نام کارخانه، قیمت پیش‌فرض و بیشتر</span>')+
+          (db.sample?'<button class="row" data-action="clear"><span class="ic tone-red">'+icon('trash')+'</span><div class="main"><b>پاک کردن اطلاعات نمونه</b><span class="sub">برای شروع با اطلاعات واقعی</span></div></button>':'')+
+        '</div></div>';
+    },
+    newsale:function(){
+      var opts=db.customers.map(function(c){return '<option value="'+esc(c.name)+'">'}).join('');
+      var ed=curEdit('sale');
+      return top(ed?'ویرایش فروش':'ثبت فروش جدید',{back:true})+
+        '<div class="block form" id="sf">'+
+          '<div class="fld"><label for="f-cust">مشتری</label>'+
+            '<input class="inp" id="f-cust" list="cust-list" autocomplete="off" placeholder="نام مشتری را بنویس یا انتخاب کن">'+
+            '<datalist id="cust-list">'+opts+'</datalist></div>'+
+          '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
             '<button type="button" data-v="AFN" aria-pressed="true">افغانی</button><button type="button" data-v="USD" aria-pressed="false">دالر</button></div></div>'+
-          '<div class="fld"><label for="m-amt">مبلغ</label><input class="inp" id="m-amt" inputmode="decimal" autocomplete="off"></div>'+
-          '<div class="fld"><label for="m-note">توضیح (اختیاری)</label><input class="inp" id="m-note" autocomplete="off" placeholder="مثلاً برداشت شخصی، سرمایه، تبدیل ارز"></div>'+
-          '<p class="err" id="m-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="m-save">'+(ed?'ذخیره تغییرات':'ذخیره')+'</button>'+
-          (ed?delBtn('m-del','حذف این حرکت'):'')+
+          '<div class="fld"><span class="lbl">نوع فروش</span><div class="seg" data-seg="mode" role="group" aria-label="نوع فروش">'+
+            '<button type="button" data-v="roll" aria-pressed="true">رول به رول</button><button type="button" data-v="weight" aria-pressed="false">کیلو یا تُن</button></div></div>'+
+          '<section id="sec-roll"><div class="list" id="rolls"></div>'+
+            '<button type="button" class="btn ghost" id="add-roll">'+icon('plus')+'افزودن رول</button></section>'+
+          '<section id="sec-weight" hidden>'+
+            '<div class="fld"><span class="lbl">واحد وزن</span><div class="seg" data-seg="unit" role="group" aria-label="واحد وزن">'+
+              '<button type="button" data-v="kg" aria-pressed="true">کیلو</button><button type="button" data-v="ton" aria-pressed="false">تُن</button></div></div>'+
+            '<div class="fld"><label for="w-qty" id="w-qty-l">مقدار (کیلو)</label><input class="inp" id="w-qty" inputmode="decimal" autocomplete="off"></div>'+
+            '<div class="fld"><label for="w-rate" id="w-rate-l">نرخ هر کیلو</label><input class="inp" id="w-rate" inputmode="decimal" autocomplete="off"></div>'+
+          '</section>'+
+          '<div class="total"><span>مجموع</span><b id="f-total"></b></div>'+
+          '<div class="fld"><label for="f-paid">مبلغ دریافتی</label>'+
+            '<input class="inp" id="f-paid" inputmode="decimal" autocomplete="off" placeholder="۰">'+
+            '<div class="chips"><button type="button" class="pillbtn" id="paid-all">همه نقد</button><button type="button" class="pillbtn" id="paid-none">همه باقی</button></div></div>'+
+          '<div class="due" id="f-due"></div>'+
+          '<p class="err" id="f-err" role="alert"></p>'+
+          '<button type="button" class="btn" id="f-save">'+(ed?'ذخیره تغییرات':'ذخیره فروش')+'</button>'+
+          (ed?delBtn('f-del','حذف این فروش'):'')+
         '</div>';
     },
-    openbal:function(){
-      return top('موجودی اول حساب‌ها',{back:true})+
-        '<div class="block form" id="of">'+
-          '<p class="note" style="margin:0 2px 16px">پولی که قبل از شروع کار با این اپ در هر حساب بود.</p>'+
-          '<div class="fld"><label for="o-afn">موجودی اول حساب افغانی</label><input class="inp" id="o-afn" inputmode="decimal" autocomplete="off"></div>'+
-          '<div class="fld"><label for="o-usd">موجودی اول حساب دالر</label><input class="inp" id="o-usd" inputmode="decimal" autocomplete="off"></div>'+
-          '<p class="err" id="o-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="o-save">ذخیره</button>'+
+    newbuy:function(){
+      var seen={},opts=db.buys.map(function(b){return b.name}).filter(function(n){if(seen[n])return false;seen[n]=1;return true})
+        .map(function(n){return '<option value="'+esc(n)+'">'}).join('');
+      var ed=curEdit('buy');
+      return top(ed?'ویرایش خرید':'ثبت خرید جدید',{back:true})+
+        '<div class="block form" id="bf">'+
+          '<div class="fld"><label for="b-name">جنس و فروشنده</label>'+
+            '<input class="inp" id="b-name" list="buy-list" autocomplete="off" placeholder="مثلاً پلاستیک خام، تاجر خالد">'+
+            '<datalist id="buy-list">'+opts+'</datalist></div>'+
+          '<div class="fld"><span class="lbl">پرداخت از حساب</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
+            '<button type="button" data-v="USD" aria-pressed="true">دالر</button><button type="button" data-v="AFN" aria-pressed="false">افغانی</button></div></div>'+
+          '<div class="fld"><span class="lbl">واحد وزن</span><div class="seg" data-seg="unit" role="group" aria-label="واحد وزن">'+
+            '<button type="button" data-v="ton" aria-pressed="true">تُن</button><button type="button" data-v="kg" aria-pressed="false">کیلو</button></div></div>'+
+          '<div class="fld"><label for="b-qty" id="b-qty-l">مقدار (تُن)</label><input class="inp" id="b-qty" inputmode="decimal" autocomplete="off"></div>'+
+          '<div class="fld"><label for="b-amt">مبلغ کل خرید</label><input class="inp" id="b-amt" inputmode="decimal" autocomplete="off"></div>'+
+          '<div class="total"><span>از حساب کم می‌شود</span><b id="b-show"></b></div>'+
+          '<p class="err" id="b-err" role="alert"></p>'+
+          '<button type="button" class="btn" id="b-save">'+(ed?'ذخیره تغییرات':'ذخیره خرید')+'</button>'+
+          (ed?delBtn('b-del','حذف این خرید'):'')+
         '</div>';
     },
-
-    /* ----- settings ----- */
-    settings:function(){
-      return top('تنظیمات',{back:true})+
-        '<div class="block form" id="sg">'+
-          '<div class="fld"><label for="s-name">نام کارخانه</label><input class="inp" id="s-name" autocomplete="off" value="'+esc(db.settings.name)+'"></div>'+
-          '<div class="fld"><label for="s-rate">قیمت پیش‌فرض فروش هر کیلو (افغانی)</label>'+
-            '<input class="inp" id="s-rate" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(db.settings.rate?db.settings.rate:'')+'">'+
-            '<p class="note">در فرم فروش با افغانی، این قیمت خودکار نوشته می‌شود و می‌توانی تغییرش بدهی.</p></div>'+
-          '<div class="fld"><span class="lbl">ظاهر اپ</span><div class="seg" data-seg="theme" role="group" aria-label="ظاهر اپ">'+
-            '<button type="button" data-v="auto" aria-pressed="true">خودکار</button>'+
-            '<button type="button" data-v="light" aria-pressed="false">روشن</button>'+
-            '<button type="button" data-v="dark" aria-pressed="false">تیره</button></div></div>'+
-          '<p class="err" id="s-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="s-save">ذخیره تنظیمات</button>'+
+    newexp:function(){
+      var ed=curEdit('exp');
+      var chips=EXP_CATS.map(function(c,i){return '<button type="button" class="pillbtn" data-cat="'+esc(c)+'" aria-pressed="'+(i===0)+'">'+esc(c)+'</button>'}).join('');
+      return top(ed?'ویرایش مصرف':'ثبت مصرف جدید',{back:true})+
+        '<div class="block form" id="ef">'+
+          '<div class="fld"><span class="lbl">نوع مصرف</span><div class="chips wrap" id="e-cats">'+chips+'</div></div>'+
+          '<div class="fld"><label for="e-name">توضیح</label>'+
+            '<input class="inp" id="e-name" autocomplete="off" placeholder="مثلاً اسم کارگر، برق، کرایه موتر">'+'</div>'+
+          '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
+            '<button type="button" data-v="AFN" aria-pressed="true">افغانی</button><button type="button" data-v="USD" aria-pressed="false">دالر</button></div></div>'+
+          '<div class="fld"><label for="e-amt">مبلغ</label><input class="inp" id="e-amt" inputmode="decimal" autocomplete="off"></div>'+
+          '<div class="total"><span>از حساب کم می‌شود</span><b id="e-show"></b></div>'+
+          '<p class="err" id="e-err" role="alert"></p>'+
+          '<button type="button" class="btn" id="e-save">'+(ed?'ذخیره تغییرات':'ذخیره مصرف')+'</button>'+
+          (ed?delBtn('e-del','حذف این مصرف'):'')+
         '</div>';
-    }
-  };
-  var EXP_CATS=['معاش','خدمات','حمل','خوراک','تعمیرات','دیگر'];
+    },
     cust:function(){
       var name=state.cust,known=db.customers.some(function(c){return c.name===name});
       if(!name||!known)return top('مشتری',{back:true})+'<div class="block"><div class="empty">مشتری پیدا نشد.</div></div>';
