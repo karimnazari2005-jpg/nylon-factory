@@ -127,6 +127,12 @@ button.row{cursor:pointer}
 .c.l{text-align:start;padding-inline-start:14px;font-weight:500}
 .c.res{font-weight:700;border-bottom:0}
 .note{margin:10px 2px 0;color:var(--muted);font-size:13px}
+.daynav{display:grid;grid-template-columns:48px 1fr 48px;gap:8px;align-items:stretch}
+.daynav button{border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;place-items:center;cursor:pointer;min-height:52px}
+.daynav button:disabled{opacity:.4;cursor:default}
+.daymid{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 8px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;text-align:center}
+.daymid b{font-weight:700}
+.daymid input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px;border:0}
 
 /* form */
 .form .fld{margin-bottom:16px}
@@ -163,6 +169,53 @@ button.row{cursor:pointer}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);width:max-content;max-width:calc(100% - 32px);box-sizing:border-box;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--ink);color:var(--on-ink);font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion: reduce){.toast{transition:none}}
+/* logo and profile */
+.logo{flex:none;width:44px;height:44px;border-radius:12px;object-fit:cover;background:rgba(255,255,255,.12)}
+.logo.big{width:72px;height:72px;border-radius:18px}
+.logo.ph{display:grid;place-items:center;background:var(--t-blue);color:var(--primary)}
+.logo.ph .icon{width:30px;height:30px}
+.profrow{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.profrow .btns{flex:1;display:grid;gap:8px}
+.profrow .btn{margin-top:0}
+.swrow{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:40px;height:40px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 1px var(--line);cursor:pointer;background:var(--c,#1B7A9E)}
+.sw[aria-pressed="true"]{border-color:var(--text)}
+
+/* futuristic dark glass theme */
+:root[data-theme="neon"]{
+  --bg:#070B1A; --surface:rgba(18,28,58,.62); --ink:#070B1A; --text:#EAF6FF; --muted:#8FA9C4; --line:rgba(110,190,255,.20);
+  --primary:#37E1FF; --on-primary:#04121C;
+  --red:#FF6F91; --green:#3DF2B0; --gold:#FFC857;
+  --t-blue:rgba(55,225,255,.14); --t-green:rgba(61,242,176,.14); --t-gold:rgba(255,200,87,.14); --t-red:rgba(255,111,145,.14);
+  --on-ink:#EAF6FF; --on-ink-muted:#8FA9C4;
+}
+:root[data-theme="neon"] body{background:transparent}
+:root[data-theme="neon"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60% 40% at 85% 0%,rgba(55,225,255,.22),transparent 70%),radial-gradient(50% 40% at 0% 32%,rgba(124,92,255,.22),transparent 70%),radial-gradient(60% 40% at 50% 100%,rgba(0,255,190,.10),transparent 70%)}
+:root[data-theme="neon"] .top{background:linear-gradient(160deg,rgba(10,20,50,.96),rgba(11,36,71,.93));border-bottom:1px solid var(--line);box-shadow:0 8px 40px rgba(55,225,255,.12)}
+:root[data-theme="neon"] .roll{color:#37E1FF;opacity:.32}
+:root[data-theme="neon"] .top h1{text-shadow:0 0 18px rgba(55,225,255,.55)}
+:root[data-theme="neon"] .list,
+:root[data-theme="neon"] .accounts,
+:root[data-theme="neon"] .qa,
+:root[data-theme="neon"] .rep,
+:root[data-theme="neon"] .empty,
+:root[data-theme="neon"] .sum,
+:root[data-theme="neon"] .total,
+:root[data-theme="neon"] .daymid,
+:root[data-theme="neon"] .daynav button,
+:root[data-theme="neon"] .inp,
+:root[data-theme="neon"] .pillbtn{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+:root[data-theme="neon"] .accounts{box-shadow:0 0 0 1px var(--line),0 12px 40px rgba(0,0,0,.45),0 0 34px rgba(55,225,255,.12)}
+:root[data-theme="neon"] .list,:root[data-theme="neon"] .qa,:root[data-theme="neon"] .rep{box-shadow:0 10px 30px rgba(0,0,0,.35)}
+:root[data-theme="neon"] .acc b,:root[data-theme="neon"] .sum b{text-shadow:0 0 12px rgba(55,225,255,.35)}
+:root[data-theme="neon"] .btn:not(.ghost):not(.del){background:linear-gradient(135deg,#37E1FF,#6C7BFF);color:#04121C;box-shadow:0 0 22px rgba(55,225,255,.4)}
+:root[data-theme="neon"] .tabbar{background:rgba(8,14,34,.86);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+:root[data-theme="neon"] .tab[aria-current="page"] .pill{background:rgba(55,225,255,.16);box-shadow:0 0 18px rgba(55,225,255,.45)}
+:root[data-theme="neon"] .seg{background:rgba(255,255,255,.06)}
+:root[data-theme="neon"] .seg button[aria-pressed="true"]{background:rgba(55,225,255,.2);color:var(--text);box-shadow:0 0 12px rgba(55,225,255,.25)}
+:root[data-theme="neon"] .inp{background:rgba(255,255,255,.05)}
+:root[data-theme="neon"] .toast{background:rgba(8,14,34,.92)}
 </style>
 </head>
 <body>
@@ -257,6 +310,27 @@ button.row{cursor:pointer}
     if(dayKey(ts)===dayKey(Date.now()-864e5))return 'دیروز';
     return pdate(ts,{day:'numeric',month:'long'});
   }
+  /* a timestamp on a chosen day (yyyy-mm-dd) with the current time of day */
+  function tsOnDay(v){
+    var p=String(v||'').split('-');if(p.length!==3)return 0;
+    var n=new Date();
+    var t=new Date(+p[0],+p[1]-1,+p[2],n.getHours(),n.getMinutes(),n.getSeconds()).getTime();
+    return isFinite(t)?t:0;
+  }
+  function pickTs(v,old){
+    if(old&&dateVal(old)===v)return old;
+    return tsOnDay(v)||old||Date.now();
+  }
+  function dateFld(id,w){
+    return '<div class="fld"><label for="'+id+'">تاریخ</label><input class="inp" type="date" id="'+id+'"><div class="due" id="'+w+'"></div></div>';
+  }
+  function bindDate(f,idInput,idWhen,ts){
+    var d=f.querySelector(idInput),w=f.querySelector(idWhen);
+    d.max=dateVal(Date.now());d.value=dateVal(ts);
+    function upd(){var t=dateTs(d.value);w.textContent=t?fullDate(t)+' — '+pdate(t,{weekday:'long'}):''}
+    d.addEventListener('input',upd);d.addEventListener('change',upd);upd();
+    return d;
+  }
   /* full date like ۱۴۰۵/۰۵/۰۵ */
   function fullDate(ts){
     try{
@@ -283,12 +357,19 @@ button.row{cursor:pointer}
   /* ---------- data (shared between phones through Firebase) ---------- */
   var COLS=['sales','buys','exps','pays','checks','moves'];
   var auth=null,fs=null,user=null,ready=false,sess=0,unsubs=[],synced={},metaSynced='',authState='boot',gateMsg='',role='',profile=null;
-  var TYPING={newsale:1,newbuy:1,newexp:1,newcheck:1,newmove:1,openbal:1,settings:1,editpay:1,editcust:1,cust:1,newuser:1,edituser:1};
+  var TYPING={newsale:1,newbuy:1,newexp:1,newcheck:1,newmove:1,openbal:1,settings:1,editpay:1,editcust:1,cust:1,newuser:1,edituser:1,customers:1};
 
   function emptyData(){
     return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[],users:[]};
   }
   function localTheme(){try{return localStorage.getItem('nylon-theme')||'auto'}catch(e){return 'auto'}}
+  function localAccent(){try{return localStorage.getItem('nylon-accent')||''}catch(e){return ''}}
+  function savePrefs(){try{localStorage.setItem('nylon-theme',db.settings.theme);localStorage.setItem('nylon-accent',db.settings.accent||'')}catch(e){}}
+  function cacheBrand(){try{localStorage.setItem('nylon-brand',JSON.stringify({name:db.settings.name,logo:db.settings.logo||''}))}catch(e){}}
+  function brand(){
+    try{var b=JSON.parse(localStorage.getItem('nylon-brand')||'null');if(b&&typeof b==='object')return b}catch(e){}
+    return {name:DEFAULT_NAME,logo:''};
+  }
   var db=emptyData();
   function ensure(){
     if(!db.pays)db.pays=[];
@@ -296,12 +377,38 @@ button.row{cursor:pointer}
     if(!db.moves)db.moves=[];
     if(!db.open)db.open={AFN:0,USD:0};
     var s=db.settings||{};
-    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||localTheme()};
+    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||localTheme(),accent:(s.accent!==undefined?s.accent:localAccent()),phone:s.phone||'',address:s.address||'',logo:s.logo||''};
+  }
+  function hex2rgb(h){h=String(h).replace('#','');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
+  function mixc(a,b,t){return a.map(function(v,i){return Math.round(v*(1-t)+b[i]*t)})}
+  function rgb2hex(c){return '#'+c.map(function(v){return ('0'+v.toString(16)).slice(-2)}).join('')}
+  function lum(c){return (0.299*c[0]+0.587*c[1]+0.114*c[2])/255}
+  function isDarkNow(){
+    var t=db.settings.theme;
+    if(t==='dark'||t==='neon')return true;
+    if(t==='light')return false;
+    try{return !!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)}catch(e){return false}
+  }
+  /* the chosen app color replaces the main blue */
+  function applyAccent(){
+    var st=document.documentElement.style,a=db.settings.accent;
+    if(!a){['--primary','--on-primary','--t-blue'].forEach(function(p){st.removeProperty(p)});return}
+    var rgb=hex2rgb(a),dark=isDarkNow();
+    var prim=dark?mixc(rgb,[255,255,255],0.25):rgb;
+    st.setProperty('--primary',rgb2hex(prim));
+    st.setProperty('--on-primary',lum(prim)>0.6?'#072028':'#FFFFFF');
+    st.setProperty('--t-blue',rgb2hex(dark?mixc(rgb,[21,37,45],0.78):mixc(rgb,[255,255,255],0.86)));
   }
   function applyTheme(){
     var t=db.settings.theme,r=document.documentElement;
-    if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
+    if(t==='light'||t==='dark'||t==='neon')r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
     document.title=db.settings.name;
+    applyAccent();
+  }
+  try{window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){applyAccent()})}catch(e){}
+  function logoHtml(src,big){
+    if(src&&String(src).indexOf('data:image/')===0)return '<img class="logo'+(big?' big':'')+'" alt="" src="'+esc(src)+'">';
+    return big?'<div class="logo big ph">'+icon('home')+'</div>':'';
   }
   ensure();applyTheme();
 
@@ -390,7 +497,7 @@ button.row{cursor:pointer}
     Array.prototype.forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v?'true':'false')});
   }
   /* ---------- state and shell ---------- */
-  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in',uid:''};
+  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in',uid:'',day:Date.now(),formDay:null};
   var view=document.getElementById('view');
   var tabsEl=document.getElementById('tabs');
   var tabbarEl=document.querySelector('.tabbar');
@@ -408,9 +515,10 @@ button.row{cursor:pointer}
 
   function top(title,o){
     o=o||{};
+    var lg=logoHtml(o.logo!==undefined?o.logo:(o.home?db.settings.logo:''),false);
     return '<header class="top'+(o.home?'':' compact')+'"><div class="roll" aria-hidden="true">'+ROLL+'</div>'+
       '<div class="top-row">'+
-      (o.back?'<button class="back" data-go="back" aria-label="بازگشت">'+icon('back')+'</button>':'')+
+      (o.back?'<button class="back" data-go="back" aria-label="بازگشت">'+icon('back')+'</button>':'')+lg+
       '<div class="grow"><h1>'+title+'</h1>'+(o.sub?'<p class="date">'+o.sub+'</p>':'')+'</div>'+
       (db.sample?'<span class="chip">اطلاعات نمونه</span>':'')+'</div></header>';
   }
@@ -521,8 +629,39 @@ button.row{cursor:pointer}
         '</div>';
     },
     sales:function(){
-      return top('فروش')+addBtn('ثبت فروش جدید','newsale')+
-        grouped(db.sales,saleRow,'هنوز فروشی ثبت نشده. اولین فروش را ثبت کن.');
+      var day=state.day,key=dayKey(day);
+      var ds=db.sales.filter(function(x){return dayKey(x.ts)===key}).sort(function(a,b){return a.ts-b.ts});
+      var tot=by(ds,function(x){return x.total}),got=by(ds,function(x){return x.paid}),due=by(ds,function(x){return x.total-x.paid});
+      var atToday=dateVal(day)>=dateVal(Date.now());
+      var head=isToday(day)?'امروز':(dayKey(day)===dayKey(Date.now()-864e5)?'دیروز':pdate(day,{weekday:'long'}));
+      var days={};
+      db.sales.forEach(function(x){
+        var k=dayKey(x.ts),o=days[k]||(days[k]={ts:dayStart(x.ts)+432e5,n:0,AFN:0,USD:0});
+        o.n++;o[x.cur||'AFN']+=x.total;
+      });
+      var dl=Object.keys(days).map(function(k){return days[k]}).sort(function(a,b){return b.ts-a.ts}).slice(0,60);
+      var owe=due.AFN>0||due.USD>0;
+      return top('فروش روزانه')+
+        '<div class="block"><button class="btn" data-go="newsale" data-formday="1">'+icon('plus')+'ثبت فروش جدید</button></div>'+
+        '<div class="block"><div class="daynav">'+
+          '<button type="button" data-step="-1" aria-label="روز قبل">'+icon('back')+'</button>'+
+          '<label class="daymid"><b>'+head+'</b><span class="sub"><span class="n">'+fullDate(day)+'</span></span>'+
+            '<input type="date" id="day-pick" value="'+dateVal(day)+'" max="'+dateVal(Date.now())+'" aria-label="انتخاب تاریخ"></label>'+
+          '<button type="button" data-step="1" aria-label="روز بعد"'+(atToday?' disabled':'')+'>'+icon('chev')+'</button>'+
+        '</div></div>'+
+        '<div class="block"><div class="list">'+
+          '<div class="row"><span class="ic tone-green">'+icon('sale')+'</span><div class="main"><b>جمع فروش این روز</b><span class="subs"><span class="sub">'+N(ds.length)+' فروش</span>'+
+            (sum(ds,'rolls')?'<span class="sub">'+N(sum(ds,'rolls'))+' رول</span>':'')+'<span class="sub">'+N(sum(ds,'kg'))+' کیلو</span></span></div><div class="amt">'+amts(tot.AFN,tot.USD)+'</div></div>'+
+          '<div class="row"><span class="ic tone-blue">'+icon('bank')+'</span><div class="main"><b>دریافتی</b></div><div class="amt">'+amts(got.AFN,got.USD)+'</div></div>'+
+          '<div class="row"><span class="ic tone-red">'+icon('users')+'</span><div class="main"><b>باقی</b></div><div class="amt'+(owe?' neg':'')+'">'+amts(due.AFN>0?due.AFN:0,due.USD>0?due.USD:0)+'</div></div>'+
+        '</div></div>'+
+        (ds.length?'<div class="block"><h2>فروش‌های این روز</h2><div class="list">'+ds.map(saleRow).join('')+'</div></div>'
+                  :'<div class="block"><div class="empty">در این روز فروشی ثبت نشده.</div></div>')+
+        (dl.length?'<div class="block"><h2>روزهای ثبت‌شده</h2><div class="list">'+dl.map(function(d){
+          return '<button class="row" data-pickday="'+d.ts+'"><span class="ic tone-blue">'+icon('sale')+'</span>'+
+            '<div class="main"><b>'+T(fullDate(d.ts))+'</b><span class="sub">'+pdate(d.ts,{weekday:'long'})+' · '+N(d.n)+' فروش</span></div>'+
+            '<div class="amt">'+amts(r2(d.AFN),r2(d.USD))+'</div><span class="chev">'+icon('chev')+'</span></button>';
+        }).join('')+'</div></div>':'');
     },
     buy:function(){
       return top('خرید مواد خام')+addBtn('ثبت خرید جدید','newbuy')+
@@ -539,8 +678,9 @@ button.row{cursor:pointer}
       if(debt.AFN>0)t+='<span class="blk">'+N(debt.AFN)+cur(CUR.AFN)+'</span>';
       if(debt.USD>0)t+='<span class="blk">'+N(debt.USD)+cur(CUR.USD)+'</span>';
       if(!t)t='<span class="blk">'+N(0)+cur(CUR.AFN)+'</span>';
-      return top('مشتری‌ها',{back:true})+
+      return top('پرونده مشتری‌ها',{back:true})+
         '<div class="block"><div class="sum"><span>مجموع طلب از مشتری‌ها</span><b>'+t+'</b></div></div>'+
+        '<div class="block"><input class="inp" id="cq" placeholder="جستجوی مشتری..." autocomplete="off"></div>'+
         '<div class="block">'+(ci.length?'<div class="list">'+ci.map(function(c){
           return '<button class="row" data-go="cust" data-cust="'+esc(c.name)+'"><span class="avatar" aria-hidden="true">'+esc(c.name.charAt(0))+'</span>'+
             '<div class="main"><b>'+esc(c.name)+'</b><span class="sub">'+(c.last?'آخرین خرید: '+T(fullDate(c.last)):'هنوز خریدی ندارد')+'</span></div>'+
@@ -575,7 +715,7 @@ button.row{cursor:pointer}
       var chExtra=pend.length?'<div class="amt"><span class="tag '+(late?'debt':'info')+'">'+N(pend.length)+' در انتظار</span></div>':'';
       return top('بیشتر')+
         '<div class="block"><h2>حساب‌داری</h2><div class="list">'+
-          link('customers','users','blue','مشتری‌ها','<span class="sub">حساب و طلب هر مشتری</span>')+
+          link('customers','users','blue','پرونده مشتری‌ها','<span class="sub">پرونده، حساب و طلب هر مشتری</span>')+
           link('checks','cheque','gold','چک‌ها','<span class="sub">چک‌های دریافتی از مشتری‌ها</span>',chExtra)+
           link('accounts','bank','green','حساب‌ها','<span class="sub">حساب افغانی و حساب دالر</span>')+
         '</div></div>'+
@@ -584,7 +724,7 @@ button.row{cursor:pointer}
         '</div></div>'+
         '<div class="block"><h2>مدیریت</h2><div class="list">'+
           link('users','shield','red','کاربران','<span class="sub">مدیر و کارگرها، هرکس با دسترسی خودش</span>')+
-          link('settings','sliders','blue','تنظیمات','<span class="sub">نام کارخانه، قیمت پیش‌فرض و بیشتر</span>')+
+          link('settings','sliders','blue','تنظیمات','<span class="sub">پروفایل، ظاهر برنامه و پشتیبان‌گیری</span>')+
           '<button class="row" data-action="logout"><span class="ic tone-red">'+icon('shield')+'</span>'+
             '<div class="main"><b>خروج از حساب</b><span class="sub"><span class="n">'+esc((user&&user.email)||'')+'</span></span></div></button>'+
         '</div></div>';
@@ -597,6 +737,7 @@ button.row{cursor:pointer}
           '<div class="fld"><label for="f-cust">مشتری</label>'+
             '<input class="inp" id="f-cust" list="cust-list" autocomplete="off" placeholder="نام مشتری را بنویس یا انتخاب کن">'+
             '<datalist id="cust-list">'+opts+'</datalist></div>'+
+          dateFld('f-date','f-when')+
           '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
             '<button type="button" data-v="AFN" aria-pressed="true">افغانی</button><button type="button" data-v="USD" aria-pressed="false">دالر</button></div></div>'+
           '<div class="fld"><span class="lbl">نوع فروش</span><div class="seg" data-seg="mode" role="group" aria-label="نوع فروش">'+
@@ -617,6 +758,7 @@ button.row{cursor:pointer}
           '<p class="err" id="f-err" role="alert"></p>'+
           '<button type="button" class="btn" id="f-save">'+(ed?'ذخیره تغییرات':'ذخیره فروش')+'</button>'+
           (ed?delBtn('f-del','حذف این فروش'):'')+
+          (ed?'<button type="button" class="btn ghost" data-go="cust" data-cust="'+esc(ed.name)+'">پرونده این مشتری</button>':'')+
         '</div>';
     },
     newbuy:function(){
@@ -628,6 +770,7 @@ button.row{cursor:pointer}
           '<div class="fld"><label for="b-name">جنس و فروشنده</label>'+
             '<input class="inp" id="b-name" list="buy-list" autocomplete="off" placeholder="مثلاً پلاستیک خام، تاجر خالد">'+
             '<datalist id="buy-list">'+opts+'</datalist></div>'+
+          dateFld('b-date','b-when')+
           '<div class="fld"><span class="lbl">پرداخت از حساب</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
             '<button type="button" data-v="USD" aria-pressed="true">دالر</button><button type="button" data-v="AFN" aria-pressed="false">افغانی</button></div></div>'+
           '<div class="fld"><span class="lbl">واحد وزن</span><div class="seg" data-seg="unit" role="group" aria-label="واحد وزن">'+
@@ -648,6 +791,7 @@ button.row{cursor:pointer}
           '<div class="fld"><span class="lbl">نوع مصرف</span><div class="chips wrap" id="e-cats">'+chips+'</div></div>'+
           '<div class="fld"><label for="e-name">توضیح</label>'+
             '<input class="inp" id="e-name" autocomplete="off" placeholder="مثلاً اسم کارگر، برق، کرایه موتر">'+'</div>'+
+          dateFld('e-date','e-when')+
           '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
             '<button type="button" data-v="AFN" aria-pressed="true">افغانی</button><button type="button" data-v="USD" aria-pressed="false">دالر</button></div></div>'+
           '<div class="fld"><label for="e-amt">مبلغ</label><input class="inp" id="e-amt" inputmode="decimal" autocomplete="off"></div>'+
@@ -661,28 +805,30 @@ button.row{cursor:pointer}
       var name=state.cust,known=db.customers.some(function(c){return c.name===name});
       if(!name||!known)return top('مشتری',{back:true})+'<div class="block"><div class="empty">مشتری پیدا نشد.</div></div>';
       var info=custInfo({name:name}),d=info.d;
-      var t='';
-      if(d.AFN>0)t+='<span class="blk">'+N(d.AFN)+cur(CUR.AFN)+'</span>';
-      if(d.USD>0)t+='<span class="blk">'+N(d.USD)+cur(CUR.USD)+'</span>';
-      var items=db.sales.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'s',x:x}})
-        .concat(db.pays.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'p',x:x}}))
-        .sort(function(a,b){return b.ts-a.ts});
-      var rows=items.map(function(it){
+      var mine=db.sales.filter(function(x){return x.name===name});
+      var bought=by(mine,function(x){return x.total});
+      var got=by(mine,function(x){return x.paid});
+      db.pays.forEach(function(p){if(p.name===name){var k=p.cur||'AFN';got[k]=r2(got[k]+p.amt)}});
+      var first=mine.reduce(function(m,x){return m?Math.min(m,x.ts):x.ts},0);
+      var items=mine.map(function(x){return {ts:x.ts,k:'s',x:x}})
+        .concat(db.pays.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'p',x:x}}));
+      function histRow(it){
         var x=it.x,when='<span class="sub">'+T(fullDate(x.ts))+' '+T(timeText(x.ts))+'</span>';
         if(it.k==='p'){
           var eid=x.checkId?'check:'+x.checkId:'pay:'+x.id;
           return '<button class="row" data-edit="'+eid+'"><span class="ic tone-blue">'+icon(x.checkId?'cheque':'bank')+'</span><div class="main"><b>'+(x.checkId?'چک نقد شده':'دریافت پول')+'</b>'+when+'</div>'+
             '<div class="amt"><b>'+N(x.amt)+cur(CUR[x.cur||'AFN'])+'</b><span class="tag paid">دریافت</span></div><span class="chev">'+icon('chev')+'</span></button>';
         }
-        var due=r2(x.total-x.paid);
+        var due=r2(x.total-x.paid),c=CUR[x.cur||'AFN'];
         return '<button class="row" data-edit="sale:'+x.id+'"><span class="ic tone-green">'+icon('sale')+'</span><div class="main"><b>فروش</b><span class="subs">'+
-          (x.rolls?'<span class="sub">'+N(x.rolls)+' رول</span>':'')+'<span class="sub">'+N(x.kg)+' کیلو</span></span>'+when+'</div>'+
-          '<div class="amt"><b>'+N(x.total)+cur(CUR[x.cur||'AFN'])+'</b>'+
+          (x.rolls?'<span class="sub">'+N(x.rolls)+' رول</span>':'')+'<span class="sub">وزن '+N(x.kg)+' کیلو</span><span class="sub">نرخ '+N(saleRate(x))+' '+c+'</span></span>'+when+'</div>'+
+          '<div class="amt"><b>'+N(x.total)+cur(c)+'</b>'+
           (due>0?'<span class="tag debt">باقی '+N(due)+'</span>':'<span class="tag paid">نقد</span>')+'</div><span class="chev">'+icon('chev')+'</span></button>';
-      }).join('');
+      }
       var pendCh=db.checks.filter(function(c){return c.name===name&&c.status==='pending'}).sort(function(a,b){return a.due-b.due});
       var dc=d.AFN>0?'AFN':'USD';
-      var form=hasDebt(info)?
+      var owe=hasDebt(info);
+      var form=owe?
         '<div class="block form" id="pf"><h2>دریافت پول از مشتری</h2>'+
           '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
             '<button type="button" data-v="AFN" aria-pressed="'+(dc==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+(dc==='USD')+'">دالر</button></div></div>'+
@@ -691,11 +837,17 @@ button.row{cursor:pointer}
           '<div class="due" id="p-due"></div>'+
           '<p class="err" id="p-err" role="alert"></p>'+
           '<button type="button" class="btn" id="p-save">ثبت دریافت</button></div>':'';
-      return top(esc(name),{back:true,sub:'صورت‌حساب مشتری'})+
-        '<div class="block">'+(t?'<div class="sum"><span>باقی‌دار است</span><b>'+t+'</b></div>':'<div class="sum" style="background:var(--t-green);color:var(--green)"><span>حساب تسویه است</span><b>'+N(0)+'</b></div>')+'</div>'+
+      return top(esc(name),{back:true,sub:'پرونده مشتری'})+
+        '<div class="block"><div class="list">'+
+          '<div class="row"><span class="ic tone-green">'+icon('sale')+'</span><div class="main"><b>جمع خرید</b><span class="sub">'+N(mine.length)+' فروش</span></div><div class="amt">'+amts(bought.AFN,bought.USD)+'</div></div>'+
+          '<div class="row"><span class="ic tone-blue">'+icon('bank')+'</span><div class="main"><b>جمع دریافتی</b></div><div class="amt">'+amts(got.AFN,got.USD)+'</div></div>'+
+          '<div class="row"><span class="ic tone-red">'+icon('users')+'</span><div class="main"><b>'+(owe?'باقی‌دار است':'حساب تسویه است')+'</b></div><div class="amt'+(owe?' neg':' pos')+'">'+amts(d.AFN>0?d.AFN:0,d.USD>0?d.USD:0)+'</div></div>'+
+        '</div></div>'+
+        (first?'<div class="block"><p class="note" style="margin:0">اولین خرید: '+T(fullDate(first))+' — آخرین خرید: '+T(fullDate(info.last))+'</p></div>':'')+
         form+
         (pendCh.length?'<div class="block"><h2>چک‌های در انتظار</h2><div class="list">'+pendCh.map(checkRow).join('')+'</div></div>':'')+
-        '<div class="block"><h2>تاریخچه <span class="muted" style="font-weight:400;font-size:13px">(برای ویرایش یا حذف روی هر مورد بزن)</span></h2>'+(rows?'<div class="list">'+rows+'</div>':'<div class="empty">هنوز حرکتی ثبت نشده.</div>')+'</div>'+
+        '<div class="block"><h2>تاریخچه</h2><p class="note" style="margin:0">برای ویرایش یا حذف روی هر مورد بزن.</p></div>'+
+        grouped(items,histRow,'هنوز حرکتی ثبت نشده.')+
         '<div class="block"><button class="btn ghost" data-go="editcust">ویرایش نام مشتری</button></div>';
     },
     editpay:function(){
@@ -816,18 +968,45 @@ button.row{cursor:pointer}
 
     /* ----- settings ----- */
     settings:function(){
+      var st=db.settings;
+      function xrow(k,tone,ic,title,sub){
+        return '<button type="button" class="row" data-export="'+k+'"><span class="ic tone-'+tone+'">'+icon(ic)+'</span>'+
+          '<div class="main"><b>'+title+'</b><span class="sub">'+sub+'</span></div><span class="chev">'+icon('chev')+'</span></button>';
+      }
+      var sw=ACCENTS.map(function(a){
+        return '<button type="button" class="sw" data-accent="'+a[0]+'" aria-label="'+a[1]+'" aria-pressed="false" style="'+(a[0]?'--c:'+a[0]:'background:linear-gradient(135deg,#1B7A9E 50%,#5BB8DC 50%)')+'"></button>';
+      }).join('');
       return top('تنظیمات',{back:true})+
         '<div class="block form" id="sg">'+
-          '<div class="fld"><label for="s-name">نام کارخانه</label><input class="inp" id="s-name" autocomplete="off" value="'+esc(db.settings.name)+'"></div>'+
+          '<h2>پروفایل کارخانه</h2>'+
+          '<div class="profrow"><div id="s-prev">'+logoHtml(st.logo,true)+'</div><div class="btns">'+
+            '<button type="button" class="btn ghost" id="s-pick">انتخاب لوگو</button>'+
+            '<button type="button" class="btn ghost del" id="s-unlogo">حذف لوگو</button></div></div>'+
+          '<input type="file" id="s-file" accept="image/*" tabindex="-1" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">'+
+          '<div class="fld"><label for="s-name">نام کارخانه</label><input class="inp" id="s-name" autocomplete="off" value="'+esc(st.name)+'"></div>'+
+          '<div class="fld"><label for="s-phone">شمارهٔ تلفن</label><input class="inp ltr" id="s-phone" type="tel" inputmode="tel" autocomplete="off" value="'+esc(st.phone||'')+'"></div>'+
+          '<div class="fld"><label for="s-address">آدرس</label><input class="inp" id="s-address" autocomplete="off" value="'+esc(st.address||'')+'"></div>'+
           '<div class="fld"><label for="s-rate">قیمت پیش‌فرض فروش هر کیلو (افغانی)</label>'+
-            '<input class="inp" id="s-rate" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(db.settings.rate?db.settings.rate:'')+'">'+
+            '<input class="inp" id="s-rate" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(st.rate?st.rate:'')+'">'+
             '<p class="note">در فرم فروش با افغانی، این قیمت خودکار نوشته می‌شود و می‌توانی تغییرش بدهی.</p></div>'+
-          '<div class="fld"><span class="lbl">ظاهر اپ (فقط روی همین گوشی)</span><div class="seg" data-seg="theme" role="group" aria-label="ظاهر اپ">'+
-            '<button type="button" data-v="auto" aria-pressed="true">خودکار</button>'+
-            '<button type="button" data-v="light" aria-pressed="false">روشن</button>'+
-            '<button type="button" data-v="dark" aria-pressed="false">تیره</button></div></div>'+
           '<p class="err" id="s-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="s-save">ذخیره تنظیمات</button>'+
+          '<button type="button" class="btn" id="s-save">ذخیره پروفایل</button>'+
+          '<h2 style="margin-top:26px">ظاهر برنامه <span class="muted" style="font-weight:400;font-size:13px">(فقط روی همین گوشی)</span></h2>'+
+          '<div class="fld"><span class="lbl">حالت نمایش</span><div class="seg" data-seg="theme" role="group" aria-label="حالت نمایش">'+
+            '<button type="button" data-v="auto" aria-pressed="false">خودکار</button>'+
+            '<button type="button" data-v="light" aria-pressed="false">روشن</button>'+
+            '<button type="button" data-v="dark" aria-pressed="false">تیره</button>'+
+            '<button type="button" data-v="neon" aria-pressed="false">آینده</button></div></div>'+
+          '<div class="fld"><span class="lbl">رنگ برنامه</span><div class="swrow">'+sw+'</div></div>'+
+          '<h2 style="margin-top:26px">پشتیبان‌گیری و گرفتن اطلاعات</h2>'+
+          '<div class="list">'+
+            xrow('backup','blue','shield','نسخهٔ پشتیبان','همهٔ اطلاعات در یک فایل')+
+            xrow('sales','green','sale','فروش‌ها','فایل اکسل (CSV)')+
+            xrow('buys','blue','buy','خریدها','فایل اکسل (CSV)')+
+            xrow('exps','gold','wallet','مصارف','فایل اکسل (CSV)')+
+            xrow('customers','red','users','خلاصهٔ مشتری‌ها','فایل اکسل (CSV)')+
+          '</div>'+
+          '<p class="note">فایل‌ها با تاریخ شمسی ساخته می‌شوند و در اکسل باز می‌شوند.</p>'+
         '</div>';
     },
 
@@ -898,6 +1077,7 @@ button.row{cursor:pointer}
         '<div class="main"><b>خروج از حساب</b><span class="sub"><span class="n">'+esc((user&&user.email)||'')+'</span></span></div></button></div></div>';
   }
   var EXP_CATS=['معاش','خدمات','حمل','خوراک','تعمیرات','دیگر'];
+  var ACCENTS=[['','پیش‌فرض'],['#1B7A9E','آبی'],['#0F9D8A','سبزآبی'],['#2E9E5B','سبز'],['#7B5CE0','بنفش'],['#E07B2E','نارنجی'],['#D6457A','صورتی']];
 
   /* ---------- sales form ---------- */
   function bindForm(){
@@ -905,6 +1085,7 @@ button.row{cursor:pointer}
     var sel={cur:'AFN',mode:'roll',unit:'kg'},follow=true,ed=curEdit('sale');
     var rollsEl=f.querySelector('#rolls'),paidEl=f.querySelector('#f-paid'),errEl=f.querySelector('#f-err');
     var defRate=db.settings.rate>0?String(db.settings.rate):'';
+    var dEl=bindDate(f,'#f-date','#f-when',ed?ed.ts:(state.formDay||Date.now()));
 
     function rows(){return Array.prototype.slice.call(rollsEl.querySelectorAll('.rollrow'))}
     function renumber(){rows().forEach(function(r,i){r.querySelector('.rn').textContent=fa(i+1)})}
@@ -957,15 +1138,17 @@ button.row{cursor:pointer}
     function saveSale(){
       var name=f.querySelector('#f-cust').value.trim(),r=calc(),paid=r2(parse(paidEl.value)),err='';
       if(!name)err='نام مشتری را بنویس.';
+      else if(!dateTs(dEl.value))err='تاریخ را انتخاب کن.';
       else if(r.bad)err='برای هر رول، هم وزن و هم نرخ را وارد کن.';
       else if(!(r.total>0))err=sel.mode==='roll'?'حداقل یک رول با وزن و نرخ وارد کن.':'مقدار و نرخ را وارد کن.';
       else if(paid<0||paid>r.total+0.001)err='مبلغ دریافتی باید بین صفر و مجموع باشد.';
       errEl.textContent=err;
       if(err)return;
-      var sale={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,cur:sel.cur,mode:sel.mode,rolls:r.rolls,kg:r.kg,total:r.total,paid:paid};
+      var sale={id:ed?ed.id:uid(),ts:pickTs(dEl.value,ed?ed.ts:null),name:name,cur:sel.cur,mode:sel.mode,rolls:r.rolls,kg:r.kg,total:r.total,paid:paid};
       if(sel.mode==='roll')sale.items=r.items;
       else{sale.qty=parse(f.querySelector('#w-qty').value);sale.unit=sel.unit;sale.rate=parse(f.querySelector('#w-rate').value)}
       putRec(db.sales,sale);
+      state.day=sale.ts;
       addCustomer(name);
       pruneCustomers();persist();state.edit=null;
       toast(ed?'تغییرات ذخیره شد':'فروش ذخیره شد');go(ed?'back':'sales');
@@ -1029,6 +1212,7 @@ button.row{cursor:pointer}
   function bindBuy(){
     var f=document.getElementById('bf');if(!f)return;
     var sel={cur:'USD',unit:'ton'},errEl=f.querySelector('#b-err'),ed=curEdit('buy');
+    var dEl=bindDate(f,'#b-date','#b-when',ed?ed.ts:(state.formDay||Date.now()));
     function unitLabel(){f.querySelector('#b-qty-l').textContent='مقدار ('+(sel.unit==='ton'?'تُن':'کیلو')+')'}
     function show(){var a=parse(f.querySelector('#b-amt').value);f.querySelector('#b-show').innerHTML=a>0?N(a)+cur(CUR[sel.cur]):''}
     f.addEventListener('input',function(){errEl.textContent='';show()});
@@ -1040,11 +1224,12 @@ button.row{cursor:pointer}
       if(!e.target.closest('#b-save'))return;
       var name=f.querySelector('#b-name').value.trim(),q=parse(f.querySelector('#b-qty').value),a=r2(parse(f.querySelector('#b-amt').value)),err='';
       if(!name)err='جنس و فروشنده را بنویس.';
+      else if(!dateTs(dEl.value))err='تاریخ را انتخاب کن.';
       else if(!(q>0))err='مقدار را وارد کن.';
       else if(!(a>0))err='مبلغ خرید را وارد کن.';
       errEl.textContent=err;if(err)return;
       var ton=sel.unit==='ton'?q:q/1000;
-      var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,ton:Math.round(ton*1000)/1000,amt:a,cur:sel.cur};
+      var rec={id:ed?ed.id:uid(),ts:pickTs(dEl.value,ed?ed.ts:null),name:name,ton:Math.round(ton*1000)/1000,amt:a,cur:sel.cur};
       putRec(db.buys,rec);
       persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'خرید ذخیره شد');go(ed?'back':'buy');
     });
@@ -1057,6 +1242,7 @@ button.row{cursor:pointer}
   function bindExp(){
     var f=document.getElementById('ef');if(!f)return;
     var sel={cur:'AFN'},cat=EXP_CATS[0],errEl=f.querySelector('#e-err'),ed=curEdit('exp');
+    var dEl=bindDate(f,'#e-date','#e-when',ed?ed.ts:(state.formDay||Date.now()));
     function show(){var a=parse(f.querySelector('#e-amt').value);f.querySelector('#e-show').innerHTML=a>0?N(a)+cur(CUR[sel.cur]):''}
     f.addEventListener('input',function(){errEl.textContent='';show()});
     f.addEventListener('click',function(e){
@@ -1068,9 +1254,10 @@ button.row{cursor:pointer}
       if(!e.target.closest('#e-save'))return;
       var name=f.querySelector('#e-name').value.trim(),a=r2(parse(f.querySelector('#e-amt').value)),err='';
       if(!name)err='توضیح مصرف را بنویس.';
+      else if(!dateTs(dEl.value))err='تاریخ را انتخاب کن.';
       else if(!(a>0))err='مبلغ را وارد کن.';
       errEl.textContent=err;if(err)return;
-      var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,cat:cat,amt:a,cur:sel.cur};
+      var rec={id:ed?ed.id:uid(),ts:pickTs(dEl.value,ed?ed.ts:null),name:name,cat:cat,amt:a,cur:sel.cur};
       putRec(db.exps,rec);
       persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'مصرف ذخیره شد');go(ed?'back':'exp');
     });
@@ -1226,19 +1413,115 @@ button.row{cursor:pointer}
   }
 
   /* ---------- settings form ---------- */
+  function readLogo(file,cb){
+    var fr=new FileReader();
+    fr.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var S=160,c=document.createElement('canvas');c.width=S;c.height=S;
+        var g=c.getContext('2d'),r=Math.max(S/img.width,S/img.height),w=img.width*r,h=img.height*r;
+        g.drawImage(img,(S-w)/2,(S-h)/2,w,h);
+        var d=c.toDataURL('image/png');
+        if(d.length>150000){
+          g.globalCompositeOperation='destination-over';g.fillStyle='#ffffff';g.fillRect(0,0,S,S);
+          d=c.toDataURL('image/jpeg',0.8);
+        }
+        cb(d);
+      };
+      img.onerror=function(){cb('')};
+      img.src=fr.result;
+    };
+    fr.onerror=function(){cb('')};
+    fr.readAsDataURL(file);
+  }
+  function jdate(ts){
+    try{
+      var p={};
+      new Intl.DateTimeFormat('en-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date(ts)).forEach(function(x){p[x.type]=x.value});
+      return String(p.year).replace(/\D/g,'')+'/'+pad(+p.month)+'/'+pad(+p.day);
+    }catch(e){return ''}
+  }
+  function csvCell(v){v=String(v==null?'':v);return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+  function csvText(head,rows){return [head].concat(rows).map(function(r){return r.map(csvCell).join(',')}).join('\r\n')}
+  function download(name,text,type,bom){
+    var b=new Blob([(bom?'\ufeff':'')+text],{type:type}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download=name;document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u)},1500);
+  }
+  function exportData(kind){
+    var stamp=jdate(Date.now()).replace(/\//g,'-'),byTs=function(a,b){return a.ts-b.ts},T8='text/csv;charset=utf-8';
+    try{
+      if(kind==='sales'){
+        download('sales-'+stamp+'.csv',csvText(['تاریخ','مشتری','واحد پول','رول','وزن (کیلو)','نرخ','جمع','دریافتی','باقی'],
+          db.sales.slice().sort(byTs).map(function(x){return [jdate(x.ts),x.name,CUR[x.cur||'AFN'],x.rolls||0,x.kg,saleRate(x),x.total,x.paid,r2(x.total-x.paid)]})),T8,true);
+      }else if(kind==='buys'){
+        download('buys-'+stamp+'.csv',csvText(['تاریخ','جنس و فروشنده','مقدار (تُن)','مبلغ','واحد پول'],
+          db.buys.slice().sort(byTs).map(function(x){return [jdate(x.ts),x.name,x.ton,x.amt,CUR[x.cur||'USD']]})),T8,true);
+      }else if(kind==='exps'){
+        download('expenses-'+stamp+'.csv',csvText(['تاریخ','نوع','توضیح','مبلغ','واحد پول'],
+          db.exps.slice().sort(byTs).map(function(x){return [jdate(x.ts),x.cat||'',x.name,x.amt,CUR[x.cur||'AFN']]})),T8,true);
+      }else if(kind==='customers'){
+        download('customers-'+stamp+'.csv',csvText(['مشتری','جمع خرید افغانی','دریافتی افغانی','باقی افغانی','جمع خرید دالر','دریافتی دالر','باقی دالر','آخرین خرید'],
+          db.customers.map(function(c){
+            var mine=db.sales.filter(function(x){return x.name===c.name});
+            var bo=by(mine,function(x){return x.total}),go=by(mine,function(x){return x.paid});
+            db.pays.forEach(function(p){if(p.name===c.name){var k=p.cur||'AFN';go[k]=r2(go[k]+p.amt)}});
+            var info=custInfo(c);
+            return [c.name,bo.AFN,go.AFN,info.d.AFN,bo.USD,go.USD,info.d.USD,info.last?jdate(info.last):''];
+          })),T8,true);
+      }else if(kind==='backup'){
+        var data={app:'nylon-factory',version:1,exportedAt:new Date().toISOString(),
+          settings:{name:db.settings.name,phone:db.settings.phone,address:db.settings.address,rate:db.settings.rate},
+          open:db.open,sales:db.sales,buys:db.buys,exps:db.exps,pays:db.pays,checks:db.checks,moves:db.moves};
+        download('backup-'+stamp+'.json',JSON.stringify(data),'application/json',false);
+      }
+      toast('فایل آماده شد');
+    }catch(e){toast('ساختن فایل انجام نشد')}
+  }
   function bindSettings(){
     var f=document.getElementById('sg');if(!f)return;
-    var sel={theme:db.settings.theme},errEl=f.querySelector('#s-err');
-    setSeg(f,'theme',sel.theme);
+    var errEl=f.querySelector('#s-err'),logo=db.settings.logo||'',fileEl=f.querySelector('#s-file'),prev=f.querySelector('#s-prev');
+    setSeg(f,'theme',db.settings.theme);
+    function showAcc(){
+      Array.prototype.forEach.call(f.querySelectorAll('.sw'),function(b){
+        b.setAttribute('aria-pressed',(b.dataset.accent||'')===(db.settings.accent||'')?'true':'false');
+      });
+    }
+    showAcc();
     f.addEventListener('input',function(){errEl.textContent=''});
+    fileEl.addEventListener('change',function(){
+      var file=fileEl.files&&fileEl.files[0];if(!file)return;
+      readLogo(file,function(d){
+        if(!d){errEl.textContent='عکس خوانده نشد. عکس دیگری امتحان کن.';return}
+        logo=d;prev.innerHTML=logoHtml(logo,true);fileEl.value='';
+      });
+    });
     f.addEventListener('click',function(e){
-      if(segClick(e,sel))return;
+      var tb=e.target.closest('[data-seg="theme"] button');
+      if(tb){db.settings.theme=tb.dataset.v;setSeg(f,'theme',tb.dataset.v);applyTheme();savePrefs();return}
+      var sw=e.target.closest('.sw');
+      if(sw){db.settings.accent=sw.dataset.accent||'';showAcc();applyTheme();savePrefs();return}
+      if(e.target.closest('#s-pick')){fileEl.click();return}
+      if(e.target.closest('#s-unlogo')){logo='';prev.innerHTML=logoHtml('',true);return}
+      var ex=e.target.closest('[data-export]');
+      if(ex){exportData(ex.dataset.export);return}
       if(!e.target.closest('#s-save'))return;
       var name=f.querySelector('#s-name').value.trim()||DEFAULT_NAME;
+      var phone=f.querySelector('#s-phone').value.trim(),address=f.querySelector('#s-address').value.trim();
       var rate=r2(parse(f.querySelector('#s-rate').value));
       if(rate<0){errEl.textContent='قیمت نمی‌تواند منفی باشد.';return}
-      db.settings={name:name,rate:rate,theme:sel.theme};
-      applyTheme();persist();toast('تنظیمات ذخیره شد');go('back');
+      db.settings=Object.assign({},db.settings,{name:name,phone:phone,address:address,rate:rate,logo:logo});
+      applyTheme();cacheBrand();persist();toast('پروفایل ذخیره شد');go('back');
+    });
+  }
+
+  function bindCustSearch(){
+    var q=document.getElementById('cq');if(!q)return;
+    q.addEventListener('input',function(){
+      var v=q.value.trim().toLowerCase();
+      Array.prototype.forEach.call(view.querySelectorAll('.row[data-cust]'),function(r){
+        r.hidden=!!v&&(r.getAttribute('data-cust')||'').toLowerCase().indexOf(v)<0;
+      });
     });
   }
 
@@ -1316,7 +1599,8 @@ button.row{cursor:pointer}
     return 'ایمیل یا رمز اشتباه است.';
   }
   function gateView(){
-    var head=top(esc(DEFAULT_NAME),{sub:authState==='out'?'ورود به حساب':''});
+    var br=brand();
+    var head=top(esc(br.name||DEFAULT_NAME),{sub:authState==='out'?'ورود به حساب':'',logo:br.logo||''});
     if(authState==='out')return head+
       '<form class="block form" id="lf" autocomplete="on" novalidate>'+
         '<div class="fld"><label for="l-email">ایمیل</label>'+
@@ -1373,6 +1657,7 @@ button.row{cursor:pointer}
     else if(state.page==='newmove')bindMove();
     else if(state.page==='openbal')bindOpen();
     else if(state.page==='settings')bindSettings();
+    else if(state.page==='customers')bindCustSearch();
     else if(state.page==='newuser')bindNewUser();
     else if(state.page==='edituser')bindEditUser();
   }
@@ -1391,6 +1676,12 @@ button.row{cursor:pointer}
     clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('show')},2400);
   }
 
+  document.addEventListener('change',function(e){
+    if(authState!=='in'||!e.target||e.target.id!=='day-pick')return;
+    var t=dateTs(e.target.value);
+    if(t&&e.target.value<=dateVal(Date.now())){state.day=t;render()}
+  });
+
   document.addEventListener('click',function(e){
     if(authState!=='in')return;
     var ed=e.target.closest('[data-edit]');
@@ -1402,8 +1693,18 @@ button.row{cursor:pointer}
       if(g.dataset.acc!==undefined)state.acc=g.dataset.acc;
       if(g.dataset.dir!==undefined)state.dir=g.dataset.dir;
       if(g.dataset.uid!==undefined)state.uid=g.dataset.uid;
+      state.formDay=(g.dataset.formday!==undefined)?state.day:null;
+      if(g.dataset.go==='sales')state.day=Date.now();
       go(g.dataset.go);return;
     }
+    var st=e.target.closest('[data-step]');
+    if(st){
+      var nd=new Date(state.day);nd.setDate(nd.getDate()+(+st.dataset.step));
+      if(dateVal(nd.getTime())<=dateVal(Date.now())){state.day=nd.getTime();render()}
+      return;
+    }
+    var pk=e.target.closest('[data-pickday]');
+    if(pk){state.day=+pk.dataset.pickday;render();window.scrollTo(0,0);return}
     var ac=e.target.closest('[data-acc]');if(ac){state.acc=ac.dataset.acc;render();return}
     var t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
     var r=e.target.closest('[data-rep]');if(r){state.rep=r.dataset.rep;render();return}
@@ -1424,12 +1725,12 @@ button.row{cursor:pointer}
   function clean(x){return JSON.parse(JSON.stringify(x))}
   function cid(x){return String(x.id)}
   function metaObj(){
-    return {open:{AFN:(db.open&&db.open.AFN)||0,USD:(db.open&&db.open.USD)||0},name:db.settings.name,rate:db.settings.rate||0};
+    return {open:{AFN:(db.open&&db.open.AFN)||0,USD:(db.open&&db.open.USD)||0},name:db.settings.name,rate:db.settings.rate||0,phone:db.settings.phone||'',address:db.settings.address||'',logo:db.settings.logo||''};
   }
 
   /* called after every change: sends only what changed to the server */
   function persist(){
-    try{localStorage.setItem('nylon-theme',db.settings.theme)}catch(e){}
+    savePrefs();
     if(!fs||!user||!ready)return;
     var ops=[];
     COLS.forEach(function(c){
@@ -1508,6 +1809,9 @@ button.row{cursor:pointer}
       db.open={AFN:+o.AFN||0,USD:+o.USD||0};
       db.settings.name=m.name||DEFAULT_NAME;
       db.settings.rate=+m.rate||0;
+      db.settings.phone=m.phone||'';db.settings.address=m.address||'';
+      db.settings.logo=(typeof m.logo==='string'&&m.logo.indexOf('data:image/')===0)?m.logo:'';
+      cacheBrand();
       var ms=stable(clean(metaObj())),changed=ms!==metaSynced;
       metaSynced=ms;
       if(mfirst){mfirst=false;fin()}
