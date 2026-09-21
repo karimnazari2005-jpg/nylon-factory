@@ -257,6 +257,24 @@ button.row{cursor:pointer}
     if(dayKey(ts)===dayKey(Date.now()-864e5))return 'دیروز';
     return pdate(ts,{day:'numeric',month:'long'});
   }
+  /* full date like ۱۴۰۵/۰۵/۰۵ */
+  function fullDate(ts){
+    try{
+      var p={};
+      new Intl.DateTimeFormat('en-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date(ts)).forEach(function(x){p[x.type]=x.value});
+      return fa(String(p.year).replace(/\D/g,'')+'/'+pad(+p.month)+'/'+pad(+p.day));
+    }catch(e){return ''}
+  }
+  function dayHead(ts){
+    var pre=isToday(ts)?'امروز، ':(dayKey(ts)===dayKey(Date.now()-864e5)?'دیروز، ':'');
+    return pre+'<span class="n">'+fullDate(ts)+'</span>';
+  }
+  /* sale price per kg: the roll price if all rolls have the same price, otherwise the average */
+  function saleRate(s){
+    var it=s.items;
+    if(it&&it.length&&it.every(function(x){return x.rate===it[0].rate}))return it[0].rate;
+    return s.kg>0?r2(s.total/s.kg):0;
+  }
   function monthKey(ts){
     try{return new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric'}).format(new Date(ts))}
     catch(e){var d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()}
@@ -402,29 +420,31 @@ button.row{cursor:pointer}
   function grouped(items,rowFn,emptyMsg){
     if(!items.length)return '<div class="block"><div class="empty">'+emptyMsg+'</div></div>';
     var sorted=items.slice().sort(function(a,b){return b.ts-a.ts}),labels=[];
-    sorted.forEach(function(x){var l=dayLabel(x.ts);if(labels.indexOf(l)<0)labels.push(l)});
+    sorted.forEach(function(x){var l=dayHead(x.ts);if(labels.indexOf(l)<0)labels.push(l)});
     return labels.map(function(l){
       return '<div class="block"><h2>'+l+'</h2><div class="list">'+
-        sorted.filter(function(x){return dayLabel(x.ts)===l}).map(rowFn).join('')+'</div></div>';
+        sorted.filter(function(x){return dayHead(x.ts)===l}).map(rowFn).join('')+'</div></div>';
     }).join('');
   }
   function saleRow(s){
     var due=r2(s.total-s.paid),c=CUR[s.cur||'AFN'];
     return '<button class="row" data-edit="sale:'+s.id+'"><span class="ic tone-green">'+icon('sale')+'</span>'+
-      '<div class="main"><b>'+esc(s.name)+'</b><span class="subs">'+
+      '<div class="main"><b>فروش به '+esc(s.name)+'</b><span class="subs">'+
         (s.rolls?'<span class="sub">'+N(s.rolls)+' رول</span>':'')+
-        '<span class="sub">'+N(s.kg)+' کیلو</span></span></div>'+
+        '<span class="sub">وزن '+N(s.kg)+' کیلو</span>'+
+        '<span class="sub">نرخ '+N(saleRate(s))+' '+c+'</span>'+
+        '<span class="sub">'+T(fullDate(s.ts))+'</span></span></div>'+
       '<div class="amt"><b>'+N(s.total)+cur(c)+'</b>'+
         (due>0?'<span class="tag debt">باقی '+N(due)+'</span>':'<span class="tag paid">نقد</span>')+'</div><span class="chev">'+icon('chev')+'</span></button>';
   }
   function buyRow(b){
     return '<button class="row" data-edit="buy:'+b.id+'"><span class="ic tone-blue">'+icon('buy')+'</span>'+
-      '<div class="main"><b>'+esc(b.name)+'</b><span class="sub">'+N(b.ton)+' تُن</span></div>'+
+      '<div class="main"><b>'+esc(b.name)+'</b><span class="subs"><span class="sub">'+N(b.ton)+' تُن</span><span class="sub">'+T(fullDate(b.ts))+'</span></span></div>'+
       '<div class="amt"><b>'+N(b.amt)+cur(CUR[b.cur||'USD'])+'</b><span class="tag info">حساب '+CUR[b.cur||'USD']+'</span></div><span class="chev">'+icon('chev')+'</span></button>';
   }
   function expRow(x){
     return '<button class="row" data-edit="exp:'+x.id+'"><span class="ic tone-gold">'+icon(x.cat==='معاش'?'users':'wallet')+'</span>'+
-      '<div class="main"><b>'+esc(x.name)+'</b><span class="sub">'+esc(x.cat||'')+'</span></div>'+
+      '<div class="main"><b>'+esc(x.name)+'</b><span class="subs"><span class="sub">'+esc(x.cat||'')+'</span><span class="sub">'+T(fullDate(x.ts))+'</span></span></div>'+
       '<div class="amt"><b>'+N(x.amt)+cur(CUR[x.cur||'AFN'])+'</b></div><span class="chev">'+icon('chev')+'</span></button>';
   }
   function chTag(c){
@@ -437,7 +457,7 @@ button.row{cursor:pointer}
   }
   function checkRow(c){
     return '<button class="row" data-edit="check:'+c.id+'"><span class="ic tone-gold">'+icon('cheque')+'</span>'+
-      '<div class="main"><b>'+esc(c.name)+'</b><span class="subs"><span class="sub">سررسید: '+pdate(c.due,{day:'numeric',month:'long'})+'</span>'+
+      '<div class="main"><b>'+esc(c.name)+'</b><span class="subs"><span class="sub">سررسید: '+T(fullDate(c.due))+'</span>'+
         (c.no?'<span class="sub">شماره '+T(esc(c.no))+'</span>':'')+'</span></div>'+
       '<div class="amt"><b>'+N(c.amt)+cur(CUR[c.cur||'AFN'])+'</b>'+chTag(c)+'</div><span class="chev">'+icon('chev')+'</span></button>';
   }
@@ -495,7 +515,7 @@ button.row{cursor:pointer}
         '<div class="block"><h2>آخرین ثبت‌ها</h2>'+
           (rec.length?'<div class="list">'+rec.map(function(r){
             return '<div class="row"><span class="ic tone-'+r.tone+'">'+icon(r.ic)+'</span>'+
-              '<div class="main"><b>'+r.text+'</b><span class="sub">'+(isToday(r.ts)?'':dayLabel(r.ts)+' ')+T(timeText(r.ts))+'</span></div>'+
+              '<div class="main"><b>'+r.text+'</b><span class="sub">'+T(fullDate(r.ts))+' '+T(timeText(r.ts))+'</span></div>'+
               '<div class="amt"><b>'+N(r.amt)+cur(CUR[r.c])+'</b></div></div>';
           }).join('')+'</div>':'<div class="empty">هنوز چیزی ثبت نشده. با «ثبت فروش» شروع کن.</div>')+
         '</div>';
@@ -523,7 +543,7 @@ button.row{cursor:pointer}
         '<div class="block"><div class="sum"><span>مجموع طلب از مشتری‌ها</span><b>'+t+'</b></div></div>'+
         '<div class="block">'+(ci.length?'<div class="list">'+ci.map(function(c){
           return '<button class="row" data-go="cust" data-cust="'+esc(c.name)+'"><span class="avatar" aria-hidden="true">'+esc(c.name.charAt(0))+'</span>'+
-            '<div class="main"><b>'+esc(c.name)+'</b><span class="sub">'+(c.last?'آخرین خرید: '+dayLabel(c.last):'هنوز خریدی ندارد')+'</span></div>'+
+            '<div class="main"><b>'+esc(c.name)+'</b><span class="sub">'+(c.last?'آخرین خرید: '+T(fullDate(c.last)):'هنوز خریدی ندارد')+'</span></div>'+
             '<div class="amt">'+(hasDebt(c)?amts(c.d.AFN>0?c.d.AFN:0,c.d.USD>0?c.d.USD:0)+'<span class="tag debt">باقی</span>':'<span class="tag paid">تسویه</span>')+'</div>'+
             '<span class="chev">'+icon('chev')+'</span></button>';
         }).join('')+'</div>':'<div class="empty">هنوز مشتری‌ای نیست. با ثبت اولین فروش، مشتری هم اضافه می‌شود.</div>')+'</div>';
@@ -648,7 +668,7 @@ button.row{cursor:pointer}
         .concat(db.pays.filter(function(x){return x.name===name}).map(function(x){return {ts:x.ts,k:'p',x:x}}))
         .sort(function(a,b){return b.ts-a.ts});
       var rows=items.map(function(it){
-        var x=it.x,when='<span class="sub">'+dayLabel(x.ts)+' '+T(timeText(x.ts))+'</span>';
+        var x=it.x,when='<span class="sub">'+T(fullDate(x.ts))+' '+T(timeText(x.ts))+'</span>';
         if(it.k==='p'){
           var eid=x.checkId?'check:'+x.checkId:'pay:'+x.id;
           return '<button class="row" data-edit="'+eid+'"><span class="ic tone-blue">'+icon(x.checkId?'cheque':'bank')+'</span><div class="main"><b>'+(x.checkId?'چک نقد شده':'دریافت پول')+'</b>'+when+'</div>'+
