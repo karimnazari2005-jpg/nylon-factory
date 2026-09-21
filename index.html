@@ -111,6 +111,7 @@ button.row{cursor:pointer}
 .empty{padding:22px 16px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);text-align:center}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border:0;border-radius:14px;background:var(--primary);color:var(--on-primary);font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:default}
 .btn.ghost{background:var(--t-blue);color:var(--primary);margin-top:10px}
 .btn.del{background:var(--t-red);color:var(--red)}
 .sum{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 16px;border-radius:14px;background:var(--t-red);color:var(--red)}
@@ -131,6 +132,7 @@ button.row{cursor:pointer}
 .form .fld{margin-bottom:16px}
 .fld > label,.fld > .lbl{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
 .inp{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;line-height:1.5}
+.inp.ltr{direction:ltr;text-align:left}
 .inp[type="date"]{min-height:48px;text-align:start}
 .inp::placeholder{color:var(--muted);opacity:.8}
 .rollrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
@@ -185,16 +187,27 @@ button.row{cursor:pointer}
 
 <div class="app"><main id="view"></main></div>
 
-<nav class="tabbar" aria-label="منوی اصلی">
+<nav class="tabbar" aria-label="منوی اصلی" hidden>
   <div class="tabs" id="tabs"></div>
 </nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 (function(){
   var DIG='۰۱۲۳۴۵۶۷۸۹';
   var CUR={AFN:'افغانی',USD:'دالر'};
   var DEFAULT_NAME='کارخانه نایلون';
+  var FB={
+    apiKey:"AIzaSyDGZgy1wX5CzlSpyb2iYzgMyVXWzDbpPhg",
+    authDomain:"nylon-factory.firebaseapp.com",
+    projectId:"nylon-factory",
+    storageBucket:"nylon-factory.firebasestorage.app",
+    messagingSenderId:"72639619280",
+    appId:"1:72639619280:web:4f78925d246a738893fed5"
+  };
 
   /* ---------- helpers ---------- */
   function fa(s){return String(s).replace(/\d/g,function(d){return DIG[d]})}
@@ -249,50 +262,23 @@ button.row{cursor:pointer}
     catch(e){var d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()}
   }
 
-  /* ---------- data (saved on this device) ---------- */
-  var KEY='nylon-factory-app-v1';
-  function at(daysAgo,h,m){var d=new Date();d.setDate(d.getDate()-daysAgo);d.setHours(h,m,0,0);return d.getTime()}
+  /* ---------- data (shared between phones through Firebase) ---------- */
+  var COLS=['sales','buys','exps','pays','checks','moves'];
+  var auth=null,fs=null,user=null,ready=false,sess=0,unsubs=[],synced={},metaSynced='',authState='boot',gateMsg='';
+  var TYPING={newsale:1,newbuy:1,newexp:1,newcheck:1,newmove:1,openbal:1,settings:1,editpay:1,editcust:1,cust:1};
+
   function emptyData(){
     return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[]};
   }
-  function sampleData(){
-    return {
-      sample:true,open:{AFN:1000000,USD:10000},seq:100,
-      customers:[{name:'احمد کریمی'},{name:'حاجی نصیر'},{name:'رحمت‌الله'},{name:'شرکت آریانا'},{name:'مرادی'}],
-      sales:[
-        {id:1,ts:at(0,8,30),name:'احمد کریمی',cur:'AFN',rolls:25,kg:900,total:126000,paid:76000},
-        {id:2,ts:at(0,10,5),name:'حاجی نصیر',cur:'AFN',rolls:12,kg:430,total:60200,paid:60200},
-        {id:3,ts:at(0,11,20),name:'رحمت‌الله',cur:'AFN',rolls:40,kg:1500,total:210000,paid:100000},
-        {id:4,ts:at(1,15,0),name:'شرکت آریانا',cur:'AFN',rolls:60,kg:2100,total:294000,paid:294000},
-        {id:5,ts:at(1,11,30),name:'مرادی',cur:'AFN',rolls:18,kg:650,total:91000,paid:16000}
-      ],
-      buys:[
-        {id:1,ts:at(1,9,0),name:'پلاستیک خام، تاجر خالد',ton:3,amt:2400,cur:'USD'},
-        {id:2,ts:at(7,10,0),name:'پلاستیک خام، شرکت نوین',ton:5,amt:4000,cur:'USD'},
-        {id:3,ts:at(8,10,0),name:'رنگ و مواد افزودنی',ton:1,amt:900,cur:'USD'}
-      ],
-      exps:[
-        {id:1,ts:at(0,9,40),name:'برق',cat:'خدمات',amt:12000,cur:'AFN'},
-        {id:2,ts:at(0,9,10),name:'کرایه موتر',cat:'حمل',amt:3500,cur:'AFN'},
-        {id:3,ts:at(0,8,50),name:'چای و خوراک کارگران',cat:'خوراک',amt:1800,cur:'AFN'},
-        {id:4,ts:at(1,17,0),name:'معاش کارگران',cat:'معاش',amt:85000,cur:'AFN'}
-      ],
-      pays:[],checks:[],moves:[]
-    };
-  }
-  function load(){
-    try{var s=localStorage.getItem(KEY);if(s){var d=JSON.parse(s);if(d&&d.sales&&d.customers)return d}}catch(e){}
-    return null;
-  }
-  function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
-  var db=load()||sampleData();
+  function localTheme(){try{return localStorage.getItem('nylon-theme')||'auto'}catch(e){return 'auto'}}
+  var db=emptyData();
   function ensure(){
     if(!db.pays)db.pays=[];
     if(!db.checks)db.checks=[];
     if(!db.moves)db.moves=[];
     if(!db.open)db.open={AFN:0,USD:0};
     var s=db.settings||{};
-    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||'auto'};
+    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||localTheme()};
   }
   function applyTheme(){
     var t=db.settings.theme,r=document.documentElement;
@@ -343,6 +329,12 @@ button.row{cursor:pointer}
     for(var i=0;i<a.length;i++)if(String(a[i].id)===String(state.edit.id))return a[i];
     return null;
   }
+  /* save or delete a record by its id (safe even if another phone changed the list meanwhile) */
+  function putRec(arr,rec){
+    for(var i=0;i<arr.length;i++)if(String(arr[i].id)===String(rec.id)){arr[i]=rec;return}
+    arr.push(rec);
+  }
+  function dropRec(name,rec){db[name]=db[name].filter(function(x){return String(x.id)!==String(rec.id)})}
   function pruneCustomers(){
     var used={};
     db.sales.forEach(function(x){used[x.name]=1});
@@ -352,6 +344,14 @@ button.row{cursor:pointer}
   }
   function addCustomer(name){
     if(!db.customers.some(function(c){return c.name===name}))db.customers.push({name:name});
+  }
+  /* the customer list is always built from sales, payments and checks */
+  function rebuildCustomers(){
+    var seen={},arr=[];
+    [db.sales,db.pays,db.checks].forEach(function(a){
+      a.forEach(function(x){if(x.name&&!seen[x.name]){seen[x.name]=1;arr.push({name:x.name})}});
+    });
+    db.customers=arr;
   }
   /* a cashed check becomes a payment received from the customer */
   function syncCheckPay(c){
@@ -375,8 +375,9 @@ button.row{cursor:pointer}
   var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in'};
   var view=document.getElementById('view');
   var tabsEl=document.getElementById('tabs');
+  var tabbarEl=document.querySelector('.tabbar');
   var toastEl=document.getElementById('toast');
-  var toastTimer,clearArmed=false,clearTimer;
+  var toastTimer;
 
   var ROLL='<svg viewBox="0 0 280 280" fill="none" stroke="currentColor" stroke-width="2"><circle cx="140" cy="140" r="132"/><circle cx="140" cy="140" r="113"/><circle cx="140" cy="140" r="94"/><circle cx="140" cy="140" r="76"/><circle cx="140" cy="140" r="60"/><circle cx="140" cy="140" r="46"/><circle cx="140" cy="140" r="32" fill="currentColor" fill-opacity=".35"/><circle cx="140" cy="140" r="12"/></svg>';
   var TABS=[['home','خانه','home'],['sales','فروش','sale'],['buy','خرید','buy'],['exp','مصارف','wallet'],['more','بیشتر','more']];
@@ -563,7 +564,8 @@ button.row{cursor:pointer}
         '<div class="block"><h2>مدیریت</h2><div class="list">'+
           soon('shield','red','کاربران','مدیر و کارگرها، هرکس با دسترسی خودش')+
           link('settings','sliders','blue','تنظیمات','<span class="sub">نام کارخانه، قیمت پیش‌فرض و بیشتر</span>')+
-          (db.sample?'<button class="row" data-action="clear"><span class="ic tone-red">'+icon('trash')+'</span><div class="main"><b>پاک کردن اطلاعات نمونه</b><span class="sub">برای شروع با اطلاعات واقعی</span></div></button>':'')+
+          '<button class="row" data-action="logout"><span class="ic tone-red">'+icon('shield')+'</span>'+
+            '<div class="main"><b>خروج از حساب</b><span class="sub"><span class="n">'+esc((user&&user.email)||'')+'</span></span></div></button>'+
         '</div></div>';
     },
     newsale:function(){
@@ -799,7 +801,7 @@ button.row{cursor:pointer}
           '<div class="fld"><label for="s-rate">قیمت پیش‌فرض فروش هر کیلو (افغانی)</label>'+
             '<input class="inp" id="s-rate" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(db.settings.rate?db.settings.rate:'')+'">'+
             '<p class="note">در فرم فروش با افغانی، این قیمت خودکار نوشته می‌شود و می‌توانی تغییرش بدهی.</p></div>'+
-          '<div class="fld"><span class="lbl">ظاهر اپ</span><div class="seg" data-seg="theme" role="group" aria-label="ظاهر اپ">'+
+          '<div class="fld"><span class="lbl">ظاهر اپ (فقط روی همین گوشی)</span><div class="seg" data-seg="theme" role="group" aria-label="ظاهر اپ">'+
             '<button type="button" data-v="auto" aria-pressed="true">خودکار</button>'+
             '<button type="button" data-v="light" aria-pressed="false">روشن</button>'+
             '<button type="button" data-v="dark" aria-pressed="false">تیره</button></div></div>'+
@@ -876,7 +878,7 @@ button.row{cursor:pointer}
       var sale={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,cur:sel.cur,mode:sel.mode,rolls:r.rolls,kg:r.kg,total:r.total,paid:paid};
       if(sel.mode==='roll')sale.items=r.items;
       else{sale.qty=parse(f.querySelector('#w-qty').value);sale.unit=sel.unit;sale.rate=parse(f.querySelector('#w-rate').value)}
-      if(ed)db.sales[db.sales.indexOf(ed)]=sale;else db.sales.push(sale);
+      putRec(db.sales,sale);
       addCustomer(name);
       pruneCustomers();persist();state.edit=null;
       toast(ed?'تغییرات ذخیره شد':'فروش ذخیره شد');go(ed?'back':'sales');
@@ -906,7 +908,7 @@ button.row{cursor:pointer}
       if(e.target.closest('#paid-all')){follow=true;calc();return}
       if(e.target.closest('#paid-none')){follow=false;paidEl.value='0';calc();return}
       var dl=e.target.closest('#f-del');
-      if(dl){armDel(dl,function(){db.sales=db.sales.filter(function(x){return x!==ed});pruneCustomers();persist();state.edit=null;toast('فروش حذف شد');go('back')});return}
+      if(dl){armDel(dl,function(){dropRec('sales',ed);pruneCustomers();persist();state.edit=null;toast('فروش حذف شد');go('back')});return}
       if(e.target.closest('#f-save'))saveSale();
     });
     if(ed){
@@ -947,7 +949,7 @@ button.row{cursor:pointer}
       var g=segClick(e,sel);
       if(g){if(g==='unit')unitLabel();show();return}
       var dl=e.target.closest('#b-del');
-      if(dl){armDel(dl,function(){db.buys=db.buys.filter(function(x){return x!==ed});persist();state.edit=null;toast('خرید حذف شد');go('back')});return}
+      if(dl){armDel(dl,function(){dropRec('buys',ed);persist();state.edit=null;toast('خرید حذف شد');go('back')});return}
       if(!e.target.closest('#b-save'))return;
       var name=f.querySelector('#b-name').value.trim(),q=parse(f.querySelector('#b-qty').value),a=r2(parse(f.querySelector('#b-amt').value)),err='';
       if(!name)err='جنس و فروشنده را بنویس.';
@@ -956,7 +958,7 @@ button.row{cursor:pointer}
       errEl.textContent=err;if(err)return;
       var ton=sel.unit==='ton'?q:q/1000;
       var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,ton:Math.round(ton*1000)/1000,amt:a,cur:sel.cur};
-      if(ed)db.buys[db.buys.indexOf(ed)]=rec;else db.buys.push(rec);
+      putRec(db.buys,rec);
       persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'خرید ذخیره شد');go(ed?'back':'buy');
     });
     if(ed){
@@ -975,14 +977,14 @@ button.row{cursor:pointer}
       var cb=e.target.closest('[data-cat]');
       if(cb){cat=cb.dataset.cat;Array.prototype.forEach.call(cb.parentNode.children,function(b){b.setAttribute('aria-pressed',b===cb?'true':'false')});return}
       var dl=e.target.closest('#e-del');
-      if(dl){armDel(dl,function(){db.exps=db.exps.filter(function(x){return x!==ed});persist();state.edit=null;toast('مصرف حذف شد');go('back')});return}
+      if(dl){armDel(dl,function(){dropRec('exps',ed);persist();state.edit=null;toast('مصرف حذف شد');go('back')});return}
       if(!e.target.closest('#e-save'))return;
       var name=f.querySelector('#e-name').value.trim(),a=r2(parse(f.querySelector('#e-amt').value)),err='';
       if(!name)err='توضیح مصرف را بنویس.';
       else if(!(a>0))err='مبلغ را وارد کن.';
       errEl.textContent=err;if(err)return;
       var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,cat:cat,amt:a,cur:sel.cur};
-      if(ed)db.exps[db.exps.indexOf(ed)]=rec;else db.exps.push(rec);
+      putRec(db.exps,rec);
       persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'مصرف ذخیره شد');go(ed?'back':'exp');
     });
     if(ed){
@@ -1026,14 +1028,15 @@ button.row{cursor:pointer}
     f.addEventListener('click',function(e){
       if(segClick(e,sel)){errEl.textContent='';return}
       var dl=e.target.closest('#y-del');
-      if(dl){armDel(dl,function(){db.pays=db.pays.filter(function(x){return x!==ed});persist();state.edit=null;toast('دریافت حذف شد');go('back')});return}
+      if(dl){armDel(dl,function(){dropRec('pays',ed);persist();state.edit=null;toast('دریافت حذف شد');go('back')});return}
       if(!e.target.closest('#y-save'))return;
       var a=r2(parse(f.querySelector('#y-amt').value)),err='';
       var owed=(custInfo({name:ed.name}).d[sel.cur]||0)+((ed.cur||'AFN')===sel.cur?ed.amt:0);
       if(!(a>0))err='مبلغ دریافتی را وارد کن.';
       else if(a>owed+0.001)err='مبلغ نباید از باقی‌داری بیشتر باشد.';
       errEl.textContent=err;if(err)return;
-      ed.amt=a;ed.cur=sel.cur;persist();state.edit=null;toast('تغییرات ذخیره شد');go('back');
+      putRec(db.pays,Object.assign({},ed,{amt:a,cur:sel.cur}));
+      persist();state.edit=null;toast('تغییرات ذخیره شد');go('back');
     });
   }
   function bindEditCust(){
@@ -1070,7 +1073,7 @@ button.row{cursor:pointer}
       if(segClick(e,sel))return;
       var dl=e.target.closest('#k-del');
       if(dl){armDel(dl,function(){
-        db.checks=db.checks.filter(function(x){return x!==ed});
+        dropRec('checks',ed);
         db.pays=db.pays.filter(function(p){return p.checkId!==ed.id});
         pruneCustomers();persist();state.edit=null;toast('چک حذف شد');go('back');
       });return}
@@ -1082,7 +1085,7 @@ button.row{cursor:pointer}
       errEl.textContent=err;if(err)return;
       var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),name:name,cur:sel.cur,amt:a,due:dt,no:no,status:sel.st};
       if(rec.status==='cashed')rec.cashTs=(ed&&ed.status==='cashed'&&ed.cashTs)?ed.cashTs:Date.now();
-      if(ed)db.checks[db.checks.indexOf(ed)]=rec;else db.checks.push(rec);
+      putRec(db.checks,rec);
       addCustomer(name);
       syncCheckPay(rec);
       pruneCustomers();persist();state.edit=null;
@@ -1111,13 +1114,13 @@ button.row{cursor:pointer}
     f.addEventListener('click',function(e){
       if(segClick(e,sel))return;
       var dl=e.target.closest('#m-del');
-      if(dl){armDel(dl,function(){db.moves=db.moves.filter(function(x){return x!==ed});persist();state.edit=null;toast('حذف شد');go('back')});return}
+      if(dl){armDel(dl,function(){dropRec('moves',ed);persist();state.edit=null;toast('حذف شد');go('back')});return}
       if(!e.target.closest('#m-save'))return;
       var a=r2(parse(f.querySelector('#m-amt').value)),note=f.querySelector('#m-note').value.trim(),err='';
       if(!(a>0))err='مبلغ را وارد کن.';
       errEl.textContent=err;if(err)return;
       var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),dir:sel.dir,cur:sel.cur,amt:a,note:note};
-      if(ed)db.moves[db.moves.indexOf(ed)]=rec;else db.moves.push(rec);
+      putRec(db.moves,rec);
       state.acc=sel.cur;persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'ذخیره شد');go('back');
     });
     if(ed){f.querySelector('#m-amt').value=String(ed.amt);f.querySelector('#m-note').value=ed.note||''}
@@ -1152,8 +1155,55 @@ button.row{cursor:pointer}
     });
   }
 
+  /* ---------- login screen ---------- */
+  function authMsg(e){
+    var c=(e&&e.code)||'';
+    if(c==='auth/invalid-email')return 'ایمیل درست نیست.';
+    if(c==='auth/network-request-failed')return 'اینترنت وصل نیست.';
+    if(c==='auth/too-many-requests')return 'تلاش‌های زیاد. چند دقیقه بعد دوباره امتحان کن.';
+    if(c==='auth/user-disabled')return 'این حساب غیرفعال شده.';
+    return 'ایمیل یا رمز اشتباه است.';
+  }
+  function gateView(){
+    var head=top(esc(DEFAULT_NAME),{sub:authState==='out'?'ورود به حساب':''});
+    if(authState==='out')return head+
+      '<form class="block form" id="lf" autocomplete="on" novalidate>'+
+        '<div class="fld"><label for="l-email">ایمیل</label>'+
+          '<input class="inp ltr" id="l-email" type="email" inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></div>'+
+        '<div class="fld"><label for="l-pass">رمز</label>'+
+          '<input class="inp ltr" id="l-pass" type="password" autocomplete="current-password"></div>'+
+        '<p class="err" id="l-err" role="alert"></p>'+
+        '<button type="submit" class="btn" id="l-btn">ورود</button>'+
+        '<p class="note">ایمیل و رمز را مدیر کارخانه به تو می‌دهد.</p>'+
+      '</form>';
+    if(authState==='error')return head+
+      '<div class="block"><div class="empty">'+gateMsg+'</div>'+
+      '<button type="button" class="btn ghost" id="l-retry">تلاش دوباره</button></div>';
+    return head+'<div class="block"><div class="empty">در حال بارگذاری…</div></div>';
+  }
+  function bindGate(){
+    var f=document.getElementById('lf');
+    if(f){
+      var errEl=f.querySelector('#l-err');
+      f.addEventListener('submit',function(e){
+        e.preventDefault();
+        var em=f.querySelector('#l-email').value.trim(),pw=f.querySelector('#l-pass').value;
+        if(!em||!pw){errEl.textContent='ایمیل و رمز را وارد کن.';return}
+        var btn=f.querySelector('#l-btn');btn.disabled=true;btn.textContent='در حال ورود...';errEl.textContent='';
+        auth.signInWithEmailAndPassword(em,pw).catch(function(err){
+          errEl.textContent=authMsg(err);btn.disabled=false;btn.textContent='ورود';
+        });
+      });
+    }
+    var rt=document.getElementById('l-retry');
+    if(rt)rt.addEventListener('click',function(){location.reload()});
+  }
+
   /* ---------- navigation ---------- */
   function render(){
+    var inApp=authState==='in';
+    tabbarEl.hidden=!inApp;
+    if(!inApp){view.innerHTML=gateView();bindGate();return}
     view.innerHTML=pages[state.page]();
     var here=TAB_OF[state.page];
     Array.prototype.forEach.call(tabsEl.children,function(b){
@@ -1182,6 +1232,7 @@ button.row{cursor:pointer}
   }
 
   document.addEventListener('click',function(e){
+    if(authState!=='in')return;
     var ed=e.target.closest('[data-edit]');
     if(ed){var pr=ed.dataset.edit.split(':');state.edit={type:pr[0],id:pr[1]};go({sale:'newsale',buy:'newbuy',exp:'newexp',pay:'editpay',check:'newcheck',move:'newmove'}[pr[0]]);return}
     var g=e.target.closest('[data-go]');
@@ -1196,17 +1247,130 @@ button.row{cursor:pointer}
     var t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
     var r=e.target.closest('[data-rep]');if(r){state.rep=r.dataset.rep;render();return}
     var a=e.target.closest('[data-action]');
-    if(a&&a.dataset.action==='clear'){
-      if(clearArmed){
-        var st=db.settings;db=emptyData();db.settings=st;ensure();persist();clearArmed=false;render();toast('اطلاعات نمونه پاک شد');
-      }else{
-        clearArmed=true;toast('برای پاک کردن اطلاعات نمونه، دوباره بزن');
-        clearTimeout(clearTimer);clearTimer=setTimeout(function(){clearArmed=false},5000);
-      }
+    if(a&&a.dataset.action==='logout'){
+      if(window.confirm('از حساب خارج می‌شوی؟')&&auth)auth.signOut();
     }
   });
 
-  render();
+  /* ---------- cloud: shared data through Firebase ---------- */
+  /* every record is its own document in Firestore, so two phones can
+     add records at the same time without overwriting each other */
+  function stable(o){
+    if(o===null||typeof o!=='object')return JSON.stringify(o);
+    if(Array.isArray(o))return '['+o.map(stable).join(',')+']';
+    return '{'+Object.keys(o).sort().map(function(k){return JSON.stringify(k)+':'+stable(o[k])}).join(',')+'}';
+  }
+  function clean(x){return JSON.parse(JSON.stringify(x))}
+  function cid(x){return String(x.id)}
+  function metaObj(){
+    return {open:{AFN:(db.open&&db.open.AFN)||0,USD:(db.open&&db.open.USD)||0},name:db.settings.name,rate:db.settings.rate||0};
+  }
+
+  /* called after every change: sends only what changed to the server */
+  function persist(){
+    try{localStorage.setItem('nylon-theme',db.settings.theme)}catch(e){}
+    if(!fs||!user||!ready)return;
+    var ops=[];
+    COLS.forEach(function(c){
+      var local={},prev=synced[c]||{};
+      db[c].forEach(function(x){
+        var o=clean(x),k=cid(x),s=stable(o);
+        local[k]=s;
+        if(prev[k]!==s)ops.push({t:'set',ref:fs.collection(c).doc(k),data:o});
+      });
+      Object.keys(prev).forEach(function(k){
+        if(!(k in local))ops.push({t:'del',ref:fs.collection(c).doc(k)});
+      });
+      synced[c]=local;
+    });
+    var meta=clean(metaObj()),ms=stable(meta);
+    if(ms!==metaSynced){ops.push({t:'set',ref:fs.collection('meta').doc('main'),data:meta});metaSynced=ms}
+    for(var i=0;i<ops.length;i+=400){
+      var b=fs.batch();
+      ops.slice(i,i+400).forEach(function(o){if(o.t==='set')b.set(o.ref,o.data);else b['delete'](o.ref)});
+      b.commit().catch(function(){toast('ذخیره در سرور نشد. اینترنت را بررسی کن')});
+    }
+  }
+
+  /* screen refresh after data arrives from another phone */
+  function refresh(){
+    if(!ready||authState!=='in')return;
+    applyTheme();
+    if(!TYPING[state.page])render();
+  }
+  function syncErr(err){
+    if(!user||authState==='error')return;
+    var c=(err&&err.code)||'';
+    gateMsg=c==='permission-denied'?'دسترسی به اطلاعات بسته است. قوانین Firestore را دوباره Publish کن.':'ارتباط با سرور برقرار نشد. اینترنت را بررسی کن.';
+    authState='error';ready=false;render();
+  }
+  function errH(my){return function(err){if(my===sess)syncErr(err)}}
+
+  function stopSync(){
+    sess++;
+    unsubs.forEach(function(u){try{u()}catch(e){}});
+    unsubs=[];synced={};metaSynced='';ready=false;
+    db=emptyData();ensure();applyTheme();
+  }
+  function startSync(){
+    var my=++sess,pending=COLS.length+1;
+    function fin(){
+      pending--;
+      if(pending===0){ready=true;authState='in';applyTheme();render()}
+    }
+    COLS.forEach(function(c){
+      var first=true;
+      unsubs.push(fs.collection(c).onSnapshot(function(snap){
+        if(my!==sess)return;
+        var old={},arr=[],map={},changed=snap.size!==db[c].length;
+        db[c].forEach(function(x){old[cid(x)]=x});
+        snap.forEach(function(d){
+          var o=d.data(),k=d.id,s=stable(o),p=old[k];
+          map[k]=s;
+          if(p&&stable(clean(p))===s)arr.push(p);
+          else{arr.push(o);changed=true}
+        });
+        db[c]=arr;synced[c]=map;rebuildCustomers();
+        if(first){first=false;fin()}
+        else if(changed)refresh();
+      },errH(my)));
+    });
+    var mfirst=true;
+    unsubs.push(fs.collection('meta').doc('main').onSnapshot(function(d){
+      if(my!==sess)return;
+      var m=d.exists?d.data():{},o=m.open||{};
+      db.open={AFN:+o.AFN||0,USD:+o.USD||0};
+      db.settings.name=m.name||DEFAULT_NAME;
+      db.settings.rate=+m.rate||0;
+      var ms=stable(clean(metaObj())),changed=ms!==metaSynced;
+      metaSynced=ms;
+      if(mfirst){mfirst=false;fin()}
+      else if(changed)refresh();
+    },errH(my)));
+  }
+
+  function initCloud(){
+    if(typeof firebase==='undefined'){
+      authState='error';gateMsg='اتصال به سرور برقرار نشد. اینترنت را بررسی کن و دوباره تلاش کن.';render();return;
+    }
+    try{
+      firebase.initializeApp(FB);
+      auth=firebase.auth();
+      fs=firebase.firestore();
+      try{fs.enablePersistence({synchronizeTabs:true}).catch(function(){})}catch(e){}
+    }catch(e){
+      authState='error';gateMsg='راه‌اندازی برنامه ناموفق بود. صفحه را دوباره باز کن.';render();return;
+    }
+    render();
+    auth.onAuthStateChanged(function(u){
+      stopSync();user=u;
+      state.page='home';state.stack=[];state.edit=null;
+      if(u){authState='sync';render();startSync()}
+      else{authState='out';render()}
+    });
+  }
+
+  initCloud();
 })();
 </script>
 </body>
