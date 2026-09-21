@@ -264,11 +264,11 @@ button.row{cursor:pointer}
 
   /* ---------- data (shared between phones through Firebase) ---------- */
   var COLS=['sales','buys','exps','pays','checks','moves'];
-  var auth=null,fs=null,user=null,ready=false,sess=0,unsubs=[],synced={},metaSynced='',authState='boot',gateMsg='';
-  var TYPING={newsale:1,newbuy:1,newexp:1,newcheck:1,newmove:1,openbal:1,settings:1,editpay:1,editcust:1,cust:1};
+  var auth=null,fs=null,user=null,ready=false,sess=0,unsubs=[],synced={},metaSynced='',authState='boot',gateMsg='',role='',profile=null;
+  var TYPING={newsale:1,newbuy:1,newexp:1,newcheck:1,newmove:1,openbal:1,settings:1,editpay:1,editcust:1,cust:1,newuser:1,edituser:1};
 
   function emptyData(){
-    return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[]};
+    return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[],users:[]};
   }
   function localTheme(){try{return localStorage.getItem('nylon-theme')||'auto'}catch(e){return 'auto'}}
   var db=emptyData();
@@ -372,7 +372,7 @@ button.row{cursor:pointer}
     Array.prototype.forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v?'true':'false')});
   }
   /* ---------- state and shell ---------- */
-  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in'};
+  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in',uid:''};
   var view=document.getElementById('view');
   var tabsEl=document.getElementById('tabs');
   var tabbarEl=document.querySelector('.tabbar');
@@ -382,7 +382,7 @@ button.row{cursor:pointer}
   var ROLL='<svg viewBox="0 0 280 280" fill="none" stroke="currentColor" stroke-width="2"><circle cx="140" cy="140" r="132"/><circle cx="140" cy="140" r="113"/><circle cx="140" cy="140" r="94"/><circle cx="140" cy="140" r="76"/><circle cx="140" cy="140" r="60"/><circle cx="140" cy="140" r="46"/><circle cx="140" cy="140" r="32" fill="currentColor" fill-opacity=".35"/><circle cx="140" cy="140" r="12"/></svg>';
   var TABS=[['home','خانه','home'],['sales','فروش','sale'],['buy','خرید','buy'],['exp','مصارف','wallet'],['more','بیشتر','more']];
   var ROOT={home:1,sales:1,buy:1,exp:1,more:1};
-  var TAB_OF={home:'home',sales:'sales',newsale:'sales',buy:'buy',exp:'exp',more:'more',customers:'more',reports:'more',newbuy:'buy',newexp:'exp',cust:'more',editpay:'more',editcust:'more',checks:'more',newcheck:'more',accounts:'more',newmove:'more',openbal:'more',settings:'more'};
+  var TAB_OF={home:'home',sales:'sales',newsale:'sales',buy:'buy',exp:'exp',more:'more',customers:'more',reports:'more',newbuy:'buy',newexp:'exp',cust:'more',editpay:'more',editcust:'more',checks:'more',newcheck:'more',accounts:'more',newmove:'more',openbal:'more',settings:'more',users:'more',newuser:'more',edituser:'more'};
 
   tabsEl.innerHTML=TABS.map(function(t){
     return '<button class="tab" data-go="'+t[0]+'"><span class="pill">'+icon(t[2])+'</span>'+t[1]+'</button>';
@@ -453,6 +453,7 @@ button.row{cursor:pointer}
   /* ---------- pages ---------- */
   var pages={
     home:function(){
+      if(role==='worker')return workerHome();
       var ts=db.sales.filter(function(s){return isToday(s.ts)});
       var te=db.exps.filter(function(x){return isToday(x.ts)});
       var tot=by(ts,function(s){return s.total});
@@ -562,7 +563,7 @@ button.row{cursor:pointer}
           link('reports','chart','blue','گزارش روزانه و ماهانه','<span class="sub">فروش، خرید، مصارف و نتیجه</span>')+
         '</div></div>'+
         '<div class="block"><h2>مدیریت</h2><div class="list">'+
-          soon('shield','red','کاربران','مدیر و کارگرها، هرکس با دسترسی خودش')+
+          link('users','shield','red','کاربران','<span class="sub">مدیر و کارگرها، هرکس با دسترسی خودش</span>')+
           link('settings','sliders','blue','تنظیمات','<span class="sub">نام کارخانه، قیمت پیش‌فرض و بیشتر</span>')+
           '<button class="row" data-action="logout"><span class="ic tone-red">'+icon('shield')+'</span>'+
             '<div class="main"><b>خروج از حساب</b><span class="sub"><span class="n">'+esc((user&&user.email)||'')+'</span></span></div></button>'+
@@ -808,8 +809,74 @@ button.row{cursor:pointer}
           '<p class="err" id="s-err" role="alert"></p>'+
           '<button type="button" class="btn" id="s-save">ذخیره تنظیمات</button>'+
         '</div>';
+    },
+
+    /* ----- users (admin only) ----- */
+    users:function(){
+      var list=db.users.slice().sort(function(a,b){
+        return ((a.role==='admin'?0:1)-(b.role==='admin'?0:1))||String(a.name||'').localeCompare(String(b.name||''));
+      });
+      return top('کاربران',{back:true})+
+        '<div class="block"><button class="btn" data-go="newuser">'+icon('plus')+'افزودن کاربر</button></div>'+
+        '<div class="block">'+(list.length?'<div class="list">'+list.map(function(u){
+          return '<button class="row" data-go="edituser" data-uid="'+esc(u.uid)+'"><span class="avatar" aria-hidden="true">'+esc((u.name||u.email||'?').charAt(0))+'</span>'+
+            '<div class="main"><b>'+esc(u.name||'بدون نام')+((user&&u.uid===user.uid)?' (تو)':'')+'</b><span class="sub"><span class="n">'+esc(u.email||'')+'</span></span></div>'+
+            '<div class="amt"><span class="tag '+(u.role==='admin'?'info':'warn')+'">'+(u.role==='admin'?'مدیر':'کارگر')+'</span></div>'+
+            '<span class="chev">'+icon('chev')+'</span></button>';
+        }).join('')+'</div>':'<div class="empty">هنوز کاربری نیست.</div>')+'</div>'+
+        '<div class="block"><p class="note">مدیر به همه چیز دسترسی دارد. کارگر فقط می‌تواند فروش، خرید و مصرف ثبت کند و چیز دیگری نمی‌بیند.</p></div>';
+    },
+    newuser:function(){
+      return top('کاربر جدید',{back:true})+
+        '<form class="block form" id="uf" autocomplete="off" novalidate>'+
+          '<div class="fld"><label for="u-name">اسم</label><input class="inp" id="u-name" autocomplete="off"></div>'+
+          '<div class="fld"><label for="u-email">ایمیل</label>'+
+            '<input class="inp ltr" id="u-email" type="email" inputmode="email" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></div>'+
+          '<div class="fld"><label for="u-pass">رمز (حداقل ۶ حرف)</label>'+
+            '<input class="inp ltr" id="u-pass" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></div>'+
+          '<div class="fld"><span class="lbl">نقش</span><div class="seg" data-seg="role" role="group" aria-label="نقش">'+
+            '<button type="button" data-v="worker" aria-pressed="true">کارگر</button><button type="button" data-v="admin" aria-pressed="false">مدیر</button></div>'+
+            '<p class="note">کارگر فقط فروش، خرید و مصرف ثبت می‌کند. مدیر به همه چیز دسترسی دارد.</p></div>'+
+          '<p class="err" id="u-err" role="alert"></p>'+
+          '<button type="submit" class="btn" id="u-btn">ساختن کاربر</button>'+
+          '<p class="note">ایمیل و رمز را به خود او بده تا وارد شود.</p>'+
+        '</form>';
+    },
+    edituser:function(){
+      var u=db.users.filter(function(x){return x.uid===state.uid})[0];
+      if(!u)return top('کاربر',{back:true})+'<div class="block"><div class="empty">کاربر پیدا نشد.</div></div>';
+      var me=user&&u.uid===user.uid;
+      return top(esc(u.name||'کاربر'),{back:true,sub:'<span class="n">'+esc(u.email||'')+'</span>'})+
+        '<div class="block form" id="ue">'+
+          '<div class="fld"><label for="ue-name">اسم</label><input class="inp" id="ue-name" autocomplete="off" value="'+esc(u.name||'')+'"></div>'+
+          (me?'':'<div class="fld"><span class="lbl">نقش</span><div class="seg" data-seg="role" role="group" aria-label="نقش">'+
+            '<button type="button" data-v="worker" aria-pressed="true">کارگر</button><button type="button" data-v="admin" aria-pressed="false">مدیر</button></div></div>')+
+          '<p class="err" id="ue-err" role="alert"></p>'+
+          '<button type="button" class="btn" id="ue-save">ذخیره</button>'+
+          (me?'<p class="note">نقش و دسترسی خودت را نمی‌توانی عوض کنی.</p>'
+             :delBtn('ue-del','قطع دسترسی این کاربر')+'<p class="note">حساب او می‌ماند ولی دیگر نمی‌تواند اطلاعاتی ببیند یا ثبت کند.</p>')+
+        '</div>';
     }
   };
+
+  /* what a worker sees: only the three entry forms */
+  function workerHome(){
+    var nm=(profile&&profile.name)||'';
+    function cnt(ic,tone,label,n){
+      return '<div class="row"><span class="ic tone-'+tone+'">'+icon(ic)+'</span><div class="main"><b>'+label+'</b></div><div class="amt"><b>'+N(n)+'</b></div></div>';
+    }
+    return top(esc(DEFAULT_NAME),{sub:nm?'سلام '+esc(nm):'ثبت اطلاعات'})+
+      '<div class="quick">'+
+        '<button class="qa" data-go="newsale"><span class="ic tone-green">'+icon('sale')+'</span>ثبت فروش</button>'+
+        '<button class="qa" data-go="newbuy"><span class="ic tone-blue">'+icon('buy')+'</span>ثبت خرید</button>'+
+        '<button class="qa" data-go="newexp"><span class="ic tone-gold">'+icon('wallet')+'</span>ثبت مصرف</button>'+
+      '</div>'+
+      '<div class="block"><h2>ثبت‌شده در این نشست</h2><div class="list">'+
+        cnt('sale','green','فروش',db.sales.length)+cnt('buy','blue','خرید',db.buys.length)+cnt('wallet','gold','مصرف',db.exps.length)+
+      '</div></div>'+
+      '<div class="block"><div class="list"><button class="row" data-action="logout"><span class="ic tone-red">'+icon('shield')+'</span>'+
+        '<div class="main"><b>خروج از حساب</b><span class="sub"><span class="n">'+esc((user&&user.email)||'')+'</span></span></div></button></div></div>';
+  }
   var EXP_CATS=['معاش','خدمات','حمل','خوراک','تعمیرات','دیگر'];
 
   /* ---------- sales form ---------- */
@@ -1155,6 +1222,70 @@ button.row{cursor:pointer}
     });
   }
 
+  /* ---------- users forms ---------- */
+  function createMsg(e){
+    var c=(e&&e.code)||'';
+    if(c==='auth/email-already-in-use')return 'این ایمیل قبلاً ساخته شده. اگر آن را در Firebase ساخته‌ای، از آنجا حذفش کن و دوباره اینجا بساز.';
+    if(c==='auth/invalid-email')return 'ایمیل درست نیست.';
+    if(c==='auth/weak-password')return 'رمز باید حداقل ۶ حرف باشد.';
+    if(c==='auth/network-request-failed')return 'اینترنت وصل نیست.';
+    if(c==='permission-denied')return 'ساختن کاربر فقط برای مدیر ممکن است.';
+    return 'ساختن کاربر انجام نشد. دوباره امتحان کن.';
+  }
+  /* the account is made on a second Firebase app so the manager stays signed in */
+  function createAccount(email,pass){
+    var app2;
+    try{app2=firebase.app('second')}catch(e){app2=firebase.initializeApp(FB,'second')}
+    var a2=app2.auth();
+    return a2.createUserWithEmailAndPassword(email,pass).then(function(cred){
+      var uid=cred.user.uid;
+      return a2.signOut().then(function(){return uid},function(){return uid});
+    });
+  }
+  function bindNewUser(){
+    var f=document.getElementById('uf');if(!f)return;
+    var sel={role:'worker'},errEl=f.querySelector('#u-err'),btn=f.querySelector('#u-btn');
+    f.addEventListener('input',function(){errEl.textContent=''});
+    f.addEventListener('click',function(e){segClick(e,sel)});
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var nm=f.querySelector('#u-name').value.trim(),em=f.querySelector('#u-email').value.trim().toLowerCase(),pw=f.querySelector('#u-pass').value,err='';
+      if(!nm)err='اسم را بنویس.';
+      else if(!em)err='ایمیل را بنویس.';
+      else if(pw.length<6)err='رمز باید حداقل ۶ حرف باشد.';
+      errEl.textContent=err;if(err)return;
+      btn.disabled=true;btn.textContent='در حال ساختن...';
+      createAccount(em,pw).then(function(uid){
+        return fs.collection('users').doc(uid).set({email:em,name:nm,role:sel.role,createdAt:Date.now(),by:user.uid});
+      }).then(function(){
+        toast('کاربر ساخته شد');go('back');
+      }).catch(function(er){
+        errEl.textContent=createMsg(er);btn.disabled=false;btn.textContent='ساختن کاربر';
+      });
+    });
+  }
+  function bindEditUser(){
+    var f=document.getElementById('ue');if(!f)return;
+    var u=db.users.filter(function(x){return x.uid===state.uid})[0];if(!u)return;
+    var me=user&&u.uid===user.uid,sel={role:u.role==='admin'?'admin':'worker'},errEl=f.querySelector('#ue-err');
+    setSeg(f,'role',sel.role);
+    f.addEventListener('input',function(){errEl.textContent=''});
+    f.addEventListener('click',function(e){
+      if(segClick(e,sel))return;
+      var dl=e.target.closest('#ue-del');
+      if(dl){armDel(dl,function(){
+        fs.collection('users').doc(u.uid)['delete']().then(function(){toast('دسترسی قطع شد');go('back')})
+          .catch(function(){errEl.textContent='انجام نشد. اینترنت را بررسی کن.'});
+      });return}
+      if(!e.target.closest('#ue-save'))return;
+      var nm=f.querySelector('#ue-name').value.trim();
+      if(!nm){errEl.textContent='اسم را بنویس.';return}
+      fs.collection('users').doc(u.uid).update({name:nm,role:me?u.role:sel.role})
+        .then(function(){toast('ذخیره شد');go('back')})
+        .catch(function(){errEl.textContent='انجام نشد. اینترنت را بررسی کن.'});
+    });
+  }
+
   /* ---------- login screen ---------- */
   function authMsg(e){
     var c=(e&&e.code)||'';
@@ -1178,7 +1309,8 @@ button.row{cursor:pointer}
       '</form>';
     if(authState==='error')return head+
       '<div class="block"><div class="empty">'+gateMsg+'</div>'+
-      '<button type="button" class="btn ghost" id="l-retry">تلاش دوباره</button></div>';
+      '<button type="button" class="btn ghost" id="l-retry">تلاش دوباره</button>'+
+      (user?'<button type="button" class="btn ghost" id="l-out">خروج از حساب</button>':'')+'</div>';
     return head+'<div class="block"><div class="empty">در حال بارگذاری…</div></div>';
   }
   function bindGate(){
@@ -1197,12 +1329,14 @@ button.row{cursor:pointer}
     }
     var rt=document.getElementById('l-retry');
     if(rt)rt.addEventListener('click',function(){location.reload()});
+    var lo=document.getElementById('l-out');
+    if(lo)lo.addEventListener('click',function(){if(auth)auth.signOut()});
   }
 
   /* ---------- navigation ---------- */
   function render(){
     var inApp=authState==='in';
-    tabbarEl.hidden=!inApp;
+    tabbarEl.hidden=!inApp||role==='worker';
     if(!inApp){view.innerHTML=gateView();bindGate();return}
     view.innerHTML=pages[state.page]();
     var here=TAB_OF[state.page];
@@ -1219,11 +1353,17 @@ button.row{cursor:pointer}
     else if(state.page==='newmove')bindMove();
     else if(state.page==='openbal')bindOpen();
     else if(state.page==='settings')bindSettings();
+    else if(state.page==='newuser')bindNewUser();
+    else if(state.page==='edituser')bindEditUser();
   }
+  var WORKER_OK={home:1,newsale:1,newbuy:1,newexp:1};
   function go(p){
-    if(p==='back'){p=state.stack.pop()||'home'}
-    else if(ROOT[p]){state.stack=[]}
-    else{state.stack.push(state.page)}
+    var back=(p==='back');
+    if(back)p=state.stack.pop()||'home';
+    if(role==='worker'&&!WORKER_OK[p]){p='home';state.stack=[]}
+    else if(!back){
+      if(ROOT[p])state.stack=[];else state.stack.push(state.page);
+    }
     state.page=p;render();window.scrollTo(0,0);
   }
   function toast(msg){
@@ -1241,6 +1381,7 @@ button.row{cursor:pointer}
       if(g.dataset.cust!==undefined)state.cust=g.dataset.cust;
       if(g.dataset.acc!==undefined)state.acc=g.dataset.acc;
       if(g.dataset.dir!==undefined)state.dir=g.dataset.dir;
+      if(g.dataset.uid!==undefined)state.uid=g.dataset.uid;
       go(g.dataset.go);return;
     }
     var ac=e.target.closest('[data-acc]');if(ac){state.acc=ac.dataset.acc;render();return}
@@ -1283,8 +1424,10 @@ button.row{cursor:pointer}
       });
       synced[c]=local;
     });
-    var meta=clean(metaObj()),ms=stable(meta);
-    if(ms!==metaSynced){ops.push({t:'set',ref:fs.collection('meta').doc('main'),data:meta});metaSynced=ms}
+    if(role==='admin'){
+      var meta=clean(metaObj()),ms=stable(meta);
+      if(ms!==metaSynced){ops.push({t:'set',ref:fs.collection('meta').doc('main'),data:meta});metaSynced=ms}
+    }
     for(var i=0;i<ops.length;i+=400){
       var b=fs.batch();
       ops.slice(i,i+400).forEach(function(o){if(o.t==='set')b.set(o.ref,o.data);else b['delete'](o.ref)});
@@ -1301,7 +1444,7 @@ button.row{cursor:pointer}
   function syncErr(err){
     if(!user||authState==='error')return;
     var c=(err&&err.code)||'';
-    gateMsg=c==='permission-denied'?'دسترسی به اطلاعات بسته است. قوانین Firestore را دوباره Publish کن.':'ارتباط با سرور برقرار نشد. اینترنت را بررسی کن.';
+    gateMsg=c==='permission-denied'?'دسترسی این حساب بسته شده است. با مدیر صحبت کن.':'ارتباط با سرور برقرار نشد. اینترنت را بررسی کن.';
     authState='error';ready=false;render();
   }
   function errH(my){return function(err){if(my===sess)syncErr(err)}}
@@ -1309,11 +1452,14 @@ button.row{cursor:pointer}
   function stopSync(){
     sess++;
     unsubs.forEach(function(u){try{u()}catch(e){}});
-    unsubs=[];synced={};metaSynced='';ready=false;
+    unsubs=[];synced={};metaSynced='';ready=false;role='';profile=null;
     db=emptyData();ensure();applyTheme();
   }
   function startSync(){
-    var my=++sess,pending=COLS.length+1;
+    var my=++sess;
+    /* a worker only writes new records; nothing is read back */
+    if(role==='worker'){ready=true;authState='in';applyTheme();render();return}
+    var pending=COLS.length+2;
     function fin(){
       pending--;
       if(pending===0){ready=true;authState='in';applyTheme();render()}
@@ -1347,6 +1493,33 @@ button.row{cursor:pointer}
       if(mfirst){mfirst=false;fin()}
       else if(changed)refresh();
     },errH(my)));
+    var ufirst=true;
+    unsubs.push(fs.collection('users').onSnapshot(function(snap){
+      if(my!==sess)return;
+      var arr=[];
+      snap.forEach(function(d){var o=d.data();o.uid=d.id;arr.push(o)});
+      var changed=stable(clean(arr))!==stable(clean(db.users));
+      db.users=arr;
+      if(ufirst){ufirst=false;fin()}
+      else if(changed)refresh();
+    },errH(my)));
+  }
+
+  /* read this person's role; the very first person to sign in becomes the manager */
+  function loadProfile(u){
+    return fs.collection('users').doc(u.uid).get().then(function(d){
+      if(d.exists)return d.data();
+      var prof={email:u.email||'',name:'مدیر',role:'admin',createdAt:Date.now()};
+      var b=fs.batch();
+      b.set(fs.collection('users').doc(u.uid),prof);
+      b.set(fs.collection('config').doc('setup'),{owner:u.uid,at:Date.now()});
+      return b.commit().then(function(){return prof});
+    });
+  }
+  function profileErr(err){
+    var c=(err&&err.code)||'';
+    gateMsg=(c==='unavailable')?'ارتباط با سرور برقرار نشد. اینترنت را بررسی کن.':'حساب تو هنوز فعال نشده. از مدیر بخواه برایت کاربر بسازد.';
+    authState='error';ready=false;render();
   }
 
   function initCloud(){
@@ -1365,8 +1538,18 @@ button.row{cursor:pointer}
     auth.onAuthStateChanged(function(u){
       stopSync();user=u;
       state.page='home';state.stack=[];state.edit=null;
-      if(u){authState='sync';render();startSync()}
-      else{authState='out';render()}
+      if(u){
+        authState='sync';render();
+        loadProfile(u).then(function(p){
+          if(!user||user.uid!==u.uid)return;
+          profile=p;
+          role=p.role==='worker'?'worker':(p.role==='admin'?'admin':'');
+          if(!role){profileErr({code:'no-role'});return}
+          startSync();
+        }).catch(function(err){
+          if(user&&user.uid===u.uid)profileErr(err);
+        });
+      }else{authState='out';render()}
     });
   }
 
