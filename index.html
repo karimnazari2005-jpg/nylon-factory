@@ -533,6 +533,12 @@ button.row{cursor:pointer}
   }
   /* sale price per kg: the roll price if all rolls have the same price, otherwise the average */
   function buyKg(b){return b.kg!=null?b.kg:r2((b.ton||0)*1000)}
+  function empBalance(empId){
+    var mine=db.salaries.filter(function(x){return x.empId===empId});
+    var d={AFN:0,USD:0};
+    mine.forEach(function(x){var k=x.cur||'AFN';d[k]=r2(d[k]+(x.type==='debit'?-x.amt:x.amt))});
+    return d;
+  }
   function saleRate(s){
     var it=s.items;
     if(it&&it.length&&it.every(function(x){return x.rate===it[0].rate}))return it[0].rate;
@@ -1256,13 +1262,18 @@ button.row{cursor:pointer}
         if(!byDept[d]){byDept[d]=[];order.push(d)}
         byDept[d].push(e);
       });
+      var tot={AFN:0,USD:0};
+      db.employees.forEach(function(e){var b=empBalance(e.id);tot.AFN=r2(tot.AFN+b.AFN);tot.USD=r2(tot.USD+b.USD)});
       return top('کارمندان',{back:true})+
         '<div class="block"><button class="btn" data-go="newemp">'+icon('plus')+'افزودن کارمند</button></div>'+
+        (db.employees.length?'<div class="block"><div class="sum blue"><span>جمع طلب کارگرها</span><b>'+amts(tot.AFN,tot.USD)+'</b></div></div>':'')+
         (order.length?order.map(function(d){
           return '<div class="block"><h2>'+esc(d)+' <span class="muted" style="font-weight:400;font-size:13px">('+fa(byDept[d].length)+' نفر)</span></h2><div class="list">'+
             byDept[d].map(function(e){
+              var b=empBalance(e.id),owe=b.AFN>0||b.USD>0;
               return '<button class="row" data-go="empfile" data-emp="'+esc(e.id)+'"><span class="avatar" aria-hidden="true">'+esc((e.name||'?').charAt(0))+'</span>'+
                 '<div class="main"><b>'+esc(e.name)+'</b>'+(e.phone?'<span class="sub"><span class="n">'+esc(e.phone)+'</span></span>':'')+'</div>'+
+                '<div class="amt">'+(owe?amts(b.AFN>0?b.AFN:0,b.USD>0?b.USD:0)+'<span class="tag debt">طلب</span>':(e.rate>0?'<span class="tag paid">تسویه</span>':''))+'</div>'+
                 '<span class="chev">'+icon('chev')+'</span></button>';
             }).join('')+'</div></div>';
         }).join(''):'<div class="block"><div class="empty">هنوز کارمندی ثبت نشده.</div></div>');
@@ -1277,6 +1288,10 @@ button.row{cursor:pointer}
           '<div class="fld"><label for="m-dept">بخش</label><input class="inp" id="m-dept" list="dept-list" autocomplete="off" value="'+(ed?esc(ed.dept||''):'')+'">'+
             '<datalist id="dept-list">'+opts+'</datalist></div>'+
           '<div class="fld"><label for="m-phone">شمارهٔ تلفن (اختیاری)</label><input class="inp ltr" id="m-phone" type="tel" inputmode="tel" autocomplete="off" value="'+(ed?esc(ed.phone||''):'')+'"></div>'+
+          '<div class="fld"><label for="m-rate">معاش ماهانه (اختیاری)</label><input class="inp" id="m-rate" inputmode="decimal" autocomplete="off" value="'+(ed&&ed.rate?ed.rate:'')+'">'+
+            '<p class="note">وقتی معاش ماهانه را اینجا بگذاری، هر بار که «معاش این ماه» را ثبت کنی، مبلغ خودش نوشته می‌شود.</p></div>'+
+          '<div class="fld"><span class="lbl">واحد پول معاش</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
+            '<button type="button" data-v="AFN" aria-pressed="'+(!ed||(ed.cur||'AFN')==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+(ed&&ed.cur==='USD')+'">دالر</button></div></div>'+
           '<p class="err" id="m-err" role="alert"></p>'+
           '<button type="button" class="btn" id="m-save">'+(ed?'ذخیره تغییرات':'ذخیره کارمند')+'</button>'+
           (ed?delBtn('m-del','حذف این کارمند'):'')+
@@ -1286,42 +1301,55 @@ button.row{cursor:pointer}
       var e=db.employees.filter(function(x){return x.id===state.emp})[0];
       if(!e)return top('کارمند',{back:true})+'<div class="block"><div class="empty">کارمند پیدا نشد.</div></div>';
       var mine=db.salaries.filter(function(x){return x.empId===e.id});
-      var tot=by(mine,function(x){return x.amt});
+      var cred=by(mine.filter(function(x){return x.type!=='debit'}),function(x){return x.amt});
+      var paid=by(mine.filter(function(x){return x.type==='debit'}),function(x){return x.amt});
+      var bal=empBalance(e.id),owe=bal.AFN>0||bal.USD>0;
       var byYear={},years=[];
-      mine.slice().sort(function(a,b){return (b.year-a.year)||(b.month-a.month)}).forEach(function(x){
+      mine.slice().sort(function(a,b){return (b.year-a.year)||(b.month-a.month)||(b.ts-a.ts)}).forEach(function(x){
         if(!byYear[x.year]){byYear[x.year]=[];years.push(x.year)}
         byYear[x.year].push(x);
       });
       function salRow(x){
-        return '<button class="row" data-edit="salary:'+x.id+'"><span class="ic tone-gold">'+icon('wallet')+'</span>'+
-          '<div class="main"><b>'+esc(FA_MONTHS[x.month-1]||'')+'</b>'+(x.note?'<span class="sub">'+esc(x.note)+'</span>':'')+'</div>'+
-          '<div class="amt"><b>'+N(x.amt)+cur(CUR[x.cur||'AFN'])+'</b></div><span class="chev">'+icon('chev')+'</span></button>';
+        var debit=x.type==='debit';
+        return '<button class="row" data-edit="salary:'+x.id+'"><span class="ic tone-'+(debit?'red':'green')+'">'+icon(debit?'minus':'plus')+'</span>'+
+          '<div class="main"><b>'+(debit?'برداشت':'معاش')+' '+esc(FA_MONTHS[x.month-1]||'')+' '+T(fa(x.year))+'</b>'+(x.note?'<span class="sub">'+esc(x.note)+'</span>':'')+'</div>'+
+          '<div class="amt"><b class="'+(debit?'neg':'pos')+'">'+S(debit?'out':'in',x.amt)+cur(CUR[x.cur||'AFN'])+'</b></div><span class="chev">'+icon('chev')+'</span></button>';
       }
-      return top(esc(e.name),{back:true,sub:esc(e.dept||'')})+
-        '<div class="block"><button class="btn" data-go="newsalary" data-emp="'+esc(e.id)+'">'+icon('plus')+'ثبت معاش</button></div>'+
-        (mine.length?'<div class="block"><div class="sum blue"><span>جمع پرداختی</span><b>'+amts(tot.AFN,tot.USD)+'</b></div></div>':'')+
+      return top(esc(e.name),{back:true,sub:esc(e.dept||'')+(e.rate>0?' — معاش ماهانه '+N(e.rate)+' '+CUR[e.cur||'AFN']:'')})+
+        '<div class="block"><div class="sum'+(owe?'':' blue')+'" style="'+(owe?'':'background:var(--t-green);color:var(--green)')+'"><span>'+(owe?'طلب کارگر از کارخانه':'حساب تسویه است')+'</span><b>'+(owe?amts(bal.AFN>0?bal.AFN:0,bal.USD>0?bal.USD:0):N(0))+'</b></div></div>'+
+        '<div class="quick" style="grid-template-columns:1fr 1fr">'+
+          '<button class="qa" data-go="newsalary" data-emp="'+esc(e.id)+'" data-stype="credit"><span class="ic tone-green">'+icon('plus')+'</span>معاش این ماه</button>'+
+          '<button class="qa" data-go="newsalary" data-emp="'+esc(e.id)+'" data-stype="debit"><span class="ic tone-red">'+icon('minus')+'</span>برداشت کارگر</button>'+
+        '</div>'+
+        (mine.length?'<div class="block"><div class="list"><div class="row"><span class="ic tone-green">'+icon('plus')+'</span><div class="main"><b>جمع معاش تعیین‌شده</b></div><div class="amt">'+amts(cred.AFN,cred.USD)+'</div></div>'+
+          '<div class="row"><span class="ic tone-red">'+icon('minus')+'</span><div class="main"><b>جمع برداشت‌شده</b></div><div class="amt">'+amts(paid.AFN,paid.USD)+'</div></div></div></div>':'')+
         (years.length?years.map(function(y){
           return '<div class="block"><h2>سال '+T(fa(y))+'</h2><div class="list">'+byYear[y].map(salRow).join('')+'</div></div>';
-        }).join(''):'<div class="block"><div class="empty">هنوز معاشی ثبت نشده.</div></div>')+
+        }).join(''):'<div class="block"><div class="empty">هنوز چیزی ثبت نشده.</div></div>')+
         '<div class="block"><button class="btn ghost" data-edit="employee:'+esc(e.id)+'">ویرایش اطلاعات کارمند</button></div>';
     },
     newsalary:function(){
       var e=db.employees.filter(function(x){return x.id===state.emp})[0];
       var ed=curEdit('salary');
       var ym=nowYM();
+      var type=ed?(ed.type==='debit'?'debit':'credit'):(state.stype==='debit'?'debit':'credit');
       var chips=FA_MONTHS.map(function(m,i){return '<button type="button" class="pillbtn" data-month="'+(i+1)+'" aria-pressed="'+((ed?ed.month:ym.m)===i+1)+'">'+esc(m)+'</button>'}).join('');
-      return top(ed?'ویرایش معاش':'ثبت معاش',{back:true,sub:e?esc(e.name):''})+
+      var defCur=e?(e.cur||'AFN'):'AFN',defAmt=(!ed&&type==='credit'&&e&&e.rate>0)?e.rate:(ed?ed.amt:'');
+      return top(ed?'ویرایش':(type==='debit'?'ثبت برداشت کارگر':'ثبت معاش این ماه'),{back:true,sub:e?esc(e.name):''})+
         '<div class="block form" id="sy">'+
+          (ed?'':'<div class="fld"><span class="lbl">نوع</span><div class="seg" data-seg="type" role="group" aria-label="نوع">'+
+            '<button type="button" data-v="credit" aria-pressed="'+(type==='credit')+'">معاش (اضافه شود)</button>'+
+            '<button type="button" data-v="debit" aria-pressed="'+(type==='debit')+'">برداشت (کم شود)</button></div></div>')+
           '<div class="fld"><label for="sy-year">سال (افغانی)</label><input class="inp" id="sy-year" inputmode="numeric" autocomplete="off" value="'+(ed?ed.year:ym.y)+'"></div>'+
           '<div class="fld"><span class="lbl">ماه</span><div class="chips wrap" id="sy-months">'+chips+'</div></div>'+
           '<div class="fld"><span class="lbl">واحد پول</span><div class="seg" data-seg="cur" role="group" aria-label="واحد پول">'+
-            '<button type="button" data-v="AFN" aria-pressed="'+(!ed||(ed.cur||'AFN')==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+(ed&&ed.cur==='USD')+'">دالر</button></div></div>'+
-          '<div class="fld"><label for="sy-amt">مبلغ</label><input class="inp" id="sy-amt" inputmode="decimal" autocomplete="off" value="'+(ed?ed.amt:'')+'"></div>'+
+            '<button type="button" data-v="AFN" aria-pressed="'+((ed?(ed.cur||'AFN'):defCur)==='AFN')+'">افغانی</button><button type="button" data-v="USD" aria-pressed="'+((ed?ed.cur:defCur)==='USD')+'">دالر</button></div></div>'+
+          '<div class="fld"><label for="sy-amt">مبلغ</label><input class="inp" id="sy-amt" inputmode="decimal" autocomplete="off" value="'+defAmt+'"></div>'+
           '<div class="fld"><label for="sy-note">توضیح (اختیاری)</label><input class="inp" id="sy-note" autocomplete="off" value="'+(ed?esc(ed.note||''):'')+'"></div>'+
-          '<p class="note">این ثبت روی موجودی حساب‌ها اثر نمی‌گذارد؛ فقط برای پروندهٔ کارمند است.</p>'+
+          '<p class="note">این ثبت روی موجودی حساب‌های کارخانه اثر نمی‌گذارد؛ فقط پروندهٔ کارمند را به‌روز می‌کند.</p>'+
           '<p class="err" id="sy-err" role="alert"></p>'+
-          '<button type="button" class="btn" id="sy-save">'+(ed?'ذخیره تغییرات':'ذخیره معاش')+'</button>'+
-          (ed?delBtn('sy-del','حذف این معاش'):'')+
+          '<button type="button" class="btn" id="sy-save">'+(ed?'ذخیره تغییرات':'ذخیره')+'</button>'+
+          (ed?delBtn('sy-del','حذف این ثبت'):'')+
         '</div>';
     }
   };
@@ -2021,7 +2049,9 @@ button.row{cursor:pointer}
   function bindEmp(){
     var f=document.getElementById('mf2');if(!f)return;
     var ed=curEdit('employee'),errEl=f.querySelector('#m-err');
+    var sel={cur:ed?(ed.cur||'AFN'):'AFN'};
     f.addEventListener('input',function(){errEl.textContent=''});
+    f.addEventListener('click',function(e){segClick(e,sel)});
     f.addEventListener('click',function(e){
       var dl=e.target.closest('#m-del');
       if(dl){armDel(dl,function(){
@@ -2031,10 +2061,12 @@ button.row{cursor:pointer}
       });return}
       if(!e.target.closest('#m-save'))return;
       var nm=f.querySelector('#m-name').value.trim(),dept=f.querySelector('#m-dept').value.trim(),phone=f.querySelector('#m-phone').value.trim(),err='';
+      var rate=r2(parse(f.querySelector('#m-rate').value)),ecur=sel.cur;
       if(!nm)err='اسم را بنویس.';
       else if(!dept)err='بخش را بنویس.';
+      else if(rate<0)err='معاش نمی‌تواند منفی باشد.';
       errEl.textContent=err;if(err)return;
-      var rec={id:ed?ed.id:uid(),name:nm,dept:dept,phone:phone};
+      var rec={id:ed?ed.id:uid(),name:nm,dept:dept,phone:phone,rate:rate,cur:ecur};
       putRec(db.employees,rec);
       persist();state.edit=null;state.emp=rec.id;toast(ed?'تغییرات ذخیره شد':'کارمند ذخیره شد');go('back');
     });
@@ -2042,7 +2074,9 @@ button.row{cursor:pointer}
   function bindSalary(){
     var f=document.getElementById('sy');if(!f)return;
     var ed=curEdit('salary'),errEl=f.querySelector('#sy-err');
-    var ym=nowYM(),sel={cur:ed?(ed.cur||'AFN'):'AFN',month:ed?ed.month:ym.m};
+    var emp0=db.employees.filter(function(x){return x.id===(ed?ed.empId:state.emp)})[0];
+    var ym=nowYM();
+    var sel={cur:ed?(ed.cur||'AFN'):(emp0?(emp0.cur||'AFN'):'AFN'),month:ed?ed.month:ym.m,type:ed?(ed.type==='debit'?'debit':'credit'):(state.stype==='debit'?'debit':'credit')};
     f.addEventListener('input',function(){errEl.textContent=''});
     f.addEventListener('click',function(e){
       if(segClick(e,sel))return;
@@ -2057,9 +2091,9 @@ button.row{cursor:pointer}
       else if(!(year>1300&&year<1500))err='سال را درست وارد کن.';
       else if(!(amt>0))err='مبلغ را وارد کن.';
       errEl.textContent=err;if(err)return;
-      var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),empId:empId,year:year,month:sel.month,cur:sel.cur,amt:amt,note:note};
+      var rec={id:ed?ed.id:uid(),ts:ed?ed.ts:Date.now(),empId:empId,year:year,month:sel.month,cur:sel.cur,amt:amt,note:note,type:sel.type};
       putRec(db.salaries,rec);
-      persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':'معاش ذخیره شد');go('back');
+      persist();state.edit=null;toast(ed?'تغییرات ذخیره شد':(sel.type==='debit'?'برداشت ثبت شد':'معاش ذخیره شد'));go('back');
     });
   }
 
@@ -2181,6 +2215,7 @@ button.row{cursor:pointer}
       if(g.dataset.dir!==undefined)state.dir=g.dataset.dir;
       if(g.dataset.uid!==undefined)state.uid=g.dataset.uid;
       if(g.dataset.emp!==undefined)state.emp=g.dataset.emp;
+      if(g.dataset.stype!==undefined)state.stype=g.dataset.stype;else if(g.dataset.go==='newsalary')state.stype='credit';
       state.formDay=(g.dataset.formday!==undefined)?state.day:null;
       if(g.dataset.go==='sales')state.day=Date.now();
       go(g.dataset.go);
