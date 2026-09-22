@@ -216,6 +216,148 @@ button.row{cursor:pointer}
 :root[data-theme="neon"] .seg button[aria-pressed="true"]{background:rgba(55,225,255,.2);color:var(--text);box-shadow:0 0 12px rgba(55,225,255,.25)}
 :root[data-theme="neon"] .inp{background:rgba(255,255,255,.05)}
 :root[data-theme="neon"] .toast{background:rgba(8,14,34,.92)}
+/* berlian theme (purple and navy) */
+:root[data-theme="berlian"]{
+  --bg:#EEF0FB; --surface:#FFFFFF; --ink:#141B4D; --text:#1B2150; --muted:#6B7390; --line:#E3E6F5;
+  --primary:#6C4DF6; --on-primary:#FFFFFF;
+  --red:#E5484D; --green:#12A66A; --gold:#C77A05;
+  --t-blue:#ECE8FE; --t-green:#DDF5EA; --t-gold:#FFF0D6; --t-red:#FDE4E4;
+  --on-ink:#F3F4FF; --on-ink-muted:#A9B0DA;
+}
+:root[data-theme="berlian"] .top{background:linear-gradient(135deg,#141B4D,#232C7A)}
+:root[data-theme="berlian"] .roll{color:#9C86FF}
+:root[data-theme="berlian"] .tab[aria-current="page"] .pill{background:#ECE8FE}
+
+/* dashboard */
+.sidenav{display:none}
+.dash{padding-bottom:8px}
+.card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 2px 14px rgba(20,27,77,.06)}
+.chd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.chd h3{margin:0;font-size:15px;font-weight:700}
+.lnk{border:0;background:none;color:var(--primary);font-size:13px;cursor:pointer;padding:0}
+.dtop{display:flex;align-items:center;gap:10px;margin:12px 16px 0;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 12px rgba(20,27,77,.06)}
+.dt-date b{display:block;font-size:14px;line-height:1.4}
+.dt-date span{font-size:12px;color:var(--muted)}
+.dt-search{flex:1;min-width:0;position:relative;margin:0}
+.dt-search input{width:100%;box-sizing:border-box;padding:9px 38px 9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font:inherit;font-size:16px}
+.dt-search .icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);width:18px;height:18px}
+.dt-ic{position:relative;flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.dt-badge{position:absolute;top:-5px;left:-5px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 4px;line-height:1}
+.dt-user{display:flex;align-items:center;gap:8px;flex:none}
+.dt-user .avatar{width:38px;height:38px}
+.dt-user div{line-height:1.3}
+.dt-user b{display:block;font-size:13px}
+.dt-user span{font-size:11.5px;color:var(--muted)}
+.hello{position:relative;overflow:hidden;margin:14px 16px 0;border-radius:18px;padding:22px 20px;background:linear-gradient(100deg,var(--t-blue),var(--surface));border:1px solid var(--line);min-height:92px;display:flex;align-items:center}
+.hello h2{margin:0;font-size:22px}
+.hello p{margin:4px 0 0;color:var(--muted)}
+.hello .art{position:absolute;left:-26px;top:50%;transform:translateY(-50%);width:170px;color:var(--primary);opacity:.3;pointer-events:none}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 16px 0}
+.stats .stat:last-child{grid-column:1/-1}
+.stat{position:relative;display:flex;align-items:center;gap:12px;padding:14px;border:0;border-radius:18px;color:#fff;text-align:start;cursor:pointer;overflow:hidden;min-height:96px}
+.sic{flex:none;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.sbody{min-width:0;flex:1}
+.slbl{display:block;font-size:13px;opacity:.92}
+.sval b{display:block;font-size:20px;line-height:1.45}
+.sval .cur{color:rgba(255,255,255,.85)}
+.sdelta{display:inline-block;margin-top:2px;font-size:12px;background:rgba(255,255,255,.2);border-radius:999px;padding:0 8px}
+.s-purple{background:linear-gradient(135deg,#8A5CFF,#5B3DE0)}
+.s-green{background:linear-gradient(135deg,#22C55E,#0E9F5A)}
+.s-blue{background:linear-gradient(135deg,#3B8CF7,#1D6BE0)}
+.s-orange{background:linear-gradient(135deg,#FFB020,#F5820A)}
+.s-red{background:linear-gradient(135deg,#FF6B6B,#E5484D)}
+.g3{display:grid;gap:14px;margin:14px 16px 0;grid-template-columns:1fr}
+.c-line{order:-1}
+.chart{width:100%;height:auto;display:block;direction:ltr}
+.gl{stroke:var(--line);stroke-width:1}
+.gt{fill:var(--muted);font-size:11px;font-family:inherit}
+.dt1{fill:var(--text);font-size:16px;font-weight:700;font-family:inherit}
+.lgd{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.lgd i,.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:6px}
+.dn{display:flex;align-items:center;gap:14px}
+.donut{width:136px;height:136px;flex:none;direction:ltr}
+.lg{flex:1;min-width:0;display:grid;gap:8px}
+.lg div{display:flex;align-items:center;font-size:13px}
+.lg span.p{margin-inline-start:auto;color:var(--muted)}
+.segs{width:150px}
+.big{font-size:30px;font-weight:700;line-height:1.3}
+.prog{height:8px;border-radius:6px;background:var(--t-blue);overflow:hidden;margin:10px 0 4px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,#1DB96B,#2F80ED);border-radius:6px}
+.c-today .art2{position:absolute;left:-34px;bottom:-34px;width:150px;color:var(--primary);opacity:.18;pointer-events:none}
+.qrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 16px 0}
+.qt{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border:0;border-radius:16px;font-size:13px;cursor:pointer;text-align:center}
+.qt .ic{background:rgba(255,255,255,.75)}
+.qt b{font-weight:500;color:inherit}
+.qt-green{background:#E6F7EE;color:#12805A}
+.qt-red{background:#FDE7E9;color:#C23A40}
+.qt-blue{background:#E4EEFF;color:#2F6FDB}
+.qt-gold{background:#FFF1D6;color:#A86404}
+.qt-purple{background:#EDE7FF;color:#5B3DE0}
+.qt-orange{background:#FFEBD9;color:#C25E08}
+.qt-navy{background:#E5E8F7;color:#26307A}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mbox{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--bg)}
+.mbox .sub{display:block}
+.mbox b{display:block;font-size:17px}
+.card .list{border:0;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.card .row{padding-inline:0}
+.side-only{display:none}
+
+@media (max-width:600px){
+  .dt-date,.dt-user div{display:none}
+}
+@media (min-width:900px){
+  .sidenav:not([hidden]){display:flex;flex-direction:column;gap:4px;position:fixed;top:0;bottom:0;right:0;width:250px;box-sizing:border-box;padding:22px 14px;overflow:auto;background:linear-gradient(180deg,#141B4D,#0B1035);color:#fff;z-index:5}
+  body.hasnav .app{max-width:none;margin:0 250px 0 0;padding-bottom:28px}
+  body.hasnav .tabbar{display:none!important}
+  .col{max-width:640px;margin:0 auto}
+  .stats{grid-template-columns:repeat(5,1fr)}
+  .stats .stat:last-child{grid-column:auto}
+  .g3{grid-template-columns:1fr 1fr 1.5fr}
+  .g3.b{grid-template-columns:1fr 1.2fr 1.2fr}
+  .c-line{order:0}
+  .qrow{grid-template-columns:repeat(7,1fr)}
+  .stat{flex-direction:row}
+}
+.sn-brand{display:flex;align-items:center;gap:10px;padding:4px 6px 18px}
+.sn-brand b{display:block;font-size:19px;line-height:1.4}
+.sn-brand span{font-size:12px;color:#A9B0DA}
+.sn-item{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 14px;border:0;border-radius:12px;background:none;color:#C8CDF0;font-size:15px;text-align:start;cursor:pointer}
+.sn-item[aria-current="page"]{background:linear-gradient(90deg,#8A5CFF,#6C4DF6);color:#fff;box-shadow:0 6px 18px rgba(108,77,246,.4)}
+.sn-foot{margin-top:auto;padding-top:14px}
+:root[data-theme="neon"] .card,:root[data-theme="neon"] .dtop,:root[data-theme="neon"] .hello{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+:root[data-theme="neon"] .dt-search input,:root[data-theme="neon"] .dt-ic,:root[data-theme="neon"] .mbox{background:rgba(255,255,255,.05)}
+/* dashboard-style home */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 16px 0}
+.stat{border-radius:16px;padding:14px;color:#fff;position:relative;overflow:hidden}
+.stat.wide{grid-column:1/-1}
+.stat .si{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.22);display:grid;place-items:center;margin-bottom:10px}
+.stat .si .icon{width:19px;height:19px}
+.stat b{display:block;font-size:19px;font-weight:700;line-height:1.4}
+.stat b + b{font-size:14px;font-weight:500;opacity:.92;margin-top:1px}
+.stat .l{display:block;font-size:12.5px;opacity:.92;margin-bottom:2px}
+.stat .delta{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;margin-top:6px;background:rgba(255,255,255,.18);padding:1px 8px;border-radius:999px}
+.stat-a{background:linear-gradient(135deg,#8B6CFF,#6247E0)}
+.stat-b{background:linear-gradient(135deg,#2FD180,#159A5C)}
+.stat-c{background:linear-gradient(135deg,#4C9CFF,#2769E0)}
+.stat-d{background:linear-gradient(135deg,#FFAE42,#E0821E)}
+.stat-e{background:linear-gradient(135deg,#FF6B7A,#E03A5A)}
+:root[data-theme="neon"] .stat{box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.chartcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px}
+.chartcard + .chartcard{margin-top:14px}
+.chartcard h2{margin:0}
+.chartcard .sub2{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+.wchart{width:100%;height:110px;display:block}
+.wchart .area{fill:var(--t-blue);stroke:none}
+.wchart .line{fill:none;stroke:var(--primary);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.wchart circle{fill:var(--primary)}
+.wk{display:flex;justify-content:space-between;margin-top:6px}
+.wk span{flex:1;text-align:center;font-size:11px;color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:2.5px;height:96px}
+.bars b{flex:1;min-width:2px;border-radius:3px 3px 0 0;background:var(--primary);opacity:.85;display:block}
+.barlbl{display:flex;gap:2.5px;margin-top:6px}
+.barlbl span{flex:1;text-align:center;font-size:10px;color:var(--muted)}
+
 </style>
 </head>
 <body>
@@ -235,9 +377,12 @@ button.row{cursor:pointer}
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
   <symbol id="i-chev" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15L6 16z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></symbol>
 </svg>
 
+<aside class="sidenav" id="side" hidden></aside>
 <div class="app"><main id="view"></main></div>
 
 <nav class="tabbar" aria-label="منوی اصلی" hidden>
@@ -331,6 +476,49 @@ button.row{cursor:pointer}
     d.addEventListener('input',upd);d.addEventListener('change',upd);upd();
     return d;
   }
+  function pDayNum(ts){
+    try{var p={};new Intl.DateTimeFormat('en-u-ca-persian-nu-latn',{day:'numeric'}).formatToParts(new Date(ts)).forEach(function(x){p[x.type]=x.value});return +p.day}
+    catch(e){return new Date(ts).getDate()}
+  }
+  function weekdayShort(ts){
+    try{return new Intl.DateTimeFormat('fa-AF-u-ca-persian',{weekday:'short'}).format(new Date(ts))}catch(e){return ''}
+  }
+  function pct(now,prev){if(!prev)return null;return Math.round((now-prev)/prev*100)}
+  /* AFN sales total on a given day, used for the home charts */
+  function dayAFN(ts){
+    var k=dayKey(ts);
+    return r2(db.sales.reduce(function(t,s){return dayKey(s.ts)===k&&(s.cur||'AFN')==='AFN'?t+s.total:t},0));
+  }
+  function dailyTotals(n){
+    var arr=[];
+    for(var i=n-1;i>=0;i--){
+      var ts=dayStart(Date.now())-i*864e5+12*36e5;
+      arr.push({ts:ts,val:dayAFN(ts)});
+    }
+    return arr;
+  }
+  function svgArea(data){
+    var w=300,h=110,max=Math.max.apply(null,data.map(function(d){return d.val}))||1;
+    var stepX=data.length>1?w/(data.length-1):0;
+    var pts=data.map(function(d,i){return [i*stepX,h-2-(d.val/max*(h-14))]});
+    var line=pts.map(function(p,i){return (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ');
+    var area=line+' L'+w+','+h+' L0,'+h+' Z';
+    var dots=pts.map(function(p){return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.2"/>'}).join('');
+    return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" class="wchart" aria-hidden="true">'+
+      '<path class="area" d="'+area+'"/><path class="line" d="'+line+'"/>'+dots+'</svg>';
+  }
+  function weekChart(){
+    var data=dailyTotals(7);
+    return '<div class="chartcard"><h2>نمودار فروش ۷ روز اخیر</h2><p class="sub2">افغانی</p>'+
+      svgArea(data)+'<div class="wk">'+data.map(function(d){return '<span>'+esc(weekdayShort(d.ts))+'</span>'}).join('')+'</div></div>';
+  }
+  function monthChart(){
+    var data=dailyTotals(30),max=Math.max.apply(null,data.map(function(d){return d.val}))||1;
+    var bars=data.map(function(d){return '<b style="height:'+Math.max(4,Math.round(d.val/max*100))+'%" title="'+fullDate(d.ts)+'"></b>'}).join('');
+    var lbls=data.map(function(d,i){return '<span>'+((i%5===0||i===data.length-1)?fa(pDayNum(d.ts)):'')+'</span>'}).join('');
+    return '<div class="chartcard"><h2>فروش ۳۰ روز اخیر</h2><p class="sub2">افغانی، بر اساس تاریخ شمسی</p>'+
+      '<div class="bars">'+bars+'</div><div class="barlbl">'+lbls+'</div></div>';
+  }
   /* full date like ۱۴۰۵/۰۵/۰۵ */
   function fullDate(ts){
     try{
@@ -362,7 +550,8 @@ button.row{cursor:pointer}
   function emptyData(){
     return {sample:false,open:{AFN:0,USD:0},seq:1,customers:[],sales:[],buys:[],exps:[],pays:[],checks:[],moves:[],users:[]};
   }
-  function localTheme(){try{return localStorage.getItem('nylon-theme')||'auto'}catch(e){return 'auto'}}
+  function normTheme(t){return (t==='light'||t==='dark'||t==='neon'||t==='berlian')?t:'berlian'}
+  function localTheme(){try{return normTheme(localStorage.getItem('nylon-theme'))}catch(e){return 'berlian'}}
   function localAccent(){try{return localStorage.getItem('nylon-accent')||''}catch(e){return ''}}
   function savePrefs(){try{localStorage.setItem('nylon-theme',db.settings.theme);localStorage.setItem('nylon-accent',db.settings.accent||'')}catch(e){}}
   function cacheBrand(){try{localStorage.setItem('nylon-brand',JSON.stringify({name:db.settings.name,logo:db.settings.logo||''}))}catch(e){}}
@@ -377,7 +566,7 @@ button.row{cursor:pointer}
     if(!db.moves)db.moves=[];
     if(!db.open)db.open={AFN:0,USD:0};
     var s=db.settings||{};
-    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme||localTheme(),accent:(s.accent!==undefined?s.accent:localAccent()),phone:s.phone||'',address:s.address||'',logo:s.logo||''};
+    db.settings={name:s.name||DEFAULT_NAME,rate:s.rate||0,theme:s.theme?normTheme(s.theme):localTheme(),accent:(s.accent!==undefined?s.accent:localAccent()),phone:s.phone||'',address:s.address||'',logo:s.logo||'',target:s.target||0};
   }
   function hex2rgb(h){h=String(h).replace('#','');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
   function mixc(a,b,t){return a.map(function(v,i){return Math.round(v*(1-t)+b[i]*t)})}
@@ -386,8 +575,7 @@ button.row{cursor:pointer}
   function isDarkNow(){
     var t=db.settings.theme;
     if(t==='dark'||t==='neon')return true;
-    if(t==='light')return false;
-    try{return !!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)}catch(e){return false}
+    return false;
   }
   /* the chosen app color replaces the main blue */
   function applyAccent(){
@@ -401,7 +589,7 @@ button.row{cursor:pointer}
   }
   function applyTheme(){
     var t=db.settings.theme,r=document.documentElement;
-    if(t==='light'||t==='dark'||t==='neon')r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
+    if(t==='light'||t==='dark'||t==='neon'||t==='berlian')r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
     document.title=db.settings.name;
     applyAccent();
   }
@@ -497,11 +685,12 @@ button.row{cursor:pointer}
     Array.prototype.forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v?'true':'false')});
   }
   /* ---------- state and shell ---------- */
-  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in',uid:'',day:Date.now(),formDay:null};
+  var state={page:'home',stack:[],rep:'day',edit:null,cust:'',acc:'AFN',dir:'in',uid:'',day:Date.now(),formDay:null,dcur:'AFN',q:''};
   var view=document.getElementById('view');
   var tabsEl=document.getElementById('tabs');
   var tabbarEl=document.querySelector('.tabbar');
   var toastEl=document.getElementById('toast');
+  var sideEl=document.getElementById('side');
   var toastTimer;
 
   var ROLL='<svg viewBox="0 0 280 280" fill="none" stroke="currentColor" stroke-width="2"><circle cx="140" cy="140" r="132"/><circle cx="140" cy="140" r="113"/><circle cx="140" cy="140" r="94"/><circle cx="140" cy="140" r="76"/><circle cx="140" cy="140" r="60"/><circle cx="140" cy="140" r="46"/><circle cx="140" cy="140" r="32" fill="currentColor" fill-opacity=".35"/><circle cx="140" cy="140" r="12"/></svg>';
@@ -583,21 +772,28 @@ button.row{cursor:pointer}
     home:function(){
       if(role==='worker')return workerHome();
       var ts=db.sales.filter(function(s){return isToday(s.ts)});
+      var ys=db.sales.filter(function(s){return dayKey(s.ts)===dayKey(Date.now()-864e5)});
       var te=db.exps.filter(function(x){return isToday(x.ts)});
-      var tot=by(ts,function(s){return s.total});
-      var dueT=by(ts,function(s){return s.total-s.paid});
-      var ex=by(te,function(x){return x.amt});
+      var ye=db.exps.filter(function(x){return dayKey(x.ts)===dayKey(Date.now()-864e5)});
+      var tot=by(ts,function(s){return s.total}),ytot=by(ys,function(s){return s.total});
+      var ex=by(te,function(x){return x.amt}),yex=by(ye,function(x){return x.amt});
+      var sDelta=pct(tot.AFN,ytot.AFN),eDelta=pct(ex.AFN,yex.AFN);
       var ci=db.customers.map(custInfo);
       var debt=totalDebt();
       var debtors=ci.filter(hasDebt).length;
-      var nRolls=sum(ts,'rolls'),nKg=sum(ts,'kg');
-      var dt=dueText(dueT);
+      var pendCh=db.checks.filter(function(c){return c.status==='pending'}).length;
 
       var rec=db.sales.map(function(s){return {ts:s.ts,ic:'sale',tone:'green',text:'فروش به '+esc(s.name),amt:s.total,c:s.cur||'AFN'}})
         .concat(db.buys.map(function(b){return {ts:b.ts,ic:'buy',tone:'blue',text:'خرید '+esc(b.name),amt:b.amt,c:b.cur||'USD'}}))
         .concat(db.exps.map(function(x){return {ts:x.ts,ic:x.cat==='معاش'?'users':'wallet',tone:'gold',text:esc(x.name),amt:x.amt,c:x.cur||'AFN'}}))
         .concat(db.pays.map(function(p){return {ts:p.ts,ic:p.checkId?'cheque':'bank',tone:'blue',text:(p.checkId?'چک از ':'دریافت از ')+esc(p.name),amt:p.amt,c:p.cur||'AFN'}}))
-        .sort(function(a,b){return b.ts-a.ts}).slice(0,4);
+        .sort(function(a,b){return b.ts-a.ts}).slice(0,5);
+
+      function card(cls,ic,label,val1,val2,delta){
+        return '<div class="stat '+cls+'"><span class="si">'+icon(ic)+'</span><span class="l">'+label+'</span>'+
+          '<b>'+val1+'</b>'+(val2?'<b>'+val2+'</b>':'')+
+          (delta!==null&&delta!==undefined?'<span class="delta">'+(delta>=0?'▲':'▼')+' '+T(fa(Math.abs(delta)))+'٪</span>':'')+'</div>';
+      }
 
       return top(esc(db.settings.name),{home:true,sub:pdate(Date.now(),{weekday:'long',day:'numeric',month:'long',year:'numeric'})})+
         '<div class="accounts">'+
@@ -609,18 +805,16 @@ button.row{cursor:pointer}
           '<button class="qa" data-go="newbuy"><span class="ic tone-blue">'+icon('buy')+'</span>ثبت خرید</button>'+
           '<button class="qa" data-go="newexp"><span class="ic tone-gold">'+icon('wallet')+'</span>ثبت مصرف</button>'+
         '</div>'+
-        '<div class="block"><h2>امروز</h2><div class="list">'+
-          link('sales','sale','green','فروش امروز',
-            ts.length?'<span class="subs">'+(nRolls?'<span class="sub">'+N(nRolls)+' رول</span>':'')+'<span class="sub">'+N(nKg)+' کیلو</span></span>':'<span class="sub">هنوز فروشی ثبت نشده</span>',
-            '<div class="amt">'+amts(tot.AFN,tot.USD)+(dt?'<span class="tag debt">باقی '+dt+'</span>':'')+'</div>')+
-          link('exp','wallet','gold','مصارف امروز',
-            '<span class="sub">'+(te.length?N(te.length)+' ثبت':'مصرفی ثبت نشده')+'</span>',
-            '<div class="amt">'+amts(ex.AFN,ex.USD)+'</div>')+
-          link('customers','users','red','طلب از مشتری‌ها',
-            '<span class="sub">'+(debtors?N(debtors)+' مشتری':'کسی باقی‌دار نیست')+'</span>',
-            '<div class="amt">'+amts(debt.AFN,debt.USD)+'</div>')+
-        '</div></div>'+
-        '<div class="block"><h2>آخرین ثبت‌ها</h2>'+
+        '<div class="stats">'+
+          card('stat-a','sale','فروش امروز',N(tot.AFN)+' افغانی',tot.USD>0?N(tot.USD)+' دالر':'',sDelta)+
+          card('stat-b','wallet','مصرف امروز',N(ex.AFN)+' افغانی',ex.USD>0?N(ex.USD)+' دالر':'',eDelta)+
+          card('stat-c','bank','موجودی حساب‌ها',N(balance('AFN'))+' افغانی',N(balance('USD'))+' دالر',null)+
+          card('stat-d','cheque','چک‌های در انتظار',N(pendCh)+' عدد','',null)+
+          '<div class="stat stat-e wide"><span class="si">'+icon('users')+'</span><span class="l">مشتریان باقی‌دار</span>'+
+            '<b>'+N(debtors)+' نفر</b>'+(debt.AFN||debt.USD?'<b>'+N(debt.AFN>0?debt.AFN:debt.USD)+' '+(debt.AFN>0?'افغانی':'دالر')+' باقی</b>':'')+'</div>'+
+        '</div>'+
+        weekChart()+monthChart()+
+        '<div class="block"><h2>آخرین فعالیت‌ها</h2>'+
           (rec.length?'<div class="list">'+rec.map(function(r){
             return '<div class="row"><span class="ic tone-'+r.tone+'">'+icon(r.ic)+'</span>'+
               '<div class="main"><b>'+r.text+'</b><span class="sub">'+T(fullDate(r.ts))+' '+T(timeText(r.ts))+'</span></div>'+
@@ -680,7 +874,7 @@ button.row{cursor:pointer}
       if(!t)t='<span class="blk">'+N(0)+cur(CUR.AFN)+'</span>';
       return top('پرونده مشتری‌ها',{back:true})+
         '<div class="block"><div class="sum"><span>مجموع طلب از مشتری‌ها</span><b>'+t+'</b></div></div>'+
-        '<div class="block"><input class="inp" id="cq" placeholder="جستجوی مشتری..." autocomplete="off"></div>'+
+        '<div class="block"><input class="inp" id="cq" placeholder="جستجوی مشتری..." autocomplete="off" value="'+esc(state.q||'')+'"></div>'+
         '<div class="block">'+(ci.length?'<div class="list">'+ci.map(function(c){
           return '<button class="row" data-go="cust" data-cust="'+esc(c.name)+'"><span class="avatar" aria-hidden="true">'+esc(c.name.charAt(0))+'</span>'+
             '<div class="main"><b>'+esc(c.name)+'</b><span class="sub">'+(c.last?'آخرین خرید: '+T(fullDate(c.last)):'هنوز خریدی ندارد')+'</span></div>'+
@@ -989,11 +1183,14 @@ button.row{cursor:pointer}
           '<div class="fld"><label for="s-rate">قیمت پیش‌فرض فروش هر کیلو (افغانی)</label>'+
             '<input class="inp" id="s-rate" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(st.rate?st.rate:'')+'">'+
             '<p class="note">در فرم فروش با افغانی، این قیمت خودکار نوشته می‌شود و می‌توانی تغییرش بدهی.</p></div>'+
+          '<div class="fld"><label for="s-target">هدف روزانهٔ فروش (کیلو)</label>'+
+            '<input class="inp" id="s-target" inputmode="decimal" autocomplete="off" placeholder="اختیاری" value="'+(st.target?st.target:'')+'">'+
+            '<p class="note">در داشبورد پیشرفت فروش امروز نسبت به این عدد نشان داده می‌شود.</p></div>'+
           '<p class="err" id="s-err" role="alert"></p>'+
           '<button type="button" class="btn" id="s-save">ذخیره پروفایل</button>'+
           '<h2 style="margin-top:26px">ظاهر برنامه <span class="muted" style="font-weight:400;font-size:13px">(فقط روی همین گوشی)</span></h2>'+
           '<div class="fld"><span class="lbl">حالت نمایش</span><div class="seg" data-seg="theme" role="group" aria-label="حالت نمایش">'+
-            '<button type="button" data-v="auto" aria-pressed="false">خودکار</button>'+
+            '<button type="button" data-v="berlian" aria-pressed="false">برلیان</button>'+
             '<button type="button" data-v="light" aria-pressed="false">روشن</button>'+
             '<button type="button" data-v="dark" aria-pressed="false">تیره</button>'+
             '<button type="button" data-v="neon" aria-pressed="false">آینده</button></div></div>'+
@@ -1057,6 +1254,216 @@ button.row{cursor:pointer}
         '</div>';
     }
   };
+
+  /* ---------- dashboard ---------- */
+  var CH=['#2F80ED','#1DB96B','#FF9F1A','#7C4DFF','#9AA3B2','#FF5A5F'];
+  function nice(max){
+    if(!(max>0))return 1;
+    var p=Math.pow(10,Math.floor(Math.log(max)/Math.LN10)),m=max/p;
+    return (m<=1?1:m<=2?2:m<=5?5:10)*p;
+  }
+  function short(v){
+    if(v>=1e6)return fa(String(Math.round(v/1e5)/10))+'M';
+    if(v>=1e3)return fa(String(Math.round(v/100)/10))+'K';
+    return fa(String(Math.round(v*10)/10));
+  }
+  function dayTs(off){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+off);return d.getTime()}
+  function jday(ts){return fa(String(+jdate(ts).split('/')[2]))}
+  function lineChart(labels,series){
+    var W=560,H=230,L=46,R=14,T0=14,B=30,iw=W-L-R,ih=H-T0-B;
+    var max=nice(Math.max.apply(null,[0].concat(series.map(function(s){return Math.max.apply(null,s.vals)}))));
+    var n=labels.length,step=n>1?iw/(n-1):0,g='';
+    function X(i){return L+i*step}
+    function Y(v){return T0+ih-(v/max)*ih}
+    for(var i=0;i<=4;i++){
+      var y=Y(max*i/4);
+      g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" class="gl"/><text x="'+(L-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" class="gt">'+short(max*i/4)+'</text>';
+    }
+    labels.forEach(function(lb,i){g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" class="gt">'+lb+'</text>'});
+    series.forEach(function(s){
+      var pts=s.vals.map(function(v,i){return X(i).toFixed(1)+','+Y(v).toFixed(1)});
+      g+='<path d="M'+X(0).toFixed(1)+','+(T0+ih)+' L'+pts.join(' L')+' L'+X(n-1).toFixed(1)+','+(T0+ih)+' Z" fill="'+s.color+'" opacity=".12"/>'+
+        '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+      s.vals.forEach(function(v,i){g+='<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="3.5" fill="#fff" stroke="'+s.color+'" stroke-width="2"/>'});
+    });
+    return '<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img" aria-label="نمودار">'+g+'</svg>';
+  }
+  function barChart(labels,series){
+    var W=560,H=210,L=46,R=10,T0=10,B=26,iw=W-L-R,ih=H-T0-B;
+    var max=nice(Math.max.apply(null,[0].concat(series.map(function(s){return Math.max.apply(null,s.vals)}))));
+    var n=labels.length,gw=iw/n,bw=Math.max(2,gw*0.36),g='';
+    for(var i=0;i<=4;i++){
+      var y=T0+ih-ih*i/4;
+      g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" class="gl"/><text x="'+(L-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" class="gt">'+short(max*i/4)+'</text>';
+    }
+    labels.forEach(function(lb,i){
+      if(i%5===0||i===n-1)g+='<text x="'+(L+i*gw+gw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" class="gt">'+lb+'</text>';
+    });
+    series.forEach(function(s,j){
+      s.vals.forEach(function(v,i){
+        var h=v/max*ih;if(h<=0)return;
+        g+='<rect x="'+(L+i*gw+gw*0.12+j*bw).toFixed(1)+'" y="'+(T0+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="'+s.color+'"/>';
+      });
+    });
+    return '<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img" aria-label="نمودار">'+g+'</svg>';
+  }
+  function donutSvg(items,total,unit){
+    var R=54,C=2*Math.PI*R,off=0,g='';
+    items.forEach(function(it){
+      var len=total>0?it.val/total*C:0;
+      g+='<circle r="'+R+'" cx="70" cy="70" fill="none" stroke="'+it.color+'" stroke-width="22" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"/>';
+      off+=len;
+    });
+    return '<svg viewBox="0 0 140 140" class="donut" role="img" aria-label="نمودار دایره‌ای">'+g+
+      '<text x="70" y="68" text-anchor="middle" class="dt1">'+short(total)+'</text><text x="70" y="86" text-anchor="middle" class="gt">'+unit+'</text></svg>';
+  }
+  function stat(cls,go,ic,label,val,foot){
+    return '<button type="button" class="stat '+cls+'" data-go="'+go+'" data-root="1"><div class="sbody"><span class="slbl">'+label+'</span>'+val+(foot||'')+'</div>'+
+      '<span class="sic">'+icon(ic)+'</span></button>';
+  }
+  function valHtml(a,u,both){
+    var o='';
+    if(a||both)o+='<b>'+N(a||0)+cur(CUR.AFN)+'</b>';
+    if(u||both)o+='<b>'+N(u||0)+cur(CUR.USD)+'</b>';
+    return '<div class="sval">'+(o||'<b>'+N(0)+cur(CUR.AFN)+'</b>')+'</div>';
+  }
+
+  var NAV=[['home','داشبورد','home'],['sales','فروش','sale'],['buy','خرید','buy'],['exp','مصارف','wallet'],['customers','مشتریان','users'],['checks','چک‌ها','cheque'],['accounts','حساب‌ها','bank'],['reports','گزارش‌ها','chart'],['users','کاربران','shield'],['settings','تنظیمات','sliders']];
+  var NAV_OF={home:'home',more:'home',sales:'sales',newsale:'sales',buy:'buy',newbuy:'buy',exp:'exp',newexp:'exp',customers:'customers',cust:'customers',editcust:'customers',editpay:'customers',checks:'checks',newcheck:'checks',accounts:'accounts',newmove:'accounts',openbal:'accounts',reports:'reports',users:'users',newuser:'users',edituser:'users',settings:'settings'};
+  function renderSide(){
+    var here=NAV_OF[state.page]||'home';
+    sideEl.innerHTML='<div class="sn-brand">'+logoHtml(db.settings.logo,false)+'<div><b>'+esc(db.settings.name)+'</b><span>سیستم مدیریت کارخانه</span></div></div>'+
+      NAV.map(function(n){
+        return '<button type="button" class="sn-item" data-go="'+n[0]+'" data-root="1"'+(n[0]===here?' aria-current="page"':'')+'>'+icon(n[2])+'<span>'+n[1]+'</span></button>';
+      }).join('')+
+      '<div class="sn-foot"><button type="button" class="sn-item" data-action="logout">'+icon('back')+'<span>خروج از حساب</span></button></div>';
+  }
+
+  function dashboard(){
+    var c=state.dcur,cn=CUR[c],now=Date.now(),i;
+    var me=(profile&&profile.name)||'مدیر';
+    var todaySales=db.sales.filter(function(x){return isToday(x.ts)});
+    var yk=dayKey(now-864e5);
+    var ySales=db.sales.filter(function(x){return dayKey(x.ts)===yk});
+    var tdT=by(todaySales,function(x){return x.total}),ydT=by(ySales,function(x){return x.total});
+    var buysToday=by(db.buys.filter(function(x){return isToday(x.ts)}),function(x){return x.amt});
+    var pend=db.checks.filter(function(x){return x.status==='pending'}).sort(function(a,b){return a.due-b.due});
+    var pendT=by(pend,function(x){return x.amt});
+    var late=pend.filter(function(x){return daysLeft(x.due)<=0}).length;
+    var ci=db.customers.map(custInfo),debtors=ci.filter(hasDebt).length,debt=totalDebt();
+    var dc=(tdT.AFN||ydT.AFN)?'AFN':((tdT.USD||ydT.USD)?'USD':'AFN');
+    var pct=ydT[dc]>0?Math.round((tdT[dc]-ydT[dc])/ydT[dc]*100):null;
+    var delta=pct===null?'':'<span class="sdelta">'+(pct<0?'↓ ':'↑ ')+N(Math.abs(pct))+'٪ نسبت به دیروز</span>';
+    var kgToday=r2(sum(todaySales,'kg')),rollsToday=sum(todaySales,'rolls'),tg=db.settings.target||0;
+    var pctT=tg>0?Math.min(100,Math.round(kgToday/tg*100)):0;
+
+    function daySum(arr,f,ts){var k=dayKey(ts);return arr.reduce(function(t,x){return (dayKey(x.ts)===k&&(x.cur||'AFN')===c)?t+f(x):t},0)}
+    function series(days){
+      return {
+        sv:days.map(function(t){return r2(daySum(db.sales,function(x){return x.total},t))}),
+        rv:days.map(function(t){return r2(daySum(db.sales,function(x){return x.paid},t)+daySum(db.pays,function(x){return x.amt},t))})
+      };
+    }
+    var d7=[],d30=[];
+    for(i=6;i>=0;i--)d7.push(dayTs(-i));
+    for(i=29;i>=0;i--)d30.push(dayTs(-i));
+    var s7=series(d7),s30=series(d30);
+    var has7=s7.sv.concat(s7.rv).some(function(v){return v>0}),has30=s30.sv.concat(s30.rv).some(function(v){return v>0});
+
+    var since=dayStart(now)-29*864e5,cats={};
+    db.exps.forEach(function(x){if((x.cur||'AFN')===c&&x.ts>=since){var k=x.cat||'دیگر';cats[k]=(cats[k]||0)+x.amt}});
+    var items=Object.keys(cats).map(function(k,idx){return {name:k,val:r2(cats[k])}}).sort(function(a,b){return b.val-a.val}).slice(0,6)
+      .map(function(it,idx){it.color=CH[idx%CH.length];return it});
+    var expTot=r2(items.reduce(function(t,x){return t+x.val},0));
+
+    var mats={};
+    db.buys.forEach(function(x){
+      if(x.ts<since)return;
+      var m=mats[x.name]||(mats[x.name]={name:x.name,ton:0,AFN:0,USD:0});
+      m.ton+=x.ton||0;m[x.cur||'USD']+=x.amt;
+    });
+    var matList=Object.keys(mats).map(function(k){return mats[k]}).sort(function(a,b){return b.ton-a.ton}).slice(0,4);
+
+    var rec=db.sales.map(function(x){return {ts:x.ts,ic:'sale',tone:'green',text:'فروش به '+esc(x.name),amt:x.total,c:x.cur||'AFN'}})
+      .concat(db.buys.map(function(x){return {ts:x.ts,ic:'buy',tone:'blue',text:'خرید '+esc(x.name),amt:x.amt,c:x.cur||'USD'}}))
+      .concat(db.exps.map(function(x){return {ts:x.ts,ic:x.cat==='معاش'?'users':'wallet',tone:'gold',text:esc(x.name),amt:x.amt,c:x.cur||'AFN'}}))
+      .concat(db.pays.map(function(x){return {ts:x.ts,ic:x.checkId?'cheque':'bank',tone:'blue',text:(x.checkId?'چک از ':'دریافت از ')+esc(x.name),amt:x.amt,c:x.cur||'AFN'}}))
+      .sort(function(a,b){return b.ts-a.ts}).slice(0,5);
+
+    function seg(){
+      return '<div class="seg segs" role="group" aria-label="واحد پول"><button type="button" data-dcur="AFN" aria-pressed="'+(c==='AFN')+'">افغانی</button><button type="button" data-dcur="USD" aria-pressed="'+(c==='USD')+'">دالر</button></div>';
+    }
+    function lnk(label,go){return '<button type="button" class="lnk" data-go="'+go+'" data-root="1">'+label+'</button>'}
+
+    var head='<div class="dtop">'+
+      '<div class="dt-date"><b>'+T(fullDate(now))+'</b><span>'+pdate(now,{weekday:'long'})+' · '+T(timeText(now))+'</span></div>'+
+      '<form class="dt-search" id="dsearch">'+icon('search')+'<input id="dq" placeholder="جستجوی مشتری..." autocomplete="off"></form>'+
+      '<button type="button" class="dt-ic" data-go="checks" data-root="1" aria-label="چک‌ها">'+icon('bell')+(late?'<span class="dt-badge">'+N(late)+'</span>':'')+'</button>'+
+      '<button type="button" class="dt-ic" data-go="settings" data-root="1" aria-label="تنظیمات">'+icon('sliders')+'</button>'+
+      '<div class="dt-user"><span class="avatar" aria-hidden="true">'+esc(me.charAt(0))+'</span><div><b>'+esc(me)+'</b><span>مدیر</span></div></div></div>';
+
+    var hello='<div class="hello"><div><h2>سلام، '+esc(me)+' 👋</h2><p>به سیستم مدیریت '+esc(db.settings.name)+' خوش آمدید.</p></div><div class="art" aria-hidden="true">'+ROLL+'</div></div>';
+
+    var stats='<div class="stats">'+
+      stat('s-purple','sales','sale','کل فروش امروز',valHtml(tdT.AFN,tdT.USD),delta)+
+      stat('s-green','buy','buy','خرید مواد امروز',valHtml(buysToday.AFN,buysToday.USD))+
+      stat('s-blue','accounts','bank','موجودی حساب‌ها',valHtml(balance('AFN'),balance('USD'),true))+
+      stat('s-orange','checks','cheque','چک‌های در انتظار','<div class="sval"><b>'+N(pend.length)+cur('عدد')+'</b></div>',pend.length?'<span class="sdelta">'+dueText(pendT)+'</span>':'')+
+      stat('s-red','customers','users','مشتریان','<div class="sval"><b>'+N(ci.length)+cur('نفر')+'</b></div>',debtors?'<span class="sdelta">'+N(debtors)+' نفر باقی‌دار</span>':'')+
+    '</div>';
+
+    var todayCard='<div class="card c-today"><div class="chd"><h3>وزن فروش امروز</h3><span class="tag info">'+T(fullDate(now))+'</span></div>'+
+      '<div class="big">'+N(kgToday)+cur('کیلوگرم')+'</div>'+
+      (tg>0?'<div class="prog"><i style="width:'+pctT+'%"></i></div><p class="note" style="margin:0">هدف روزانه: '+N(tg)+' کیلو ('+N(pctT)+'٪)</p>'
+           :'<p class="note">برای دیدن پیشرفت، «هدف روزانه» را در تنظیمات بنویس.</p>')+
+      '<p class="note">'+N(todaySales.length)+' فروش'+(rollsToday?' · '+N(rollsToday)+' رول':'')+'</p>'+
+      '<div class="art2" aria-hidden="true">'+ROLL+'</div></div>';
+
+    var donutCard='<div class="card"><div class="chd"><h3>توزیع مصارف (۳۰ روز)</h3></div>'+
+      (items.length?'<div class="dn">'+donutSvg(items,expTot,cn)+'<div class="lg">'+items.map(function(it){
+        return '<div><i class="dot" style="background:'+it.color+'"></i>'+esc(it.name)+'<span class="p">'+N(Math.round(it.val/expTot*100))+'٪</span></div>';
+      }).join('')+'</div></div>':'<div class="empty">در ۳۰ روز اخیر مصرفی با '+cn+' ثبت نشده.</div>')+'</div>';
+
+    var lineCard='<div class="card c-line"><div class="chd"><h3>نمودار فروش (هفت روز اخیر)</h3>'+seg()+'</div>'+
+      '<div class="lgd"><span><i style="background:#7C4DFF"></i>فروش</span><span><i style="background:#2F80ED"></i>دریافتی</span></div>'+
+      (has7?lineChart(d7.map(function(t){return pdate(t,{weekday:'long'})}),[{vals:s7.rv,color:'#2F80ED'},{vals:s7.sv,color:'#7C4DFF'}])
+           :'<div class="empty">در هفت روز اخیر فروشی با '+cn+' ثبت نشده.</div>')+'</div>';
+
+    var tiles=[['newsale','sale','green','ثبت فروش'],['newbuy','buy','red','ثبت خرید'],['newexp','wallet','blue','ثبت مصرف'],['newcheck','cheque','gold','ثبت چک'],['customers','users','purple','پرونده مشتری‌ها'],['accounts','bank','orange','حساب‌ها'],['reports','chart','navy','گزارش‌ها']];
+    var qrow='<div class="qrow">'+tiles.map(function(t){
+      return '<button type="button" class="qt qt-'+t[2]+'" data-go="'+t[0]+'"><span class="ic">'+icon(t[1])+'</span><b>'+t[3]+'</b></button>';
+    }).join('')+'</div>';
+
+    var matCard='<div class="card"><div class="chd"><h3>مواد اولیهٔ خریداری‌شده (۳۰ روز)</h3>'+lnk('مشاهده همه','buy')+'</div>'+
+      (matList.length?'<div class="list">'+matList.map(function(m){
+        return '<div class="row"><span class="ic tone-green">'+icon('buy')+'</span><div class="main"><b>'+esc(m.name)+'</b><span class="sub">'+N(r2(m.ton))+' تُن</span></div><div class="amt">'+amts(m.AFN,m.USD)+'</div></div>';
+      }).join('')+'</div>':'<div class="empty">در ۳۰ روز اخیر خریدی ثبت نشده.</div>')+'</div>';
+
+    var barCard='<div class="card"><div class="chd"><h3>فروش ۳۰ روز اخیر</h3></div>'+
+      '<div class="lgd"><span><i style="background:#7C4DFF"></i>فروش</span><span><i style="background:#2F80ED"></i>دریافتی</span></div>'+
+      (has30?barChart(d30.map(jday),[{vals:s30.sv,color:'#7C4DFF'},{vals:s30.rv,color:'#2F80ED'}]):'<div class="empty">در ۳۰ روز اخیر فروشی با '+cn+' ثبت نشده.</div>')+'</div>';
+
+    var recCard='<div class="card"><div class="chd"><h3>آخرین فعالیت‌ها</h3>'+lnk('مشاهده همه','sales')+'</div>'+
+      (rec.length?'<div class="list">'+rec.map(function(r){
+        return '<div class="row"><span class="ic tone-'+r.tone+'">'+icon(r.ic)+'</span><div class="main"><b>'+r.text+'</b><span class="sub">'+T(fullDate(r.ts))+' '+T(timeText(r.ts))+'</span></div>'+
+          '<div class="amt"><b>'+N(r.amt)+cur(CUR[r.c])+'</b></div></div>';
+      }).join('')+'</div>':'<div class="empty">هنوز چیزی ثبت نشده. با «ثبت فروش» شروع کن.</div>')+'</div>';
+
+    var debtCard='<div class="card"><div class="chd"><h3>طلب از مشتری‌ها</h3>'+lnk('مشاهده همه','customers')+'</div>'+
+      '<div class="mrow"><div class="mbox"><span class="sub">جمع طلب</span><div class="'+((debt.AFN>0||debt.USD>0)?'neg':'')+'">'+amts(debt.AFN>0?debt.AFN:0,debt.USD>0?debt.USD:0)+'</div></div>'+
+      '<div class="mbox"><span class="sub">مشتری باقی‌دار</span><b>'+N(debtors)+'</b></div></div></div>';
+    var chkCard='<div class="card"><div class="chd"><h3>چک‌های در انتظار</h3>'+lnk('مشاهده همه','checks')+'</div>'+
+      (pend.length?'<div class="list">'+pend.slice(0,3).map(checkRow).join('')+'</div>':'<div class="empty">چک در انتظاری نیست.</div>')+'</div>';
+    var accCard='<div class="card"><div class="chd"><h3>موجودی حساب‌ها</h3>'+lnk('مشاهده همه','accounts')+'</div>'+
+      '<div class="mrow"><div class="mbox"><span class="sub">حساب افغانی</span><b>'+N(balance('AFN'))+cur(CUR.AFN)+'</b></div>'+
+      '<div class="mbox"><span class="sub">حساب دالر</span><b>'+N(balance('USD'))+cur(CUR.USD)+'</b></div></div></div>';
+
+    return head+hello+stats+
+      '<div class="g3">'+todayCard+donutCard+lineCard+'</div>'+
+      qrow+
+      '<div class="g3 b">'+matCard+barCard+recCard+'</div>'+
+      '<div class="g3 b">'+debtCard+chkCard+accCard+'</div>';
+  }
 
   /* what a worker sees: only the three entry forms */
   function workerHome(){
@@ -1508,21 +1915,24 @@ button.row{cursor:pointer}
       if(!e.target.closest('#s-save'))return;
       var name=f.querySelector('#s-name').value.trim()||DEFAULT_NAME;
       var phone=f.querySelector('#s-phone').value.trim(),address=f.querySelector('#s-address').value.trim();
-      var rate=r2(parse(f.querySelector('#s-rate').value));
-      if(rate<0){errEl.textContent='قیمت نمی‌تواند منفی باشد.';return}
-      db.settings=Object.assign({},db.settings,{name:name,phone:phone,address:address,rate:rate,logo:logo});
+      var rate=r2(parse(f.querySelector('#s-rate').value)),target=r2(parse(f.querySelector('#s-target').value));
+      if(rate<0||target<0){errEl.textContent='عدد نمی‌تواند منفی باشد.';return}
+      db.settings=Object.assign({},db.settings,{name:name,phone:phone,address:address,rate:rate,target:target,logo:logo});
       applyTheme();cacheBrand();persist();toast('پروفایل ذخیره شد');go('back');
     });
   }
 
   function bindCustSearch(){
     var q=document.getElementById('cq');if(!q)return;
-    q.addEventListener('input',function(){
+    function filt(){
       var v=q.value.trim().toLowerCase();
       Array.prototype.forEach.call(view.querySelectorAll('.row[data-cust]'),function(r){
         r.hidden=!!v&&(r.getAttribute('data-cust')||'').toLowerCase().indexOf(v)<0;
       });
-    });
+    }
+    q.addEventListener('input',filt);
+    if(q.value)filt();
+    state.q='';
   }
 
   /* ---------- users forms ---------- */
@@ -1641,8 +2051,12 @@ button.row{cursor:pointer}
   function render(){
     var inApp=authState==='in';
     tabbarEl.hidden=!inApp||role==='worker';
+    var nav=inApp&&role==='admin';
+    try{document.body.classList.toggle('hasnav',nav)}catch(e){}
+    sideEl.hidden=!nav;
+    if(nav)renderSide();
     if(!inApp){view.innerHTML=gateView();bindGate();return}
-    view.innerHTML=pages[state.page]();
+    view.innerHTML='<div class="'+((state.page==='home'&&role==='admin')?'dash':'col')+'">'+pages[state.page]()+'</div>';
     var here=TAB_OF[state.page];
     Array.prototype.forEach.call(tabsEl.children,function(b){
       if(b.dataset.go===here)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
@@ -1676,6 +2090,13 @@ button.row{cursor:pointer}
     clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('show')},2400);
   }
 
+  document.addEventListener('submit',function(e){
+    if(authState!=='in'||!e.target||e.target.id!=='dsearch')return;
+    e.preventDefault();
+    var q=document.getElementById('dq');
+    state.q=q?q.value.trim():'';
+    go('customers');state.stack=[];
+  });
   document.addEventListener('change',function(e){
     if(authState!=='in'||!e.target||e.target.id!=='day-pick')return;
     var t=dateTs(e.target.value);
@@ -1695,7 +2116,9 @@ button.row{cursor:pointer}
       if(g.dataset.uid!==undefined)state.uid=g.dataset.uid;
       state.formDay=(g.dataset.formday!==undefined)?state.day:null;
       if(g.dataset.go==='sales')state.day=Date.now();
-      go(g.dataset.go);return;
+      go(g.dataset.go);
+      if(g.dataset.root!==undefined)state.stack=[];
+      return;
     }
     var st=e.target.closest('[data-step]');
     if(st){
@@ -1705,6 +2128,8 @@ button.row{cursor:pointer}
     }
     var pk=e.target.closest('[data-pickday]');
     if(pk){state.day=+pk.dataset.pickday;render();window.scrollTo(0,0);return}
+    var dc=e.target.closest('[data-dcur]');
+    if(dc){state.dcur=dc.dataset.dcur;render();return}
     var ac=e.target.closest('[data-acc]');if(ac){state.acc=ac.dataset.acc;render();return}
     var t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
     var r=e.target.closest('[data-rep]');if(r){state.rep=r.dataset.rep;render();return}
@@ -1725,7 +2150,7 @@ button.row{cursor:pointer}
   function clean(x){return JSON.parse(JSON.stringify(x))}
   function cid(x){return String(x.id)}
   function metaObj(){
-    return {open:{AFN:(db.open&&db.open.AFN)||0,USD:(db.open&&db.open.USD)||0},name:db.settings.name,rate:db.settings.rate||0,phone:db.settings.phone||'',address:db.settings.address||'',logo:db.settings.logo||''};
+    return {open:{AFN:(db.open&&db.open.AFN)||0,USD:(db.open&&db.open.USD)||0},name:db.settings.name,rate:db.settings.rate||0,phone:db.settings.phone||'',address:db.settings.address||'',logo:db.settings.logo||'',target:db.settings.target||0};
   }
 
   /* called after every change: sends only what changed to the server */
@@ -1809,7 +2234,7 @@ button.row{cursor:pointer}
       db.open={AFN:+o.AFN||0,USD:+o.USD||0};
       db.settings.name=m.name||DEFAULT_NAME;
       db.settings.rate=+m.rate||0;
-      db.settings.phone=m.phone||'';db.settings.address=m.address||'';
+      db.settings.phone=m.phone||'';db.settings.address=m.address||'';db.settings.target=+m.target||0;
       db.settings.logo=(typeof m.logo==='string'&&m.logo.indexOf('data:image/')===0)?m.logo:'';
       cacheBrand();
       var ms=stable(clean(metaObj())),changed=ms!==metaSynced;
